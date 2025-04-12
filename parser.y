@@ -71,7 +71,7 @@ varDeclaracao	:	tipoEspecificador ID PEV
                 	id->type = $1->type;
 					id->escopo = copyString(currentFunctionName);
                 	st_insert(location++, id->attr.name, currentFunctionName , "var",$1->type, numline, 1);
-    		}
+    			}
 			| tipoEspecificador ID 
 			// Declaração de variável vetor cria nó com tipo, id, escopo, e insere na tabela de símbolos, salva id em uma variavel global para gerar a arvore e a tabela
 			{
@@ -118,13 +118,6 @@ funDeclaracao	: 	tipoEspecificador ID {
 				st_insert(location++, id->attr.name, "global","funcao", $1->type, savedLineNo, 1);
 				currentFunctionName = "global";
 			}
-			| error ')' compostoDecl
-			 {yyerrok;
-			 }
-			| error '{' compostoDecl
-			{
-				 yyerrok;
-			}
 		;
 // Envia lista de parametros para função
 params		: 	paramLista {$$ = $1;
@@ -150,7 +143,6 @@ paramLista	: 	paramLista VIR param
 			    }
 			}
  			| param {$$ = $1;}
-			| error
 		;
 // Cria nó com tipo especificador para funções e variáveis
 tipoEspecificador: 	INT 
@@ -162,10 +154,6 @@ tipoEspecificador: 	INT
 			{	
 				$$ = newExpNode(TypeK);
 				$$->type = Void;
-			}
-			| error
-			{
-				yyerrok;
 			}
 		;
 // Cria nó com parametro de função
@@ -238,6 +226,11 @@ statement	: 	expressaoDecl  {$$ = $1;}
 			| selecaoDecl  {$$ = $1;}
 			| iteracaoDecl {$$ = $1;}
 			| retornoDecl  {$$ = $1;}
+			| error PEV
+			{
+				yyerrok;
+				$$ = NULL;
+			}
 		;
 // Expressao simples
 expressaoDecl	: 	expressao PEV {$$ = $1;}
@@ -276,7 +269,7 @@ retornoDecl	: 	RETURN PEV
 					   $$->type = Integer;
 					   $$->child[0]->type = Integer;
 					   $$->escopo = currentFunctionName;
-	                 }
+	                }
 		;
 // Cria nós com expressões
 expressao	: 	var ATR expressao 
@@ -288,6 +281,7 @@ expressao	: 	var ATR expressao
 				$$->child[1] = $3;
 			}
 			| simplesExpressao {$$ = $1;}
+			
 		;
 // Cria nós de variaveis já declaradas
 var 		: 	ID 
@@ -471,7 +465,7 @@ void yyerror(char * msg)
   extern int yychar;
   printf("\n\nERRO SINTÁTICO: %s, Token: %s", msg, yytext);
   printf(" LINHA: %d\n\n", numline);
-  exit(1);
+
   
 }
 

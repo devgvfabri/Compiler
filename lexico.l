@@ -65,7 +65,6 @@ void                                  {return VOID;}
 void erroLexico()
 {
 	printf("ERRO LÉXICO: %s LINHA: %d\n", yytext, numline);
-    exit(1);
 
 }
 
