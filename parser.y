@@ -73,6 +73,11 @@ varDeclaracao	:	tipoEspecificador ID PEV
                 	st_insert(location++, id->attr.name, currentFunctionName , "var",$1->type, numline, 1);
     			}
 			| tipoEspecificador ID 
+			| tipoEspecificador error PEV
+			{
+				yyerrok;
+				$$ = NULL;
+			}
 			// Declaração de variável vetor cria nó com tipo, id, escopo, e insere na tabela de símbolos, salva id em uma variavel global para gerar a arvore e a tabela
 			{
 			savedNameVar = copyString(tokenString);}
@@ -118,6 +123,11 @@ funDeclaracao	: 	tipoEspecificador ID {
 				st_insert(location++, id->attr.name, "global","funcao", $1->type, savedLineNo, 1);
 				currentFunctionName = "global";
 			}
+			| tipoEspecificador error PEV
+			{
+				yyerrok;
+				$$ = NULL;
+			}
 		;
 // Envia lista de parametros para função
 params		: 	paramLista {$$ = $1;
@@ -143,6 +153,11 @@ paramLista	: 	paramLista VIR param
 			    }
 			}
  			| param {$$ = $1;}
+			| paramLista error param
+			{
+				yyerrok;
+				$$ = NULL;
+			}
 		;
 // Cria nó com tipo especificador para funções e variáveis
 tipoEspecificador: 	INT 
@@ -161,10 +176,11 @@ param		: 	tipoEspecificador ID
 			{ 
 				TreeNode *paramNode = newStmtNode(ParamK);
 				paramNode->attr.name = copyString(tokenString); // Nome do parâmetro
+				$$->child[0] = paramNode;
 				paramNode->type = $1->type; // Tipo do parâmetro
 				paramNode->escopo = copyString(currentFunctionName); // Escopo do parâmetro
 				st_insert(location++, paramNode->attr.name, currentFunctionName, "param", $1->type, numline, 1);
-				$$ = paramNode;
+				$$ = $1;
     		}
 			| tipoEspecificador ID 
 			{
@@ -173,10 +189,11 @@ param		: 	tipoEspecificador ID
 			{ 
 				TreeNode *paramNode = newStmtNode(ParamK);
 				paramNode->attr.name = copyString(savedNameVar); // Nome do parâmetro
+				$$->child[0] = paramNode;
 				paramNode->type = IntegerVetorK; // Tipo do parâmetro (vetor)
 				paramNode->escopo = copyString(currentFunctionName); // Escopo do parâmetro
 				st_insert(location++, paramNode->attr.name, currentFunctionName, "param", IntegerVetorK, numline, 1);
-				$$ = paramNode;
+				$$ = $1;
     		}
 		;
 // Cria os nós com declarações da função
@@ -235,6 +252,11 @@ statement	: 	expressaoDecl  {$$ = $1;}
 // Expressao simples
 expressaoDecl	: 	expressao PEV {$$ = $1;}
 			| PEV 
+			| error PEV
+			{
+				yyerrok;
+				$$ = NULL;
+			}
 		;
 // Declaração de IFS
 selecaoDecl	: 	IF  APA expressao FPA statement 
@@ -294,7 +316,6 @@ var 		: 	ID
 			| ID {	savedNameVar = copyString(tokenString); }
 			ACO expressao FCO 
 			{
-				printf("\n\n\n\n\n\n\n\n %s \n\n\n\n\n\n\n", savedNameVar);
 				$$ = newExpNode(IdK);
 				$$->attr.name = copyString(savedNameVar);
 				$$->child[0] = $4;
@@ -308,7 +329,7 @@ simplesExpressao: 	somaExpressao relacional somaExpressao
 			{
 				$$ = $2;
 				$$->child[0] = $1;
-				$$->child[3] = $3;
+				$$->child[1] = $3;
 			}
 			| somaExpressao {$$ = $1;}
 		;
@@ -414,7 +435,6 @@ idAtiv		: 	ID
 				$$->numline = numline;
 				if(strcmp("output", tokenString) != 0 && strcmp("input", tokenString) && strcmp("main", tokenString) )
 				st_insert(location++, tokenString, currentFunctionName, "funcao", NULL, numline, 0);
-				printf("\n\n\n\n\n\n\n\n %s, %s, %d \n\n\n\n\n", tokenString, currentFunctionName, numline);
 			}
 		;	
 args		: 	/*Vazio*/ { $$ = NULL; }

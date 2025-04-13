@@ -1,6 +1,5 @@
 /*
 Gabriel Fabri do Carmo - 163756
-Karen Garcia Wada - 163872
 */
 
 %{
