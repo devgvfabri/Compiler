@@ -19,12 +19,12 @@ Erro *listaErros = NULL;  // Ponteiro global para a lista de erros
 /* ########################## Imprime tokens e lexemas correspondentes ####################################*/
 void printToken( TokenType token, const char* tokenString )
 { switch (token)
-  { case IF:
-    case ELSE:
-    case VOID:
-    case WHILE:
-    case RETURN:
-    case INT:
+  { case IF:  printf("IF"); break;
+    case ELSE: printf("ELSE"); break;
+    case VOID: printf("VOID"); break;
+    case WHILE: printf("WHILE"); break;
+    case RETURN: printf("RETURN"); break;
+    case INT: printf("INT"); break;
     case SOM: printf("SOM = +"); break;
     case SUB: printf("SUB = -"); break;
     case MUL: printf("MUL = *"); break;
@@ -412,7 +412,7 @@ void printSymTab()
 }
 /* Função para imprimir erros*/
 void typeError(TreeNode * t, char * message)
-{ printf("ERRO SEMÂNTICO Type error at line %d: %s\n",t->numline,message);
+{ printf("ERRO SEMÂNTICO NA LINHA %d: %s\n",t->numline,message);
 }
 
 /* Função para verificar o tipo de nó da árvore sintática*/
@@ -434,7 +434,7 @@ void checkNode(TreeNode * t) {
                 t->child[0]->type = st_lookup_type(t->child[0]->attr.name, "global");
               }
               if(t->child[0]->type != Integer && t->child[0]->kind.stmt == CallK){
-                typeError(t, "ERRO SEMÂNTICO: Operação inválida, variável inteira e função com retorno Void");
+                typeError(t, "Operação inválida, variável inteira e função com retorno Void");
               }
             }
             if(t->child[1] != NULL)
@@ -444,7 +444,7 @@ void checkNode(TreeNode * t) {
                 t->child[1]->type = st_lookup_type(t->child[1]->attr.name, "global");
               }
               if(t->child[1]->type != Integer && t->child[1]->kind.stmt == CallK){
-                typeError(t, "ERRO SEMÂNTICO: Operação inválida, variável inteira e função com retorno Void");
+                typeError(t, "Operação inválida, variável inteira e função com retorno Void");
               }
             }
             break;

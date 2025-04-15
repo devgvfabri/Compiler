@@ -53,6 +53,7 @@ declaracaoLista	:	declaracaoLista declaracao
 			    }
 			}
 			| declaracao { $$ = $1; }
+			
 		;
 declaracao	:	varDeclaracao { $$ = $1;}
 			| funDeclaracao { $$ = $1;}
@@ -61,16 +62,16 @@ declaracao	:	varDeclaracao { $$ = $1;}
 varDeclaracao	:	tipoEspecificador ID PEV 
 			{ 
 					$$ = newExpNode(TypeK);
-               		$$->type = $1->type;
+               				$$->type = $1->type;
 					TreeNode *id = newExpNode(IdK);
 					id->attr.name = copyString(tokenString);
-                	$$->attr.name = id->attr.name;
-                	$$->child[0] = id;
-                	id->nodekind = StmtK;
-                	id->kind.stmt = VarK;
-                	id->type = $1->type;
+                			$$->attr.name = id->attr.name;
+                			$$->child[0] = id;
+                			id->nodekind = StmtK;
+                			id->kind.stmt = VarK;
+                			id->type = $1->type;
 					id->escopo = copyString(currentFunctionName);
-                	st_insert(location++, id->attr.name, currentFunctionName , "var",$1->type, numline, 1);
+                			st_insert(location++, id->attr.name, currentFunctionName , "var",$1->type, numline, 1);
     			}
 			| tipoEspecificador ID 
 			| tipoEspecificador error PEV
@@ -80,11 +81,12 @@ varDeclaracao	:	tipoEspecificador ID PEV
 			}
 			// Declaração de variável vetor cria nó com tipo, id, escopo, e insere na tabela de símbolos, salva id em uma variavel global para gerar a arvore e a tabela
 			{
-			savedNameVar = copyString(tokenString);}
+			savedNameVar = copyString(tokenString);
+			}
     			ACO NUM FCO PEV 
 			{ 
 				$$ = newExpNode(TypeK);
-                $$->type = $1->type;
+                		$$->type = $1->type;
 				TreeNode *id = newExpNode(IdK);
 				id->attr.name = copyString(savedNameVar);
 				$$->attr.name = $1->attr.name;
@@ -95,21 +97,22 @@ varDeclaracao	:	tipoEspecificador ID PEV
 				id->attr.vetor = 1;
 				id->escopo = copyString(currentFunctionName);
 				st_insert(location++, id->attr.name, currentFunctionName, "var", $1->type, numline, 1);
-    		}
-		;
+    			}
+			;
 
 			// Declaração de função vetor cria nó com tipo, id, escopo, e insere na tabela de símbolos, salva id em uma variavel global para gerar a arvore e a tabela
 
-funDeclaracao	: 	tipoEspecificador ID {
+funDeclaracao	: 	tipoEspecificador ID 
+			{
 					savedNameFun = copyString(tokenString);
 					savedLineNo = numline;
 					currentFunctionName = savedNameFun;
 					setCurrentFunction(copyString(tokenString));
-					 }
-					APA params FPA compostoDecl 
+			}
+			APA params FPA compostoDecl 
 			{ 
 				$$ = newExpNode(TypeK);
-                $$->type = $1->type;
+                		$$->type = $1->type;
 				TreeNode *id = newExpNode(IdK);
 				id->attr.name = copyString(savedNameFun);
 				$$->attr.name = id->attr.name;
@@ -123,7 +126,7 @@ funDeclaracao	: 	tipoEspecificador ID {
 				st_insert(location++, id->attr.name, "global","funcao", $1->type, savedLineNo, 1);
 				currentFunctionName = "global";
 			}
-			| tipoEspecificador error PEV
+			| tipoEspecificador error APA
 			{
 				yyerrok;
 				$$ = NULL;
@@ -181,10 +184,10 @@ param		: 	tipoEspecificador ID
 				paramNode->escopo = copyString(currentFunctionName); // Escopo do parâmetro
 				st_insert(location++, paramNode->attr.name, currentFunctionName, "param", $1->type, numline, 1);
 				$$ = $1;
-    		}
+    			}
 			| tipoEspecificador ID 
 			{
-			savedNameVar = copyString(tokenString);
+				savedNameVar = copyString(tokenString);
 			}ACO FCO
 			{ 
 				TreeNode *paramNode = newStmtNode(ParamK);
@@ -194,7 +197,12 @@ param		: 	tipoEspecificador ID
 				paramNode->escopo = copyString(currentFunctionName); // Escopo do parâmetro
 				st_insert(location++, paramNode->attr.name, currentFunctionName, "param", IntegerVetorK, numline, 1);
 				$$ = $1;
-    		}
+    			}
+    			| tipoEspecificador error VIR
+    			{
+    				yyerrok;
+    				$$ = NULL;
+    			}
 		;
 // Cria os nós com declarações da função
 compostoDecl	: 	ACH localDeclaracoes statementLista FCH 
@@ -252,11 +260,7 @@ statement	: 	expressaoDecl  {$$ = $1;}
 // Expressao simples
 expressaoDecl	: 	expressao PEV {$$ = $1;}
 			| PEV 
-			| error PEV
-			{
-				yyerrok;
-				$$ = NULL;
-			}
+
 		;
 // Declaração de IFS
 selecaoDecl	: 	IF  APA expressao FPA statement 
@@ -280,17 +284,18 @@ iteracaoDecl	: 	WHILE APA expressao FPA statement
 		;
 // Nós com retornos de chamadas de funções/vazio
 retornoDecl	: 	RETURN PEV 
-				{
-					$$ = newStmtNode(returnK);
-					$$->escopo = currentFunctionName;
-					$$->type = Void;
-				}
+			{
+				$$ = newStmtNode(returnK);
+				$$->escopo = currentFunctionName;
+				$$->type = Void;
+			}
 			| RETURN expressao PEV 
-			{  $$ = newStmtNode(returnK);
-	                   $$->child[0] = $2;
-					   $$->type = Integer;
-					   $$->child[0]->type = Integer;
-					   $$->escopo = currentFunctionName;
+			{  
+				$$ = newStmtNode(returnK);
+	                   	$$->child[0] = $2;
+				$$->type = Integer;
+				$$->child[0]->type = Integer;
+				$$->escopo = currentFunctionName;
 	                }
 		;
 // Cria nós com expressões
@@ -483,7 +488,8 @@ void yyerror(char * msg)
 {
   extern char* yytext;
   extern int yychar;
-  printf("\n\nERRO SINTÁTICO: %s, Token: %s", msg, yytext);
+  printf("\n\nERRO SINTÁTICO: %s, Token: ", msg);
+  printToken(yychar, yytext);
   printf(" LINHA: %d\n\n", numline);
 
   
