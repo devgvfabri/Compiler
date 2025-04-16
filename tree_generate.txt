@@ -1,0 +1,38 @@
+  Type: 1
+    Fun: gcd
+      Type: 1
+        Parametro: u
+      Type: 1
+        Parametro: v
+      If
+        Op: IGU = ==
+          Id: v
+          Const: 0
+        return
+        return
+          Chamada: gcd
+            Id: v
+            Op: SUB = -
+              Id: u
+              Op: MUL = *
+                Op: DIV = /
+                  Id: u
+                  Id: v
+                Id: v
+  Type: 0
+    Fun: main
+      Type: 0
+      Type: 1
+        Var: x
+      Type: 1
+        Var: y
+      Atribuicao
+        Id: x
+        Chamada: input
+      Atribuicao
+        Id: y
+        Chamada: input
+      Chamada: output
+        Chamada: gcd
+          Id: x
+          Id: y

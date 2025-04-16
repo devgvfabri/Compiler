@@ -104,10 +104,10 @@ varDeclaracao	:	tipoEspecificador ID PEV
 
 funDeclaracao	: 	tipoEspecificador ID 
 			{
-					savedNameFun = copyString(tokenString);
-					savedLineNo = numline;
-					currentFunctionName = savedNameFun;
-					setCurrentFunction(copyString(tokenString));
+				savedNameFun = copyString(tokenString);
+				savedLineNo = numline;
+				currentFunctionName = savedNameFun;
+				setCurrentFunction(copyString(tokenString));
 			}
 			APA params FPA compostoDecl 
 			{ 
@@ -473,8 +473,7 @@ int main()
   
   yyparse();  // Executa o parser e gera a árvore sintática
   if (savedTree != NULL) {
-      printf("\nÁrvore sintática:\n");
-      printTree(savedTree);  // Imprime a árvore gerada
+      printTreeArq(savedTree);  // Imprime a árvore gerada
   } else {
       printf("\nErro ao construir a árvore sintática.\n");
   }
@@ -488,12 +487,10 @@ void yyerror(char * msg)
 {
   extern char* yytext;
   extern int yychar;
-  printf("\n\nERRO SINTÁTICO: %s, Token: ", msg);
+  printf("\n\n\nERRO SINTÁTICO: %s, Token: ", msg);
   printToken(yychar, yytext);
-  printf(" LINHA: %d\n\n", numline);
+  printf(" LINHA: %d\n\n\n", numline);
 
   
 }
-
-
 

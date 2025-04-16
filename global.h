@@ -48,7 +48,7 @@ typedef struct treeNode
 TreeNode *newStmtNode(StmtKind kind);
 TreeNode *newExpNode(ExpKind kind);
 void printTree(TreeNode *tree);
-
+void printTreeArq(TreeNode *tree);
 char *copyString(char *s);
 void checkNode(TreeNode * t);
 void typeError(TreeNode * t, char * message);
