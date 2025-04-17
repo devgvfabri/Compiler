@@ -9,6 +9,7 @@
           Id: v
           Const: 0
         return
+          Id: u
         return
           Chamada: gcd
             Id: v

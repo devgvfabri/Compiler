@@ -2136,7 +2136,7 @@ void yyerror(char * msg)
 {
   extern char* yytext;
   extern int yychar;
-  printf("\n\n\nERRO SINTÁTICO: %s, Token: ", msg);
+  printf("\n\n\n\tERRO SINTÁTICO: %s, Token: ", msg);
   printToken(yychar, yytext);
   printf(" LINHA: %d\n\n\n", numline);
 

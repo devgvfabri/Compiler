@@ -21,87 +21,89 @@ FILE *save_symTable;
 
 /* ########################## Imprime tokens e lexemas correspondentes ####################################*/
 void printToken( TokenType token, const char* tokenString )
-{ switch (token)
-  { case IF:  printf("IF"); 	 	break;
-    case ELSE: printf("ELSE");   	break;
-    case VOID: printf("VOID");  	break;
-    case WHILE: printf("WHILE"); 	break;
-    case RETURN: printf("RETURN");	break;
-    case INT: printf("INT"); 		break;
-    case SOM: printf("SOM = +"); 	break;
-    case SUB: printf("SUB = -"); 	break;
-    case MUL: printf("MUL = *"); 	break;
-    case DIV: printf("DIV = /"); 	break;
-    case MAI: printf("MAI = >"); 	break;
-    case MEN: printf("MEN = <"); 	break;
-    case MIG: printf("MIG = >="); 	break;
-    case MEI: printf("MEI = <="); 	break;
-    case IGU: printf("IGU = =="); 	break;
-    case DIF: printf("DIF = !="); 	break;
-    case ATR: printf("ATR = ="); 	break;
-    case PEV: printf("PEV = ;"); 	break;
-    case VIR: printf("VIR = ,"); 	break;
-    case APA: printf("APA = ("); 	break;
-    case FPA: printf("FPA = )"); 	break;
-    case ACO: printf("ACO = ["); 	break;
-    case FCO: printf("FCO = ]"); 	break;
-    case ACH: printf("ACH = {"); 	break;
-    case FCH: printf("FCH = }"); 	break;                
-    case NUM:
-      printf("NUM, val= %s",tokenString);
-      break;
-    case ID:
-      printf("ID, name= %s",tokenString);
-      break;
-    case ERRO:
-      printf("ERROR: %s",tokenString);
-      break;
-    default: /* should never happen */
-      printf("Unknown token: %d",token);
-  }
+{ 
+	switch (token)
+  	{ 
+  		    case IF:  printf("IF"); 	 	break;
+		    case ELSE: printf("ELSE");   	break;
+		    case VOID: printf("VOID");  	break;
+		    case WHILE: printf("WHILE"); 	break;
+		    case RETURN: printf("RETURN");	break;
+		    case INT: printf("INT"); 		break;
+		    case SOM: printf("SOM = +"); 	break;
+		    case SUB: printf("SUB = -"); 	break;
+		    case MUL: printf("MUL = *"); 	break;
+		    case DIV: printf("DIV = /"); 	break;
+		    case MAI: printf("MAI = >"); 	break;
+		    case MEN: printf("MEN = <"); 	break;
+		    case MIG: printf("MIG = >="); 	break;
+		    case MEI: printf("MEI = <="); 	break;
+		    case IGU: printf("IGU = =="); 	break;
+		    case DIF: printf("DIF = !="); 	break;
+		    case ATR: printf("ATR = ="); 	break;
+		    case PEV: printf("PEV = ;"); 	break;
+		    case VIR: printf("VIR = ,"); 	break;
+		    case APA: printf("APA = ("); 	break;
+		    case FPA: printf("FPA = )"); 	break;
+		    case ACO: printf("ACO = ["); 	break;
+		    case FCO: printf("FCO = ]"); 	break;
+		    case ACH: printf("ACH = {"); 	break;
+		    case FCH: printf("FCH = }"); 	break;                
+		    case NUM:
+		      printf("NUM, val= %s",tokenString);
+		      break;
+		    case ID:
+		      printf("ID, name= %s",tokenString);
+		      break;
+		    case ERRO:
+		      printf("ERROR: %s",tokenString);
+		      break;
+		    default: /* should never happen */
+		      printf("Unknown token: %d",token);
+		  }
 }
 
 void printTokenExternFile( TokenType token, const char* tokenString )
 { 
 	   switch (token)
 	    { 
-	    case IF:      			      break;
-	    case ELSE:    			      break;
-	    case VOID:    			      break;
-	    case WHILE:   			      break;
-	    case RETURN:  			      break;
-	    case INT: fprintf(save_tree, "INT");      break;
-	    case SOM: fprintf(save_tree, "SOM = +");  break;
-	    case SUB: fprintf(save_tree, "SUB = -");  break;
-	    case MUL: fprintf(save_tree, "MUL = *");  break;
-	    case DIV: fprintf(save_tree, "DIV = /");  break;
-	    case MAI: fprintf(save_tree, "MAI = >");  break;
-	    case MEN: fprintf(save_tree, "MEN = <");  break;
-	    case MIG: fprintf(save_tree, "MIG = >="); break;
-	    case MEI: fprintf(save_tree, "MEI = <="); break;
-	    case IGU: fprintf(save_tree, "IGU = =="); break;
-	    case DIF: fprintf(save_tree, "DIF = !="); break;
-	    case ATR: fprintf(save_tree, "ATR = =");  break;
-	    case PEV: fprintf(save_tree, "PEV = ;");  break;
-	    case VIR: fprintf(save_tree, "VIR = ,");  break;
-	    case APA: fprintf(save_tree, "APA = (");  break;
-	    case FPA: fprintf(save_tree, "FPA = )");  break;
-	    case ACO: fprintf(save_tree, "ACO = [");  break;
-	    case FCO: fprintf(save_tree, "FCO = ]");  break;
-	    case ACH: fprintf(save_tree, "ACH = {");  break;
-	    case FCH: fprintf(save_tree, "FCH = }");  break;                
-	    case NUM:
-	      fprintf(save_tree, "NUM, val= %s",tokenString);
-	      break;
-	    case ID:
-	      fprintf(save_tree, "ID, name= %s",tokenString);
-	      break;
-	    case ERRO:
-	      fprintf(save_tree, "ERROR: %s",tokenString);
-	      break;
-	    default: /* should never happen */
-	      fprintf(save_tree, "Unknown token: %d",token);
-	  }
+		    case IF:      			      break;
+		    case ELSE:    			      break;
+		    case VOID:    			      break;
+		    case WHILE:   			      break;
+		    case RETURN:  			      break;
+		    case INT: fprintf(save_tree, "INT");      break;
+		    case SOM: fprintf(save_tree, "SOM = +");  break;
+		    case SUB: fprintf(save_tree, "SUB = -");  break;
+		    case MUL: fprintf(save_tree, "MUL = *");  break;
+		    case DIV: fprintf(save_tree, "DIV = /");  break;
+		    case MAI: fprintf(save_tree, "MAI = >");  break;
+		    case MEN: fprintf(save_tree, "MEN = <");  break;
+		    case MIG: fprintf(save_tree, "MIG = >="); break;
+		    case MEI: fprintf(save_tree, "MEI = <="); break;
+		    case IGU: fprintf(save_tree, "IGU = =="); break;
+		    case DIF: fprintf(save_tree, "DIF = !="); break;
+		    case ATR: fprintf(save_tree, "ATR = =");  break;
+		    case PEV: fprintf(save_tree, "PEV = ;");  break;
+		    case VIR: fprintf(save_tree, "VIR = ,");  break;
+		    case APA: fprintf(save_tree, "APA = (");  break;
+		    case FPA: fprintf(save_tree, "FPA = )");  break;
+		    case ACO: fprintf(save_tree, "ACO = [");  break;
+		    case FCO: fprintf(save_tree, "FCO = ]");  break;
+		    case ACH: fprintf(save_tree, "ACH = {");  break;
+		    case FCH: fprintf(save_tree, "FCH = }");  break;                
+		    case NUM:
+		      fprintf(save_tree, "NUM, val= %s",tokenString);
+		      break;
+		    case ID:
+		      fprintf(save_tree, "ID, name= %s",tokenString);
+		      break;
+		    case ERRO:
+		      fprintf(save_tree, "ERROR: %s",tokenString);
+		      break;
+		    default: /* should never happen */
+		      fprintf(save_tree, "Unknown token: %d",token);
+		  }
 }
 
 
@@ -188,20 +190,20 @@ void printTree( TreeNode *tree )
 		  fprintf(save_tree, "return\n");
 		  break;
 		case AtrK:
-			fprintf(save_tree, "Atribuicao\n");
-			break;
+		  fprintf(save_tree, "Atribuicao\n");
+		  break;
 		case VarK:
-			fprintf(save_tree, "Var: %s\n", tree->attr.name);
-			break;
+		  fprintf(save_tree, "Var: %s\n", tree->attr.name);
+		  break;
 		case FunK:
-			fprintf(save_tree, "Fun: %s\n", tree->attr.name);
-			break;
+		  fprintf(save_tree, "Fun: %s\n", tree->attr.name);
+		  break;
 		case CallK:
-			fprintf(save_tree, "Chamada: %s\n", tree->attr.name);
-			break;
+		  fprintf(save_tree, "Chamada: %s\n", tree->attr.name);
+		  break;
 		case ParamK:
-			fprintf(save_tree, "Parametro: %s\n", tree->attr.name);
-			break;
+		  fprintf(save_tree, "Parametro: %s\n", tree->attr.name);
+		  break;
 		default:
 		  fprintf(save_tree, "Unknown ExpNode kind\n");
 		  break;
@@ -222,10 +224,10 @@ void printTree( TreeNode *tree )
 		  break;
 		case TypeK:
 		  fprintf(save_tree, "Type: %d\n", tree->type);
-			break;
+		  break;
 		case VetK:
-			fprintf(save_tree, "Vetor: %s\n", tree->attr.name);
-		break;
+		  fprintf(save_tree, "Vetor: %s\n", tree->attr.name);
+		  break;
 		default:
 		  fprintf(save_tree, "Unknown ExpNode kind\n");
 		  break;
@@ -248,8 +250,6 @@ void printTreeArq(TreeNode *tree)
 
 /* ########################### Tabela  de símbolos ######################################*/
 
-#define SIZE 211 
-#define SHIFT 4
 
 static char *currentFunction = "global";  // Inicializa como global
 
@@ -263,46 +263,43 @@ void setCurrentFunction(char *funcName) {
 }
 
 /* Função hash para a tabela de símbolos */
+
 int hash(char * key)
 {
   int temp = 0;
   int i = 0;
   while (key[i] != '\0')
   {
-    temp = ((temp << SHIFT) + key[i]) % SIZE;
+    temp = ((temp << 4) + key[i]) % 211;
     ++i;
   }
   return temp;
 }
 /* Lista de linhas em que determinado id aparece no código*/
 typedef struct LineListRec
-   { int numline;
-     struct LineListRec * next;
-   } * LineList;
+{ 
+   	int numline;
+   	struct LineListRec *next;
+} * LineList;
 
 /* Lista de linhas em que determinado id aparece no código*/
 
-   typedef struct BucketListRec 
-   { char * name;
-     LineList lines;
-     int memloc ;
-     char * escopo;
-     char * tipoID;
-     int  tipoDado; 
-     struct BucketListRec * next;
-   } * BucketList;
+typedef struct BucketListRec 
+{ 
+   	char * name;
+     	LineList lines;
+     	int memloc ;
+     	char * escopo;
+     	char * tipoID;
+     	int  tipoDado; 
+     	struct BucketListRec * next;
+} * BucketList;
    
-   static BucketList hashTable[SIZE];
-   
-   
-   
-   
-   
-   
-   
+static BucketList hashTable[211];
 
 /* ########################### Analisador Semântico ######################################*/
 
+/* Declarações de funções para impressão de erros e verificação na tabela*/
 void errorSemanticoVariavelExistente(char *name, int numline);
 void errorSemanticoVariavelNaoDeclarada(char *name, int numline);
 BucketList st_lookup_entry(char *name, char *escopo);
@@ -398,10 +395,12 @@ void st_insert(int loc, char *name, char *escopo, char *tipoID, int tipoDado, in
 }
 
 /* Gera erro semântico para variável já existente */
-void errorSemanticoVariavelExistente(char *name, int numline) {
+void errorSemanticoVariavelExistente(char *name, int numline) 
+{
 
     Erro *novoErro = (Erro *)malloc(sizeof(Erro));
-    if (!novoErro) {
+    if (!novoErro) 
+    {
         printf("Erro de alocação de memória!\n");
     }
 
@@ -414,9 +413,11 @@ void errorSemanticoVariavelExistente(char *name, int numline) {
 }
 
 /* Gera erro semântico para variável não declarada */
-void errorSemanticoVariavelNaoDeclarada(char *name, int numline) {
+void errorSemanticoVariavelNaoDeclarada(char *name, int numline)
+{
     Erro *novoErro = (Erro *)malloc(sizeof(Erro));
-    if (!novoErro) {
+    if (!novoErro) 
+    {
         printf("Erro de alocação de memória!\n");
         return;
     }
@@ -428,9 +429,11 @@ void errorSemanticoVariavelNaoDeclarada(char *name, int numline) {
     listaErros = novoErro;
 }
 /* Função para imprimir erros da lista encadeada*/
-void imprimirErros() {
+void imprimirErros() 
+{
     Erro *atual = listaErros;
-    while (atual) {
+    while (atual) 
+    {
         printf("%s", atual->mensagem);
         atual = atual->prox;
     }
@@ -438,12 +441,13 @@ void imprimirErros() {
 
 /* Procura variável por nome e escopo na tabela*/
 int st_lookup ( char * name, char *escopo )
-{ int h = hash(name);
-  BucketList l =  hashTable[h];
-	while ((l != NULL) && !(strcmp(name, l->name) == 0 && strcmp(escopo, l->escopo) == 0))
-    l = l->next;
-  if (l == NULL) return -1;
-  else return l->memloc;
+{ 
+	int h = hash(name);
+	  BucketList l =  hashTable[h];
+		while ((l != NULL) && !(strcmp(name, l->name) == 0 && strcmp(escopo, l->escopo) == 0))
+	    l = l->next;
+	  if (l == NULL) return -1;
+	  else return l->memloc;
 }
 
 /* Imprime a tabeala de símbolos com a anotação formatada*/
@@ -453,29 +457,35 @@ void printSymTab()
 	 save_symTable = fopen("table_generate.txt", "w");
 	  fprintf(save_symTable, "Location   Variable Name Escopo Tipo ID Tipo Dado Line Numbers\n");
 	  fprintf(save_symTable, "--------   ------------- ------ ------- --------- ------------\n");
-	  for (i=0;i<SIZE;++i)
-	  { if (hashTable[i] != NULL)
-	    { BucketList l = hashTable[i];
+	  for (i=0;i<211;++i)
+	  { 
+	  if (hashTable[i] != NULL)
+	    { 
+	    BucketList l = hashTable[i];
 	      while (l != NULL)
-	      { LineList t = l->lines;
+	      { 
+	      	LineList t = l->lines;
 	      	fprintf(save_symTable, "%-8d  ",l->memloc);
 		fprintf(save_symTable, "%-14s ",l->name);
 		fprintf(save_symTable, "%-6s  ",l->escopo);
 		fprintf(save_symTable, "%-8s  ",l->tipoID);
 		fprintf(save_symTable, "%-9d  ",l->tipoDado);
 		while (t != NULL)
-		{ fprintf(save_symTable, "%4d ",t->numline);
+		{ 
+		  fprintf(save_symTable, "%4d ",t->numline);
 		  t = t->next;
 		}
 		fprintf(save_symTable, "\n");
 		l = l->next;
 	      }
 	    }
-  }
+  	  }
 }
 /* Função para imprimir erros*/
 void typeError(TreeNode * t, char * message)
-{ printf("ERRO SEMÂNTICO NA LINHA %d: %s\n",t->numline,message);
+{ 
+	printf("ERRO SEMÂNTICO NA LINHA %d: %s\n",t->numline,message);
+	return;
 }
 
 /* Função para verificar o tipo de nó da árvore sintática*/
@@ -485,11 +495,10 @@ void checkNode(TreeNode * t) {
   switch (t->nodekind) { 
       case ExpK:
           switch (t->kind.exp) { 
-            case IdK:
-            t->type = Integer;
-            break;
-
+	    /* Verifica se o filho da esquerda ou da direita de uma operação é uma função, se for verifica se há operação de função que retorna void e variável do tipo int*/	
             case OpK:
+            /*Verifica se o filho da esquerda é uma função, verificando pelo escopo global, se for verifica o tipo e depois verifica se 
+            a função for do tipo void está fazendo operação com inteiro*/
             if(t->child[0] != NULL)
             {
               if(t->child[0]->attr.name != NULL && strcmp(t->child[0]->attr.name, "output") != 0 && strcmp(t->child[0]->attr.name, "input") != 0)
@@ -500,6 +509,8 @@ void checkNode(TreeNode * t) {
                 typeError(t, "Operação inválida, variável inteira e função com retorno Void");
               }
             }
+            /*Verifica se o filho da direita é uma função, verificando pelo escopo global, se for verifica o tipo e depois verifica se 
+            a função for do tipo void está fazendo operação com inteiro*/
             if(t->child[1] != NULL)
             {
               if(t->child[1]->attr.name != NULL && strcmp(t->child[1]->attr.name, "output") != 0 && strcmp(t->child[1]->attr.name, "input") != 0)
@@ -526,10 +537,6 @@ void checkNode(TreeNode * t) {
                   if (t->attr.name != NULL && t->escopo != NULL) {
                     BucketList entry = st_lookup_entryFun(t->attr.name, "global", "funcao");
                     if (entry != NULL) {
-                      // Verifica se o tipo da variável é void
-                      if (t->type == Void) {
-                          typeError(t, "Variável não pode ser do tipo void");
-                      }
           
                       // Verifica se o identificador é uma função para verificar conflitos de nomes com funções
                       if (strcmp(entry->tipoID, "funcao") == 0) {
@@ -541,7 +548,7 @@ void checkNode(TreeNode * t) {
                     typeError(t, "Variável não pode ser do tipo void");
                 }
                 }
-                  break;
+             break;
 
               case ParamK:
                   // Verifica se o tipo do parâmetro é void
@@ -585,9 +592,7 @@ void checkNode(TreeNode * t) {
                 // Verifica se o lado direito é uma chamada de função
                 if (t->child[1]->kind.stmt == CallK) {
                     // Verifica se o nome da função não é "input" ou "output"
-                    if (t->child[1]->attr.name != NULL &&
-                        strcmp(t->child[1]->attr.name, "output") != 0 &&  
-                        strcmp(t->child[1]->attr.name, "input") != 0) {
+                    if (t->child[1]->attr.name != NULL && strcmp(t->child[1]->attr.name, "output") != 0 && strcmp(t->child[1]->attr.name, "input") != 0) {
                         // Obtém o tipo da função na tabela de símbolos
                         t->child[1]->type = st_lookup_type(t->child[1]->attr.name, "global");
                         if(t->child[1]->type != Undefined){
@@ -602,6 +607,7 @@ void checkNode(TreeNode * t) {
                 break;
 
               case CallK:
+              /*Insere recursões na tabela de símbolos*/
               if(strcmp(t->attr.name, "output") != 0 || strcmp(t->attr.name, "input") != 0){
               st_insert(0, t->attr.name, "global","funcao", t->type, t->numline, 0);
               }
@@ -626,14 +632,14 @@ BucketList st_lookup_entry(char *name, char *escopo) {
   BucketList l = hashTable[h]; 
 
   while (l != NULL) {
-      if (l->name != NULL && l->escopo != NULL && 
-          strcmp(name, l->name) == 0 && strcmp(escopo, l->escopo) == 0) {
+      if (l->name != NULL && l->escopo != NULL && strcmp(name, l->name) == 0 && strcmp(escopo, l->escopo) == 0) {
           break;
       }
       l = l->next;
   }
   return l;  
 }
+
 /* Função para procurar um identificador função na tabela de símbolos*/
 
 BucketList st_lookup_entryFun(char *name, char *escopo, char *tipoID){
@@ -651,13 +657,14 @@ BucketList st_lookup_entryFun(char *name, char *escopo, char *tipoID){
       l = l->next;
   }
   return l;  
+}
 
-    
-}
 ExpType st_lookup_type(char *name, char *escopo) {
-  BucketList entry = st_lookup_entry(name, escopo);
-  return (entry != NULL) ? (ExpType) entry->tipoDado : Undefined;  // 🔹 Converte para ExpType
+  	BucketList entry = st_lookup_entry(name, escopo);
+  	return (entry != NULL) ? (ExpType) entry->tipoDado : Undefined;  // 🔹 Converte para ExpType
 }
+
+
 /* Função para percorrer a árvore sintática e chamar a função de verificação de nós*/
 void traverse(TreeNode * t,
   void (* preProc) (TreeNode *),
