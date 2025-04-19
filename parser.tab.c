@@ -74,6 +74,8 @@
 #include <stdio.h>
 #include "util.h"
 #include "global.h"
+#include "symtab.h"
+#include "semantico.h"
 
 void yyerror(char *);
 #define YYDEBUG 1    //Para exibir na tela os passos da análise sintática quando o parser é executado
@@ -94,7 +96,7 @@ static int location = 0;
 static char *currentFunctionName = "global";
 
 
-#line 98 "parser.tab.c"
+#line 100 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -582,14 +584,14 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    36,    36,    41,    44,    55,    58,    59,    62,    76,
-      78,    83,    77,   106,   105,   129,   136,   139,   147,   158,
-     159,   166,   171,   178,   189,   188,   201,   208,   221,   222,
-     235,   236,   249,   250,   251,   252,   253,   254,   261,   262,
-     266,   271,   279,   286,   292,   302,   310,   314,   321,   321,
-     333,   339,   342,   347,   352,   357,   362,   367,   374,   380,
-     382,   387,   394,   401,   404,   409,   416,   417,   418,   419,
-     426,   436,   445,   446,   449,   460
+       0,    38,    38,    43,    46,    57,    60,    61,    64,    78,
+      80,    85,    79,   108,   107,   131,   138,   141,   149,   160,
+     161,   168,   173,   180,   191,   190,   203,   210,   223,   224,
+     237,   238,   251,   252,   253,   254,   255,   256,   263,   264,
+     268,   273,   281,   288,   294,   304,   312,   316,   323,   323,
+     335,   341,   344,   349,   354,   359,   364,   369,   376,   382,
+     384,   389,   396,   403,   406,   411,   418,   419,   420,   421,
+     428,   438,   447,   448,   451,   462
 };
 #endif
 
@@ -851,9 +853,9 @@ yy_symbol_value_print (FILE *yyo,
   switch (yykind)
     {
     case YYSYMBOL_NUM: /* NUM  */
-#line 32 "parser.y"
+#line 34 "parser.y"
          { fprintf (yyoutput, "’%d’", (*yyvaluep)); }
-#line 857 "parser.tab.c"
+#line 859 "parser.tab.c"
         break;
 
       default:
@@ -1241,21 +1243,21 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* programa: declaracoes  */
-#line 36 "parser.y"
+#line 38 "parser.y"
                          { printf("Programa finalizado com sucesso\n"); 
 				savedTree = yyvsp[0];
 				YYACCEPT; }
-#line 1249 "parser.tab.c"
+#line 1251 "parser.tab.c"
     break;
 
   case 3: /* declaracoes: declaracaoLista  */
-#line 41 "parser.y"
+#line 43 "parser.y"
                                { yyval = yyvsp[0]; }
-#line 1255 "parser.tab.c"
+#line 1257 "parser.tab.c"
     break;
 
   case 4: /* declaracaoLista: declaracaoLista declaracao  */
-#line 45 "parser.y"
+#line 47 "parser.y"
                         {	
 			    TreeNode * t = yyvsp[-1];
 			    if (t != NULL) {
@@ -1266,29 +1268,29 @@ yyreduce:
 				yyval = yyvsp[0];
 			    }
 			}
-#line 1270 "parser.tab.c"
+#line 1272 "parser.tab.c"
     break;
 
   case 5: /* declaracaoLista: declaracao  */
-#line 55 "parser.y"
+#line 57 "parser.y"
                                      { yyval = yyvsp[0]; }
-#line 1276 "parser.tab.c"
+#line 1278 "parser.tab.c"
     break;
 
   case 6: /* declaracao: varDeclaracao  */
-#line 58 "parser.y"
+#line 60 "parser.y"
                                       { yyval = yyvsp[0];}
-#line 1282 "parser.tab.c"
+#line 1284 "parser.tab.c"
     break;
 
   case 7: /* declaracao: funDeclaracao  */
-#line 59 "parser.y"
+#line 61 "parser.y"
                                         { yyval = yyvsp[0];}
-#line 1288 "parser.tab.c"
+#line 1290 "parser.tab.c"
     break;
 
   case 8: /* varDeclaracao: tipoEspecificador ID PEV  */
-#line 63 "parser.y"
+#line 65 "parser.y"
                         { 
 					yyval = newExpNode(TypeK);
                				yyval->type = yyvsp[-2]->type;
@@ -1302,28 +1304,28 @@ yyreduce:
 					id->escopo = copyString(currentFunctionName);
                 			st_insert(location++, id->attr.name, currentFunctionName , "var",yyvsp[-2]->type, numline, 1);
     			}
-#line 1306 "parser.tab.c"
+#line 1308 "parser.tab.c"
     break;
 
   case 10: /* @1: %empty  */
-#line 78 "parser.y"
+#line 80 "parser.y"
                         {
 				yyerrok;
 				yyval = NULL;
 			}
-#line 1315 "parser.tab.c"
+#line 1317 "parser.tab.c"
     break;
 
   case 11: /* $@2: %empty  */
-#line 83 "parser.y"
+#line 85 "parser.y"
                         {
 			savedNameVar = copyString(tokenString);
 			}
-#line 1323 "parser.tab.c"
+#line 1325 "parser.tab.c"
     break;
 
   case 12: /* varDeclaracao: tipoEspecificador error PEV @1 $@2 ACO NUM FCO PEV  */
-#line 87 "parser.y"
+#line 89 "parser.y"
                         { 
 				yyval = newExpNode(TypeK);
                 		yyval->type = yyvsp[-8]->type;
@@ -1338,22 +1340,22 @@ yyreduce:
 				id->escopo = copyString(currentFunctionName);
 				st_insert(location++, id->attr.name, currentFunctionName, "var", yyvsp[-8]->type, numline, 1);
     			}
-#line 1342 "parser.tab.c"
+#line 1344 "parser.tab.c"
     break;
 
   case 13: /* $@3: %empty  */
-#line 106 "parser.y"
+#line 108 "parser.y"
                         {
 				savedNameFun = copyString(tokenString);
 				savedLineNo = numline;
 				currentFunctionName = savedNameFun;
 				setCurrentFunction(copyString(tokenString));
 			}
-#line 1353 "parser.tab.c"
+#line 1355 "parser.tab.c"
     break;
 
   case 14: /* funDeclaracao: tipoEspecificador ID $@3 APA params FPA compostoDecl  */
-#line 113 "parser.y"
+#line 115 "parser.y"
                         { 
 				yyval = newExpNode(TypeK);
                 		yyval->type = yyvsp[-6]->type;
@@ -1370,37 +1372,37 @@ yyreduce:
 				st_insert(location++, id->attr.name, "global","funcao", yyvsp[-6]->type, savedLineNo, 1);
 				currentFunctionName = "global";
 			}
-#line 1374 "parser.tab.c"
+#line 1376 "parser.tab.c"
     break;
 
   case 15: /* funDeclaracao: tipoEspecificador error APA  */
-#line 130 "parser.y"
+#line 132 "parser.y"
                         {
 				yyerrok;
 				yyval = NULL;
 			}
-#line 1383 "parser.tab.c"
+#line 1385 "parser.tab.c"
     break;
 
   case 16: /* params: paramLista  */
-#line 136 "parser.y"
+#line 138 "parser.y"
                                    {yyval = yyvsp[0];
 				}
-#line 1390 "parser.tab.c"
+#line 1392 "parser.tab.c"
     break;
 
   case 17: /* params: VOID  */
-#line 140 "parser.y"
+#line 142 "parser.y"
                         {	
 				yyval = newExpNode(TypeK);
 				yyval->type = Void;
 				yyval->child[0] = NULL;
 			}
-#line 1400 "parser.tab.c"
+#line 1402 "parser.tab.c"
     break;
 
   case 18: /* paramLista: paramLista VIR param  */
-#line 148 "parser.y"
+#line 150 "parser.y"
                         {	
 			    TreeNode * t = yyvsp[-2];
 			    if (t != NULL) {
@@ -1411,44 +1413,44 @@ yyreduce:
 				yyval = yyvsp[0];
 			    }
 			}
-#line 1415 "parser.tab.c"
+#line 1417 "parser.tab.c"
     break;
 
   case 19: /* paramLista: param  */
-#line 158 "parser.y"
+#line 160 "parser.y"
                                 {yyval = yyvsp[0];}
-#line 1421 "parser.tab.c"
+#line 1423 "parser.tab.c"
     break;
 
   case 20: /* paramLista: paramLista error param  */
-#line 160 "parser.y"
+#line 162 "parser.y"
                         {
 				yyerrok;
 				yyval = NULL;
 			}
-#line 1430 "parser.tab.c"
+#line 1432 "parser.tab.c"
     break;
 
   case 21: /* tipoEspecificador: INT  */
-#line 167 "parser.y"
+#line 169 "parser.y"
                         {	
 				yyval = newExpNode(TypeK);
 				yyval->type = Integer;
 			}
-#line 1439 "parser.tab.c"
+#line 1441 "parser.tab.c"
     break;
 
   case 22: /* tipoEspecificador: VOID  */
-#line 172 "parser.y"
+#line 174 "parser.y"
                         {	
 				yyval = newExpNode(TypeK);
 				yyval->type = Void;
 			}
-#line 1448 "parser.tab.c"
+#line 1450 "parser.tab.c"
     break;
 
   case 23: /* param: tipoEspecificador ID  */
-#line 179 "parser.y"
+#line 181 "parser.y"
                         { 
 				TreeNode *paramNode = newStmtNode(ParamK);
 				paramNode->attr.name = copyString(tokenString); // Nome do parâmetro
@@ -1458,19 +1460,19 @@ yyreduce:
 				st_insert(location++, paramNode->attr.name, currentFunctionName, "param", yyvsp[-1]->type, numline, 1);
 				yyval = yyvsp[-1];
     			}
-#line 1462 "parser.tab.c"
+#line 1464 "parser.tab.c"
     break;
 
   case 24: /* $@4: %empty  */
-#line 189 "parser.y"
+#line 191 "parser.y"
                         {
 				savedNameVar = copyString(tokenString);
 			}
-#line 1470 "parser.tab.c"
+#line 1472 "parser.tab.c"
     break;
 
   case 25: /* param: tipoEspecificador ID $@4 ACO FCO  */
-#line 192 "parser.y"
+#line 194 "parser.y"
                         { 
 				TreeNode *paramNode = newStmtNode(ParamK);
 				paramNode->attr.name = copyString(savedNameVar); // Nome do parâmetro
@@ -1480,20 +1482,20 @@ yyreduce:
 				st_insert(location++, paramNode->attr.name, currentFunctionName, "param", IntegerVetorK, numline, 1);
 				yyval = yyvsp[-4];
     			}
-#line 1484 "parser.tab.c"
+#line 1486 "parser.tab.c"
     break;
 
   case 26: /* param: tipoEspecificador error VIR  */
-#line 202 "parser.y"
+#line 204 "parser.y"
                         {
     				yyerrok;
     				yyval = NULL;
     			}
-#line 1493 "parser.tab.c"
+#line 1495 "parser.tab.c"
     break;
 
   case 27: /* compostoDecl: ACH localDeclaracoes statementLista FCH  */
-#line 209 "parser.y"
+#line 211 "parser.y"
                         {
 				TreeNode* t = yyvsp[-2];
 				if(t != NULL){
@@ -1504,17 +1506,17 @@ yyreduce:
 				} 
 				else yyval = yyvsp[-1];
              		 }
-#line 1508 "parser.tab.c"
+#line 1510 "parser.tab.c"
     break;
 
   case 28: /* localDeclaracoes: %empty  */
-#line 221 "parser.y"
+#line 223 "parser.y"
                                   { yyval = NULL; }
-#line 1514 "parser.tab.c"
+#line 1516 "parser.tab.c"
     break;
 
   case 29: /* localDeclaracoes: localDeclaracoes varDeclaracao  */
-#line 223 "parser.y"
+#line 225 "parser.y"
                         {
 				TreeNode *t = yyvsp[-1];
 				if (t != NULL) {
@@ -1525,17 +1527,17 @@ yyreduce:
 				    yyval = yyvsp[0];
 				}
 			 }
-#line 1529 "parser.tab.c"
+#line 1531 "parser.tab.c"
     break;
 
   case 30: /* statementLista: %empty  */
-#line 235 "parser.y"
+#line 237 "parser.y"
                                   { yyval = NULL; }
-#line 1535 "parser.tab.c"
+#line 1537 "parser.tab.c"
     break;
 
   case 31: /* statementLista: statementLista statement  */
-#line 237 "parser.y"
+#line 239 "parser.y"
                         {
 				TreeNode *t = yyvsp[-1];
 				if (t != NULL) {
@@ -1546,94 +1548,94 @@ yyreduce:
 				    yyval = yyvsp[0];
 				}
 			    }
-#line 1550 "parser.tab.c"
+#line 1552 "parser.tab.c"
     break;
 
   case 32: /* statement: expressaoDecl  */
-#line 249 "parser.y"
+#line 251 "parser.y"
                                        {yyval = yyvsp[0];}
-#line 1556 "parser.tab.c"
+#line 1558 "parser.tab.c"
     break;
 
   case 33: /* statement: compostoDecl  */
-#line 250 "parser.y"
+#line 252 "parser.y"
                                        {yyval = yyvsp[0];}
-#line 1562 "parser.tab.c"
+#line 1564 "parser.tab.c"
     break;
 
   case 34: /* statement: selecaoDecl  */
-#line 251 "parser.y"
+#line 253 "parser.y"
                                        {yyval = yyvsp[0];}
-#line 1568 "parser.tab.c"
+#line 1570 "parser.tab.c"
     break;
 
   case 35: /* statement: iteracaoDecl  */
-#line 252 "parser.y"
+#line 254 "parser.y"
                                        {yyval = yyvsp[0];}
-#line 1574 "parser.tab.c"
+#line 1576 "parser.tab.c"
     break;
 
   case 36: /* statement: retornoDecl  */
-#line 253 "parser.y"
+#line 255 "parser.y"
                                        {yyval = yyvsp[0];}
-#line 1580 "parser.tab.c"
+#line 1582 "parser.tab.c"
     break;
 
   case 37: /* statement: error PEV  */
-#line 255 "parser.y"
+#line 257 "parser.y"
                         {
 				yyerrok;
 				yyval = NULL;
 			}
-#line 1589 "parser.tab.c"
+#line 1591 "parser.tab.c"
     break;
 
   case 38: /* expressaoDecl: expressao PEV  */
-#line 261 "parser.y"
+#line 263 "parser.y"
                                       {yyval = yyvsp[-1];}
-#line 1595 "parser.tab.c"
+#line 1597 "parser.tab.c"
     break;
 
   case 40: /* selecaoDecl: IF APA expressao FPA statement  */
-#line 267 "parser.y"
+#line 269 "parser.y"
                         {  yyval = newStmtNode(IfK);
 	                   yyval->child[0] = yyvsp[-2];
 	                   yyval->child[1] = yyvsp[0];
 	                 }
-#line 1604 "parser.tab.c"
+#line 1606 "parser.tab.c"
     break;
 
   case 41: /* selecaoDecl: IF APA expressao FPA statement ELSE statement  */
-#line 272 "parser.y"
+#line 274 "parser.y"
                         {  yyval = newStmtNode(IfK);
 	                   yyval->child[0] = yyvsp[-4];
 	                   yyval->child[1] = yyvsp[-2];
 	                   yyval->child[2] = yyvsp[0];
 	                 }
-#line 1614 "parser.tab.c"
+#line 1616 "parser.tab.c"
     break;
 
   case 42: /* iteracaoDecl: WHILE APA expressao FPA statement  */
-#line 280 "parser.y"
+#line 282 "parser.y"
                         {  yyval = newStmtNode(WhileK);
 	                   yyval->child[0] = yyvsp[-2];
 	                   yyval->child[1] = yyvsp[0];
 	                 }
-#line 1623 "parser.tab.c"
+#line 1625 "parser.tab.c"
     break;
 
   case 43: /* retornoDecl: RETURN PEV  */
-#line 287 "parser.y"
+#line 289 "parser.y"
                         {
 				yyval = newStmtNode(returnK);
 				yyval->escopo = currentFunctionName;
 				yyval->type = Void;
 			}
-#line 1633 "parser.tab.c"
+#line 1635 "parser.tab.c"
     break;
 
   case 44: /* retornoDecl: RETURN expressao PEV  */
-#line 293 "parser.y"
+#line 295 "parser.y"
                         {  
 				yyval = newStmtNode(returnK);
 	                   	yyval->child[0] = yyvsp[-1];
@@ -1641,11 +1643,11 @@ yyreduce:
 				yyval->child[0]->type = Integer;
 				yyval->escopo = currentFunctionName;
 	                }
-#line 1645 "parser.tab.c"
+#line 1647 "parser.tab.c"
     break;
 
   case 45: /* expressao: var ATR expressao  */
-#line 303 "parser.y"
+#line 305 "parser.y"
                         { 
 				yyval = newStmtNode(AtrK);
 				yyval->attr.name = yyvsp[-2]->attr.name;
@@ -1653,34 +1655,34 @@ yyreduce:
 				yyval->child[0] = yyvsp[-2];
 				yyval->child[1] = yyvsp[0];
 			}
-#line 1657 "parser.tab.c"
+#line 1659 "parser.tab.c"
     break;
 
   case 46: /* expressao: simplesExpressao  */
-#line 310 "parser.y"
+#line 312 "parser.y"
                                            {yyval = yyvsp[0];}
-#line 1663 "parser.tab.c"
+#line 1665 "parser.tab.c"
     break;
 
   case 47: /* var: ID  */
-#line 315 "parser.y"
+#line 317 "parser.y"
                         {
 				yyval = newExpNode(IdK);
 				yyval->attr.name = copyString(tokenString);
 				yyval->type = Integer;
 				st_insert(location++, tokenString, currentFunctionName, "var", NULL, numline, 0);
 			}
-#line 1674 "parser.tab.c"
+#line 1676 "parser.tab.c"
     break;
 
   case 48: /* $@5: %empty  */
-#line 321 "parser.y"
+#line 323 "parser.y"
                              {	savedNameVar = copyString(tokenString); }
-#line 1680 "parser.tab.c"
+#line 1682 "parser.tab.c"
     break;
 
   case 49: /* var: ID $@5 ACO expressao FCO  */
-#line 323 "parser.y"
+#line 325 "parser.y"
                         {
 				yyval = newExpNode(IdK);
 				yyval->attr.name = copyString(savedNameVar);
@@ -1689,176 +1691,176 @@ yyreduce:
 				yyval->type = Integer;
 				st_insert(location++, savedNameVar, currentFunctionName, "var", NULL, numline, 0);
 			}
-#line 1693 "parser.tab.c"
+#line 1695 "parser.tab.c"
     break;
 
   case 50: /* simplesExpressao: somaExpressao relacional somaExpressao  */
-#line 334 "parser.y"
+#line 336 "parser.y"
                         {
 				yyval = yyvsp[-1];
 				yyval->child[0] = yyvsp[-2];
 				yyval->child[1] = yyvsp[0];
 			}
-#line 1703 "parser.tab.c"
+#line 1705 "parser.tab.c"
     break;
 
   case 51: /* simplesExpressao: somaExpressao  */
-#line 339 "parser.y"
+#line 341 "parser.y"
                                         {yyval = yyvsp[0];}
-#line 1709 "parser.tab.c"
+#line 1711 "parser.tab.c"
     break;
 
   case 52: /* relacional: MEI  */
-#line 343 "parser.y"
+#line 345 "parser.y"
                         { 
 				yyval = newExpNode(OpK);
 				yyval->attr.op = MEI;
 			}
-#line 1718 "parser.tab.c"
+#line 1720 "parser.tab.c"
     break;
 
   case 53: /* relacional: MEN  */
-#line 348 "parser.y"
+#line 350 "parser.y"
                         { 
 				yyval = newExpNode(OpK);
 				yyval->attr.op = MEN;
 			}
-#line 1727 "parser.tab.c"
+#line 1729 "parser.tab.c"
     break;
 
   case 54: /* relacional: MAI  */
-#line 353 "parser.y"
+#line 355 "parser.y"
                         { 
 				yyval = newExpNode(OpK);
 				yyval->attr.op = MAI;
 			}
-#line 1736 "parser.tab.c"
+#line 1738 "parser.tab.c"
     break;
 
   case 55: /* relacional: MIG  */
-#line 358 "parser.y"
+#line 360 "parser.y"
                         { 
 				yyval = newExpNode(OpK);
 				yyval->attr.op = MIG;
 			}
-#line 1745 "parser.tab.c"
+#line 1747 "parser.tab.c"
     break;
 
   case 56: /* relacional: IGU  */
-#line 363 "parser.y"
+#line 365 "parser.y"
                         { 
 				yyval = newExpNode(OpK);
 				yyval->attr.op = IGU;
 			}
-#line 1754 "parser.tab.c"
+#line 1756 "parser.tab.c"
     break;
 
   case 57: /* relacional: DIF  */
-#line 368 "parser.y"
+#line 370 "parser.y"
                         { 
 				yyval = newExpNode(OpK);
 				yyval->attr.op = DIF;
 			}
-#line 1763 "parser.tab.c"
+#line 1765 "parser.tab.c"
     break;
 
   case 58: /* somaExpressao: somaExpressao soma termo  */
-#line 375 "parser.y"
+#line 377 "parser.y"
                         {
 				yyval = yyvsp[-1];
 				yyval->child[0] = yyvsp[-2];
 				yyval->child[1] = yyvsp[0];
 			}
-#line 1773 "parser.tab.c"
+#line 1775 "parser.tab.c"
     break;
 
   case 59: /* somaExpressao: termo  */
-#line 380 "parser.y"
+#line 382 "parser.y"
                                 {yyval = yyvsp[0];}
-#line 1779 "parser.tab.c"
+#line 1781 "parser.tab.c"
     break;
 
   case 60: /* soma: SOM  */
-#line 383 "parser.y"
+#line 385 "parser.y"
                         { 
 				yyval = newExpNode(OpK);
 				yyval->attr.op = SOM;
 			}
-#line 1788 "parser.tab.c"
+#line 1790 "parser.tab.c"
     break;
 
   case 61: /* soma: SUB  */
-#line 388 "parser.y"
+#line 390 "parser.y"
                         { 
 				yyval = newExpNode(OpK);
 				yyval->attr.op = SUB;
 			}
-#line 1797 "parser.tab.c"
+#line 1799 "parser.tab.c"
     break;
 
   case 62: /* termo: termo mult fator  */
-#line 395 "parser.y"
+#line 397 "parser.y"
                         {
 				yyval = yyvsp[-1];
 				yyval->child[0] = yyvsp[-2];
 				yyval->child[1] = yyvsp[0];	
 			}
-#line 1807 "parser.tab.c"
+#line 1809 "parser.tab.c"
     break;
 
   case 63: /* termo: fator  */
-#line 401 "parser.y"
+#line 403 "parser.y"
                                 {yyval = yyvsp[0];}
-#line 1813 "parser.tab.c"
+#line 1815 "parser.tab.c"
     break;
 
   case 64: /* mult: MUL  */
-#line 405 "parser.y"
+#line 407 "parser.y"
                         { 
 				yyval = newExpNode(OpK);
 				yyval->attr.op = MUL;
 			}
-#line 1822 "parser.tab.c"
+#line 1824 "parser.tab.c"
     break;
 
   case 65: /* mult: DIV  */
-#line 410 "parser.y"
+#line 412 "parser.y"
                         { 
 				yyval = newExpNode(OpK);
 				yyval->attr.op = DIV;
 			}
-#line 1831 "parser.tab.c"
+#line 1833 "parser.tab.c"
     break;
 
   case 66: /* fator: APA expressao FPA  */
-#line 416 "parser.y"
+#line 418 "parser.y"
                                           {yyval = yyvsp[-1];}
-#line 1837 "parser.tab.c"
+#line 1839 "parser.tab.c"
     break;
 
   case 67: /* fator: var  */
-#line 417 "parser.y"
+#line 419 "parser.y"
                                {yyval = yyvsp[0];}
-#line 1843 "parser.tab.c"
+#line 1845 "parser.tab.c"
     break;
 
   case 68: /* fator: ativacao  */
-#line 418 "parser.y"
+#line 420 "parser.y"
                                    {yyval = yyvsp[0];}
-#line 1849 "parser.tab.c"
+#line 1851 "parser.tab.c"
     break;
 
   case 69: /* fator: NUM  */
-#line 420 "parser.y"
+#line 422 "parser.y"
                         {
 				yyval = newExpNode(ConstK);
 				yyval->attr.val = atoi(tokenString);
   			}
-#line 1858 "parser.tab.c"
+#line 1860 "parser.tab.c"
     break;
 
   case 70: /* ativacao: idAtiv APA args FPA  */
-#line 427 "parser.y"
+#line 429 "parser.y"
                         {
 				yyval = yyvsp[-3];
 				yyval->child[0] = yyvsp[-1];
@@ -1867,11 +1869,11 @@ yyreduce:
 				yyval->numline = numline;
 				yyval->attr.name = yyvsp[-3]->attr.name;
 			}
-#line 1871 "parser.tab.c"
+#line 1873 "parser.tab.c"
     break;
 
   case 71: /* idAtiv: ID  */
-#line 437 "parser.y"
+#line 439 "parser.y"
                         {
 				yyval = newExpNode(IdK);
 				yyval->attr.name = copyString(tokenString);
@@ -1879,23 +1881,23 @@ yyreduce:
 				if(strcmp("output", tokenString) != 0 && strcmp("input", tokenString) && strcmp("main", tokenString) )
 				st_insert(location++, tokenString, currentFunctionName, "funcao", NULL, numline, 0);
 			}
-#line 1883 "parser.tab.c"
+#line 1885 "parser.tab.c"
     break;
 
   case 72: /* args: %empty  */
-#line 445 "parser.y"
+#line 447 "parser.y"
                                   { yyval = NULL; }
-#line 1889 "parser.tab.c"
+#line 1891 "parser.tab.c"
     break;
 
   case 73: /* args: argLista  */
-#line 446 "parser.y"
+#line 448 "parser.y"
                                    {yyval = yyvsp[0];}
-#line 1895 "parser.tab.c"
+#line 1897 "parser.tab.c"
     break;
 
   case 74: /* argLista: argLista VIR expressao  */
-#line 450 "parser.y"
+#line 452 "parser.y"
                         {	
 			    TreeNode * t = yyvsp[-2];
 			    if (t != NULL) {
@@ -1906,17 +1908,17 @@ yyreduce:
 				yyval = yyvsp[0];
 			    }
 			}
-#line 1910 "parser.tab.c"
+#line 1912 "parser.tab.c"
     break;
 
   case 75: /* argLista: expressao  */
-#line 460 "parser.y"
+#line 462 "parser.y"
                                     {yyval = yyvsp[0];}
-#line 1916 "parser.tab.c"
+#line 1918 "parser.tab.c"
     break;
 
 
-#line 1920 "parser.tab.c"
+#line 1922 "parser.tab.c"
 
       default: break;
     }
@@ -2109,7 +2111,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 464 "parser.y"
+#line 466 "parser.y"
 
 
 

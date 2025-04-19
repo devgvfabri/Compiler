@@ -58,5 +58,7 @@ void traverse(TreeNode * t,
   void (* preProc) (TreeNode *),
   void (* postProc) (TreeNode *));
 
+  ExpType st_lookup_type(char *name, char *escopo);
+
 
 #endif

@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "util.h"
 #include "global.h"
+#include "symtab.h"
+#include "semantico.h"
 
 void yyerror(char *);
 #define YYDEBUG 1    //Para exibir na tela os passos da análise sintática quando o parser é executado
