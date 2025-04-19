@@ -35,6 +35,22 @@ void errorSemanticoVariavelExistente(char *name, int numline)
     listaErros = novoErro;
 }
 
+void errorSemanticoFuncaoNaoDeclarada(char *name, int numline) 
+{
+    Erro *novoErro = (Erro *)malloc(sizeof(Erro));
+    if (!novoErro) 
+    {
+        printf("Erro de alocação de memória!\n");
+        return;
+    }
+
+    snprintf(novoErro->mensagem, sizeof(novoErro->mensagem), 
+             "ERRO SEMÂNTICO: %s LINHA: %d, Função não declarada.\n", name, numline);
+
+    novoErro->prox = listaErros;
+    listaErros = novoErro;
+}
+
 /* Gera erro semântico para variável não declarada */
 void errorSemanticoVariavelNaoDeclarada(char *name, int numline)
 {
@@ -46,11 +62,12 @@ void errorSemanticoVariavelNaoDeclarada(char *name, int numline)
     }
 
     snprintf(novoErro->mensagem, sizeof(novoErro->mensagem), 
-             "ERRO SEMÂNTICO: %s LINHA: %d, ID não declarado antes do uso.\n", name, numline);
+             "ERRO SEMÂNTICO: %s LINHA: %d, Variável não declarada antes do uso.\n", name, numline);
 
     novoErro->prox = listaErros;
     listaErros = novoErro;
 }
+
 /* Função para imprimir erros da lista encadeada*/
 void imprimirErros() 
 {
@@ -121,6 +138,7 @@ void checkNode(TreeNode * t) {
                     if (t->attr.name != NULL && t->escopo != NULL) {
                       BucketList entry = st_lookup_entryFun(t->attr.name, "global", "funcao");
                       if (entry != NULL) {
+                        
             
                         // Verifica se o identificador é uma função para verificar conflitos de nomes com funções
                         if (strcmp(entry->tipoID, "funcao") == 0) {
@@ -206,46 +224,6 @@ void checkNode(TreeNode * t) {
             // Ignora outros casos de nodekind
             break;
     }
-  }
-  /* Função para procurar um identificador na tabela de símbolos*/
-  BucketList st_lookup_entry(char *name, char *escopo) {
-    if (name == NULL || escopo == NULL) {
-        return NULL;  // Retorna nulo se os parâmetros forem inválidos
-    }
-    int h = hash(name);
-    BucketList l = hashTable[h]; 
-  
-    while (l != NULL) {
-        if (l->name != NULL && l->escopo != NULL && strcmp(name, l->name) == 0 && strcmp(escopo, l->escopo) == 0) {
-            break;
-        }
-        l = l->next;
-    }
-    return l;  
-  }
-  
-  /* Função para procurar um identificador função na tabela de símbolos*/
-  
-  BucketList st_lookup_entryFun(char *name, char *escopo, char *tipoID){
-    if (name == NULL || escopo == NULL) {
-        return NULL;  // Retorna nulo se os parâmetros forem inválidos
-    }
-    int h = hash(name);
-    BucketList l = hashTable[h]; 
-  
-    while (l != NULL) {
-        if (l->name != NULL && l->escopo != NULL && l->tipoID != NULL && 
-            strcmp(name, l->name) == 0 && strcmp(escopo, l->escopo) == 0 && strcmp(tipoID, l->tipoID) == 0) {
-            break;
-        }
-        l = l->next;
-    }
-    return l;  
-  }
-  
-  ExpType st_lookup_type(char *name, char *escopo) {
-        BucketList entry = st_lookup_entry(name, escopo);
-        return (entry != NULL) ? (ExpType) entry->tipoDado : Undefined;  // 🔹 Converte para ExpType
   }
   
   

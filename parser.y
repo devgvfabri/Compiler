@@ -76,11 +76,6 @@ varDeclaracao	:	tipoEspecificador ID PEV
                 			st_insert(location++, id->attr.name, currentFunctionName , "var",$1->type, numline, 1);
     			}
 			| tipoEspecificador ID 
-			| tipoEspecificador error PEV
-			{
-				yyerrok;
-				$$ = NULL;
-			}
 			// Declaração de variável vetor cria nó com tipo, id, escopo, e insere na tabela de símbolos, salva id em uma variavel global para gerar a arvore e a tabela
 			{
 			savedNameVar = copyString(tokenString);
@@ -100,6 +95,11 @@ varDeclaracao	:	tipoEspecificador ID PEV
 				id->escopo = copyString(currentFunctionName);
 				st_insert(location++, id->attr.name, currentFunctionName, "var", $1->type, numline, 1);
     			}
+				| tipoEspecificador error PEV
+			{
+				yyerrok;
+				$$ = NULL;
+			}
 			;
 
 			// Declaração de função vetor cria nó com tipo, id, escopo, e insere na tabela de símbolos, salva id em uma variavel global para gerar a arvore e a tabela

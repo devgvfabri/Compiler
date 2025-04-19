@@ -7,6 +7,32 @@
 #include "semantico.h"
 /* ########################### Tabela  de símbolos ######################################*/
 
+/* Lista de linhas em que determinado id aparece no código*/
+typedef struct LineListRec
+{ 
+   	int numline;
+   	struct LineListRec *next;
+} * LineList;
+
+typedef struct BucketListRec 
+{ 
+   	char * name;
+     	LineList lines;
+     	int memloc ;
+     	char * escopo;
+     	char * tipoID;
+     	int  tipoDado; 
+     	struct BucketListRec * next;
+} * BucketList;
+   
+static BucketList hashTable[211];
+
+static char *currentFunction = "global";  // Inicializa como global
+
+BucketList st_lookup_entry(char *name, char *escopo);
+
+BucketList st_lookup_entryFun(char *name, char *escopo, char *tipoID);
+
 /* Protótipo da função */
 void printToken(TokenType token, const char* tokenString);
 

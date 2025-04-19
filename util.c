@@ -7,17 +7,9 @@
 
 /* ########################### Arvore Sintática Abstrata ######################################*/
 
-/* Lista encadeada para armazenar as mensagens de erros */
 
-typedef struct Erro {
-    char mensagem[256];  // Armazena a mensagem de erro
-    struct Erro *prox;   // Ponteiro para o próximo erro
-} Erro;
-
-Erro *listaErros = NULL;  // Ponteiro global para a lista de erros
 
 FILE *save_tree;
-FILE *save_symTable;
 
 /* ########################## Imprime tokens e lexemas correspondentes ####################################*/
 void printToken( TokenType token, const char* tokenString )

@@ -13,4 +13,7 @@
 
  void errorSemanticoVariavelNaoDeclarada(char *name, int numline);
 
+ void errorSemanticoFuncaoNaoDeclarada(char *name, int numline);
+
+
  #endif /* SEMANTICO_H */

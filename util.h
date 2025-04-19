@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include "global.h"
-#include "parser.tab.h"
+
 /* Definição do tipo TokenType */
 typedef int TokenType;
 

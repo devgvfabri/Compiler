@@ -10,31 +10,6 @@
 
 FILE *save_symTable;
 
-/* Lista de linhas em que determinado id aparece no código*/
-typedef struct LineListRec
-{ 
-   	int numline;
-   	struct LineListRec *next;
-} * LineList;
-
-typedef struct BucketListRec 
-{ 
-   	char * name;
-     	LineList lines;
-     	int memloc ;
-     	char * escopo;
-     	char * tipoID;
-     	int  tipoDado; 
-     	struct BucketListRec * next;
-} * BucketList;
-   
-static BucketList hashTable[211];
-
-static char *currentFunction = "global";  // Inicializa como global
-
-BucketList st_lookup_entry(char *name, char *escopo);
-
-BucketList st_lookup_entryFun(char *name, char *escopo, char *tipoID);
 
 /* retorna a função atual para o analisador semantico*/
 char *getCurrentFunction() {
@@ -168,11 +143,16 @@ void st_insert(int loc, char *name, char *escopo, char *tipoID, int tipoDado, in
         if (temp == NULL) {
             if (strcmp(name, escopo) == 0 && strcmp(tipoID, "funcao") == 0) {
                 return;  // Chamada recursiva válida, não gera erro
-            } else {
-                errorSemanticoVariavelNaoDeclarada(name, numline);
-                return;
+            } else if(strcmp(tipoID, "funcao") != 0) {
+                    errorSemanticoVariavelNaoDeclarada(name, numline);
+                    return;
+                
+            }else if (strcmp(tipoID, "funcao") == 0) {
+                    errorSemanticoFuncaoNaoDeclarada(name, numline);
+                    return;  // Chamada de função não encontrada
+                }
             }
-        } 
+        
   
         // Se for chamada de função, marcar como tal
         if (strcmp(temp->tipoID, "funcao") == 0) {
@@ -194,5 +174,46 @@ void st_insert(int loc, char *name, char *escopo, char *tipoID, int tipoDado, in
         t->next->numline = numline;
         t->next->next = NULL;
     }
+  }
+
+   /* Função para procurar um identificador na tabela de símbolos*/
+   BucketList st_lookup_entry(char *name, char *escopo) {
+    if (name == NULL || escopo == NULL) {
+        return NULL;  // Retorna nulo se os parâmetros forem inválidos
+    }
+    int h = hash(name);
+    BucketList l = hashTable[h]; 
+  
+    while (l != NULL) {
+        if (l->name != NULL && l->escopo != NULL && strcmp(name, l->name) == 0 && strcmp(escopo, l->escopo) == 0) {
+            break;
+        }
+        l = l->next;
+    }
+    return l;  
+  }
+  
+  /* Função para procurar um identificador função na tabela de símbolos*/
+  
+  BucketList st_lookup_entryFun(char *name, char *escopo, char *tipoID){
+    if (name == NULL || escopo == NULL) {
+        return NULL;  // Retorna nulo se os parâmetros forem inválidos
+    }
+    int h = hash(name);
+    BucketList l = hashTable[h]; 
+  
+    while (l != NULL) {
+        if (l->name != NULL && l->escopo != NULL && l->tipoID != NULL && 
+            strcmp(name, l->name) == 0 && strcmp(escopo, l->escopo) == 0 && strcmp(tipoID, l->tipoID) == 0) {
+            break;
+        }
+        l = l->next;
+    }
+    return l;  
+  }
+  
+  ExpType st_lookup_type(char *name, char *escopo) {
+        BucketList entry = st_lookup_entry(name, escopo);
+        return (entry != NULL) ? (ExpType) entry->tipoDado : Undefined;  // 🔹 Converte para ExpType
   }
 

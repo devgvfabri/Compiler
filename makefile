@@ -36,7 +36,7 @@ $(SEMANTICO_O): $(SEMANTICO)
 	gcc -c $(SEMANTICO)
 
 $(EXEC): $(LEX_O) $(UTIL_O) $(SYMTAB_O) $(SEMANTICO_O) $(YACC_C)
-	g++ -o $(EXEC) $(UTIL_O) $(LEX_O) $(SYMTAB_O) $(SEMANTICO_O) $(YACC_C) -lfl
+	g++ -o $(EXEC) $(YACC_C) $(UTIL) $(LEX_O) $(SYMTAB) $(SEMANTICO) -lfl
 
 run: $(EXEC)
 	./$(EXEC)
