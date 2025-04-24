@@ -43,6 +43,13 @@ typedef struct treeNode
      char *escopo;
    } TreeNode;
    
+   typedef struct ErroSintatico
+   { 
+     char mensagem[256];  // Armazena a mensagem de erro
+     struct ErroSintatico *prox;   // Ponteiro para o próximo erro
+   } ErroSintatico;
+    
+
 
 
 TreeNode *newStmtNode(StmtKind kind);

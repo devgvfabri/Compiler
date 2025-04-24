@@ -24,6 +24,7 @@ static int savedLineNo;
 static TreeNode* savedTree;
 static int location = 0;
 static char *currentFunctionName = "global";
+ErroSintatico *listaErrosSintaticos = NULL;  // Ponteiro global para a lista de erros
 
 %}
 
@@ -466,6 +467,15 @@ argLista	: 	argLista VIR expressao
 %%
 
 
+void imprimirErrosSintaticos() 
+{
+	ErroSintatico *atual = listaErrosSintaticos;
+	while (atual) 
+	{
+		printf("%s", atual->mensagem);
+		atual = atual->prox;
+	}
+}
 int main()
 {
   extern int yydebug;
@@ -480,6 +490,7 @@ int main()
       printf("\nErro ao construir a árvore sintática.\n");
   }
   imprimirErros();
+  imprimirErrosSintaticos();
 	semanticCheck(savedTree);
 	printSymTab();
   return 0;
@@ -489,6 +500,12 @@ void yyerror(char * msg)
 {
   extern char* yytext;
   extern int yychar;
+    ErroSintatico *novoErroSintatico = (ErroSintatico *)malloc(sizeof(ErroSintatico));
+	snprintf(novoErroSintatico->mensagem, sizeof(novoErroSintatico->mensagem), 
+             "ERRO SINTÁTICO: %s LINHA: %d\n", yytext, numline);
+
+    novoErroSintatico->prox = listaErrosSintaticos;  // Adicionar ao início da lista
+    listaErrosSintaticos = novoErroSintatico;
   printf("\n\n\n\tERRO SINTÁTICO: %s, Token: ", msg);
   printToken(yychar, yytext);
   printf(" LINHA: %d\n\n\n", numline);
