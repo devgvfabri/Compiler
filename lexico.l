@@ -19,6 +19,9 @@ void contLine();
 
 extern int numline;
 char tokenString[256];
+ErroLexico *listaErrosLexicos = NULL;  // Ponteiro global para a lista de erros
+
+
 %}
 
 NUMERO [0-9]
@@ -54,18 +57,27 @@ void                                  {return VOID;}
 "}"                                   {return FCH;}
 {LETRA}+                              {strcpy(tokenString, yytext); return ID;}
 {NUMERO}+                             {strcpy(tokenString, yytext);return NUM;}
-\n				      numline++;
+\n				                      numline++;
 \t
 {OUTRO}+                              {erroLexico(); return(OUTRO);};
 <<EOF>>                               return FIM;					
 %%
 
+
 /* Função para imprimir erros */
 void erroLexico()
 {
+    ErroLexico *novoErroLexico = (ErroLexico *)malloc(sizeof(ErroLexico));
+	snprintf(novoErroLexico->mensagem, sizeof(novoErroLexico->mensagem), 
+             "ERRO LÉXICO: %s LINHA: %d\n", yytext, numline);
+
+    novoErroLexico->prox = listaErrosLexicos;  // Adicionar ao início da lista
+    listaErrosLexicos = novoErroLexico;
 	printf("ERRO LÉXICO: %s LINHA: %d\n", yytext, numline);
 
 }
+
+
 
 /* Função para contar linhas em um comentário */
 void contLine() {

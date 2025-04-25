@@ -8,8 +8,18 @@
 /* ########################### Arvore Sintática Abstrata ######################################*/
 
 
-
+extern ErroLexico *listaErrosLexicos;
 FILE *save_tree;
+
+void imprimirErrosLexicos() 
+{
+	ErroLexico *atual = listaErrosLexicos;
+	while (atual) 
+	{
+		printf("%s", atual->mensagem);
+		atual = atual->prox;
+	}
+}
 
 /* ########################## Imprime tokens e lexemas correspondentes ####################################*/
 void printToken( TokenType token, const char* tokenString )

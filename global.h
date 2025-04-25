@@ -48,9 +48,15 @@ typedef struct treeNode
      char mensagem[256];  // Armazena a mensagem de erro
      struct ErroSintatico *prox;   // Ponteiro para o próximo erro
    } ErroSintatico;
-    
 
+   typedef struct ErroLexico
+   { 
+     char mensagem[256];  // Armazena a mensagem de erro
+     struct ErroLexico *prox;   // Ponteiro para o próximo erro
+   } ErroLexico;
+   
 
+void imprimirErrosLexicos();
 
 TreeNode *newStmtNode(StmtKind kind);
 TreeNode *newExpNode(ExpKind kind);

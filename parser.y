@@ -476,6 +476,7 @@ void imprimirErrosSintaticos()
 		atual = atual->prox;
 	}
 }
+
 int main()
 {
   extern int yydebug;
@@ -491,6 +492,7 @@ int main()
   }
   imprimirErros();
   imprimirErrosSintaticos();
+  imprimirErrosLexicos();
 	semanticCheck(savedTree);
 	printSymTab();
   return 0;
