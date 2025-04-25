@@ -11,6 +11,8 @@ void main (void)
 {	
 	int x; int y; int @#$; void a;
 	x = #$%;
+	y = #$%;
+	x = 1.5;
 	x = input(); y = input();
 	output(gcd(x,y));
 }
