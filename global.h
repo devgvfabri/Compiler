@@ -40,6 +40,7 @@ typedef struct treeNode
              int vetor;
             } attr;
      ExpType type; 
+     char *temp;
      char *escopo;
    } TreeNode;
    

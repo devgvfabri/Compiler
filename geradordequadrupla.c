@@ -20,7 +20,7 @@ char* newLabel() {
 
 char* newTemp() {
     char *name = (char*)malloc(sizeof(char) * 10);
-    sprintf(name, "T%d", tempVarNum++);
+    sprintf(name, "$t%d", tempVarNum++);
     return name;
 }
 
@@ -39,7 +39,10 @@ void genStmt(TreeNode *tree)
 			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
 			break;
 		case AtrK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			cGen(tree->child[0]);
+			cGen(tree->child[1]);
+			fprintf(codigoIntermediario, "(ASSIGN,%s,%s,-)\n", tree->child[0]->temp, tree->child[1]->temp);
+			fprintf(codigoIntermediario, "(STORE,%s,%s,-)\n", tree->child[0]->attr.name, tree->child[0]->temp);
 			break;
 		case VarK:
 			fprintf(codigoIntermediario, "(ALLOC,%s,%s,-)\n", tree->attr.name, tree->escopo);
@@ -51,7 +54,8 @@ void genStmt(TreeNode *tree)
 			fprintf(codigoIntermediario, "(END,-,-,-)\n");
 			break;
 		case CallK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			tree->temp = newTemp();
+			fprintf(codigoIntermediario, "(CALL,%s,%s,-)\n", tree->temp, tree->attr.name);
 			break;
 		case ParamK:
 			fprintf(codigoIntermediario, "(ARG,%d,%s,%s)\n", tree->type, tree->attr.name, tree->escopo);
@@ -74,7 +78,8 @@ void genExp(TreeNode *tree)
 			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
 			break;
 		case IdK:
-			fprintf(codigoIntermediario, "(LOAD,-,-,-)\n");
+			tree->temp = newTemp();
+			fprintf(codigoIntermediario, "(LOAD,%s,%s,-)\n", tree->temp, tree->attr.name);
 			break;
 		case TypeK:
 			cGen(tree->child[0]);
