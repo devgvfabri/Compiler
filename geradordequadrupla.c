@@ -8,6 +8,21 @@
 
 FILE *codigoIntermediario;
 
+void cGen(TreeNode *t);
+
+int tempVarNum = 0;
+
+char* newLabel() {
+	char* name = (char*)malloc(sizeof(char) * 10);
+	sprintf(name, "L%d", tempVarNum++);
+	return name;
+}
+
+char* newTemp() {
+    char *name = (char*)malloc(sizeof(char) * 10);
+    sprintf(name, "T%d", tempVarNum++);
+    return name;
+}
 
 void genStmt(TreeNode *tree)
 {
@@ -27,16 +42,19 @@ void genStmt(TreeNode *tree)
 			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
 			break;
 		case VarK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			fprintf(codigoIntermediario, "(ALLOC,%s,%s,-)\n", tree->attr.name, tree->escopo);
 			break;
 		case FunK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			fprintf(codigoIntermediario, "(FUN,%d,%s,-)\n", tree->type, tree->attr.name);
+			cGen(tree->child[0]);
+			cGen(tree->child[1]);
+			fprintf(codigoIntermediario, "(END,-,-,-)\n");
 			break;
 		case CallK:
 			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
 			break;
 		case ParamK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			fprintf(codigoIntermediario, "(ARG,%d,%s,%s)\n", tree->type, tree->attr.name, tree->escopo);
 			break;
 		default:
 			break;
@@ -56,10 +74,10 @@ void genExp(TreeNode *tree)
 			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
 			break;
 		case IdK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			fprintf(codigoIntermediario, "(LOAD,-,-,-)\n");
 			break;
 		case TypeK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			cGen(tree->child[0]);
 			break;
 		case VetK:
 			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
@@ -84,9 +102,7 @@ void cGen(TreeNode *t)
 		default:
 			break;
 	}
-	for (i=0;i<3;i++)
-		 cGen(t->child[i]);
-	t = t->sibling;
+	cGen(t->sibling);
 	}
 }
 
@@ -94,8 +110,4 @@ void generateCode(TreeNode *t) {
     if (t == NULL) return;
 	codigoIntermediario = fopen("codqua.txt", "w");
     cGen(t);
-
-
-
-
 }

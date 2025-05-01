@@ -1,9 +1,8 @@
 Location   Variable Name Escopo Tipo ID Tipo Dado Line Numbers
 --------   ------------- ------ ------- --------- ------------
-15        main           global  funcao    0            11 
-6         a              main    var       0            13 
-0         u              gcd     param     1             4 
-1         v              gcd     param     1             4    6 
-4         x              main    var       1            13   15   17   18   19 
-5         y              main    var       1            13   16   18   19 
-3         gcd            global  funcao    1             4   19 
+18        main           global  funcao    0            11 
+0         u              gcd     param     1             4    6    7 
+1         v              gcd     param     1             4    6    7 
+11        x              main    var       1            13   14   15 
+12        y              main    var       1            13   14   15 
+10        gcd            global  funcao    1             4   15    7 

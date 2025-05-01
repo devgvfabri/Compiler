@@ -76,7 +76,7 @@
 #include "global.h"
 #include "symtab.h"
 #include "semantico.h"
-
+#include "geradordequadrupla.h"
 void yyerror(char *);
 #define YYDEBUG 1    //Para exibir na tela os passos da análise sintática quando o parser é executado
 extern "C"
@@ -2140,8 +2140,9 @@ int main()
   imprimirErros();
   imprimirErrosSintaticos();
   imprimirErrosLexicos();
-	semanticCheck(savedTree);
-	printSymTab();
+  semanticCheck(savedTree);
+  printSymTab();
+  generateCode(savedTree);
   return 0;
 }
 
