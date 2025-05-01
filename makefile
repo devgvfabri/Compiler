@@ -5,6 +5,7 @@ YACC = parser.y
 UTIL = util.c
 SYMTAB = symtab.c
 SEMANTICO = semantico.c
+GERADORDEQUADRUPLA = geradordequadrupla.c
 
 LEX_C = lex.yy.c
 YACC_C = parser.tab.c
@@ -14,6 +15,7 @@ LEX_O = lex.yy.o
 UTIL_O = util.o
 SYMTAB_O = symtab.o
 SEMANTICO_O = semantico.o
+GERADORDEQUADRUPLA_O = geradordequadrupla.o
 
 all: $(EXEC)
 
@@ -34,12 +36,15 @@ $(SYMTAB_O): $(SYMTAB)
 
 $(SEMANTICO_O): $(SEMANTICO)
 	gcc -c $(SEMANTICO)
+	
+$(GERADORDEQUADRUPLA_O): $(GERADORDEQUADRUPLA)
+	gcc -c $(GERADORDEQUADRUPLA)
 
-$(EXEC): $(LEX_O) $(UTIL_O) $(SYMTAB_O) $(SEMANTICO_O) $(YACC_C)
-	g++ -o $(EXEC) $(YACC_C) $(UTIL) $(LEX_O) $(SYMTAB) $(SEMANTICO) -lfl
+$(EXEC): $(LEX_O) $(UTIL_O) $(SYMTAB_O) $(SEMANTICO_O) $(GERADORDEQUADRUPLA_O) $(YACC_C)
+	g++ -o $(EXEC) $(YACC_C) $(UTIL) $(LEX_O) $(SYMTAB) $(SEMANTICO) $(GERADORDEQUADRUPLA) -lfl
 
 run: $(EXEC)
 	./$(EXEC)
 
 clean:
-	rm -f $(LEX_C) $(YACC_C) $(YACC_H) $(LEX_O) $(UTIL_O) $(SYMTAB_O) $(SEMANTICO_O) $(EXEC)
+	rm -f $(LEX_C) $(YACC_C) $(YACC_H) $(LEX_O) $(UTIL_O) $(SYMTAB_O) $(SEMANTICO_O) $(GERADORDEQUADRUPLA_O) $(EXEC)
