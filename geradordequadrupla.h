@@ -13,5 +13,7 @@ void cGen(TreeNode *t);
 
 void generateCode(TreeNode *t);
 
+void cGen_noSibling(TreeNode *t);
+
 #endif
 

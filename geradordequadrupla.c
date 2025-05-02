@@ -9,8 +9,15 @@
 FILE *codigoIntermediario;
 
 void cGen(TreeNode *t);
-
+void cGen_noSibling(TreeNode *t);
 int tempVarNum = 0;
+
+typedef struct parametros {
+	char *name;
+	struct parametros *prox;
+} parametros;
+
+parametros *parametrosLista = NULL;
 
 char* newLabel() {
 	char* name = (char*)malloc(sizeof(char) * 10);
@@ -48,18 +55,50 @@ void genStmt(TreeNode *tree)
 			fprintf(codigoIntermediario, "(ALLOC,%s,%s,-)\n", tree->attr.name, tree->escopo);
 			break;
 		case FunK:
+		{
 			fprintf(codigoIntermediario, "(FUN,%d,%s,-)\n", tree->type, tree->attr.name);
 			cGen(tree->child[0]);
+			while (parametrosLista != NULL) {
+				char *temp = newTemp();
+				fprintf(codigoIntermediario, "(LOAD,%s,%s,-)\n", temp,parametrosLista->name);
+				parametrosLista = parametrosLista->prox;
+			}
 			cGen(tree->child[1]);
-			fprintf(codigoIntermediario, "(END,-,-,-)\n");
+			fprintf(codigoIntermediario, "(END,%s,-,-)\n", tree->attr.name);
 			break;
-		case CallK:
-			tree->temp = newTemp();
-			fprintf(codigoIntermediario, "(CALL,%s,%s,-)\n", tree->temp, tree->attr.name);
-			break;
+		}
+		case CallK: {
+				TreeNode *arg = tree->child[0];
+				int argCount = 0;
+				
+				// Gera código e PARAM para cada argumento
+				while (arg != NULL) {
+					cGen_noSibling(arg); // Gera código da expressão
+					fprintf(codigoIntermediario, "(PARAM,%s,-,-)\n", arg->temp);
+					argCount++;
+					arg = arg->sibling;
+				}
+			
+				tree->temp = newTemp();
+				fprintf(codigoIntermediario, "(CALL,%s,%s,%d)\n", tree->temp, tree->attr.name, argCount);
+				break;
+			}
 		case ParamK:
-			fprintf(codigoIntermediario, "(ARG,%d,%s,%s)\n", tree->type, tree->attr.name, tree->escopo);
-			break;
+			{
+				fprintf(codigoIntermediario, "(ARG,%d,%s,%s)\n", tree->type, tree->attr.name, tree->escopo);
+				parametros *param = (struct parametros*)malloc(sizeof(struct parametros));
+				param->name = tree->attr.name;
+				param->prox = NULL;
+				if(parametrosLista == NULL) parametrosLista = param;
+				else
+				{
+					parametros *aux = parametrosLista;
+					while(aux->prox != NULL)
+						aux = aux->prox;
+					aux->prox = param;
+				}
+				break;
+			}
 		default:
 			break;
 
@@ -92,6 +131,24 @@ void genExp(TreeNode *tree)
 	}
 
 }
+
+void cGen_noSibling(TreeNode *t)
+{
+	if (t != NULL){
+		switch(t->nodekind)
+		{
+			case StmtK:
+				genStmt(t);
+				break;
+			case ExpK:
+				genExp(t);
+				break;
+			default:
+				break;
+		}
+	}
+}
+
 void cGen(TreeNode *t)
 {
 	int i;
@@ -115,4 +172,5 @@ void generateCode(TreeNode *t) {
     if (t == NULL) return;
 	codigoIntermediario = fopen("codqua.txt", "w");
     cGen(t);
+	fprintf(codigoIntermediario, "(HALT,-,-,-)\n");
 }
