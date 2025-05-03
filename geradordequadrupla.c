@@ -67,7 +67,7 @@ void genStmt(TreeNode *tree)
 			break;
 		case FunK:
 		{
-			fprintf(codigoIntermediario, "(FUN,%d,%s,-)\n", tree->type, tree->attr.name);
+			fprintf(codigoIntermediario, "(FUN,%s,%s,-)\n", tree->type == 0 ? "void" : "int", tree->attr.name);
 			cGen(tree->child[0]);
 			while (parametrosLista != NULL) {
 				char *temp = newTemp();
