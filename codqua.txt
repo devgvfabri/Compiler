@@ -1,6 +1,6 @@
 (FUN,int,gcd,-)
-(ARG,1,u,gcd)
-(ARG,1,v,gcd)
+(ARG,int,u,gcd)
+(ARG,int,v,gcd)
 (LOAD,$t0,u,-)
 (LOAD,$t1,v,-)
 (LOAD,$t2,v,-)

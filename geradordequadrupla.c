@@ -8,11 +8,17 @@
 
 FILE *codigoIntermediario;
 
+/* Realiza traversia percorrendo irmãos do nó*/
 void cGen(TreeNode *t);
+
+/* Percorre a arvore sem passar para o nós irmãos usado para chamadas de funções*/
 void cGen_noSibling(TreeNode *t);
+
+/* Contadores de registradores e labels*/
 int tempVarNum = 0;
 int tempLabelNum = 0;
 
+/* Estrutura para armazenar os parâmetros de uma função*/
 typedef struct parametros {
 	char *name;
 	struct parametros *prox;
@@ -20,23 +26,28 @@ typedef struct parametros {
 
 parametros *parametrosLista = NULL;
 
+/* Gera um novo label*/
 char* newLabel() {
 	char* name = (char*)malloc(sizeof(char) * 10);
 	sprintf(name, "L%d", tempLabelNum++);
 	return name;
 }
 
+/* Gera um novo temporário*/
 char* newTemp() {
     char *name = (char*)malloc(sizeof(char) * 10);
     sprintf(name, "$t%d", tempVarNum++);
     return name;
 }
 
+/* Gera código intermediário para expressões e comandos*/
 void genStmt(TreeNode *tree)
 {
 	int loc;
 	switch(tree->kind.stmt)
 	{
+		/*Gera código para nó tipo If, percorre em pós ordem, primeiro ao filho mais a esquerda, volta gerando código cria um
+		label para o caminho do segundo filho e um para o terceiro filho, passa por todos os filhos em pós ordem*/
 		case IfK:
 			cGen(tree->child[0]);
 			tree->child[1]->label = newLabel();
@@ -50,21 +61,26 @@ void genStmt(TreeNode *tree)
 			fprintf(codigoIntermediario, "(LAB,%s,-,-)\n", tree->child[2]->label);
 			break;
 		case WhileK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			
 			break;
+		/* Gera quadrupla para returns, apenas visita os filhos e imprime uma quadrupla do tipo retorno com temporario do filho*/
 		case returnK:
 			cGen(tree->child[0]);
 			fprintf(codigoIntermediario, "(RET,%s,-,-)\n", tree->child[0]->temp);
 			break;
+		/* Gera quadrupla para atribuições, visita os filhos e imprime uma quadrupla do tipo atribuição com os temporarios dos filhos,
+		depois carrega com um store o valor a atribuição na memória*/
 		case AtrK:
 			cGen(tree->child[0]);
 			cGen(tree->child[1]);
 			fprintf(codigoIntermediario, "(ASSIGN,%s,%s,-)\n", tree->child[0]->temp, tree->child[1]->temp);
 			fprintf(codigoIntermediario, "(STORE,%s,%s,-)\n", tree->child[0]->attr.name, tree->child[0]->temp);
 			break;
+		/* Gera quadrupla para leitura, apenas visita a variavel e imprime uma quadrupla do tipo leitura com o nome e escopo*/
 		case VarK:
 			fprintf(codigoIntermediario, "(ALLOC,%s,%s,-)\n", tree->attr.name, tree->escopo);
 			break;
+		/* Gera quadrupla para funções, apenas visita o filho e imprime uma quadrupla do tipo escrita com o temporario do filho*/
 		case FunK:
 		{
 			fprintf(codigoIntermediario, "(FUN,%s,%s,-)\n", tree->type == 0 ? "void" : "int", tree->attr.name);
@@ -78,6 +94,8 @@ void genStmt(TreeNode *tree)
 			fprintf(codigoIntermediario, "(END,%s,-,-)\n", tree->attr.name);
 			break;
 		}
+		/*Gera quadruplas para chamadas de funções visita o filho sendo o primeiro argumento da função e os irmãos desse argumento, 
+		para cada argumento gera um parametro temporário*/
 		case CallK: {
 				TreeNode *arg = tree->child[0];
 				int argCount = 0;
@@ -94,9 +112,10 @@ void genStmt(TreeNode *tree)
 				fprintf(codigoIntermediario, "(CALL,%s,%s,%d)\n", tree->temp, tree->attr.name, argCount);
 				break;
 			}
+		/* Gera quadrupla para escrita, apenas visita o filho e imprime uma quadrupla do tipo escrita com o temporario do filho*/
 		case ParamK:
 			{
-				fprintf(codigoIntermediario, "(ARG,%d,%s,%s)\n", tree->type, tree->attr.name, tree->escopo);
+				fprintf(codigoIntermediario, "(ARG,%s,%s,%s)\n", tree->type == 0 ? "void" : "int", tree->attr.name, tree->escopo);
 				parametros *param = (struct parametros*)malloc(sizeof(struct parametros));
 				param->name = tree->attr.name;
 				param->prox = NULL;
@@ -115,6 +134,7 @@ void genStmt(TreeNode *tree)
 
 	}
 }
+/*Gera operadores para as quadruplas de operação de acordo com o token salvo na arvore*/
 char *genOperator(TokenType token)
 {
 	switch(token)
@@ -132,31 +152,36 @@ char *genOperator(TokenType token)
 		default: return "UNKNOWN";
 	}
 }
-
+/*Gera código intermediário para nós do tipo expressão */
 void genExp(TreeNode *tree)
 {
 	int loc;
 	switch(tree->kind.exp)
 	{
+		/* Gera nós de operadores com a operação e cada temporário do filho do nó*/
 		case OpK:
 			cGen(tree->child[0]);
 			cGen(tree->child[1]);
 			tree->temp = newTemp();
 			fprintf(codigoIntermediario, "(%s,%s,%s,%s)\n", genOperator(tree->attr.op), tree->temp, tree->child[0]->temp, tree->child[1]->temp);
 			break;
+		/* Gera nós de operadores unários com a constante armazenada*/
 		case ConstK:
 			tree->temp = (char*)malloc(sizeof(char*)*12);
 			if (tree->temp != NULL) {
 				snprintf(tree->temp, 12, "%d", tree->attr.val);
 			}
 			break;
+		/*Gera quadruplas carregando váriaveis da memória*/
 		case IdK:
 			tree->temp = newTemp();
 			fprintf(codigoIntermediario, "(LOAD,%s,%s,-)\n", tree->temp, tree->attr.name);
 			break;
+		/*Usado para percorrer a arvore em pós ordem*/
 		case TypeK:
 			cGen(tree->child[0]);
 			break;
+		/* Gera quadruplas para vetores */
 		case VetK:
 			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
 			break;
@@ -165,7 +190,7 @@ void genExp(TreeNode *tree)
 	}
 
 }
-
+/* Percorre em pós ordem sem passar pelos irmãos*/
 void cGen_noSibling(TreeNode *t)
 {
 	if (t != NULL){
@@ -182,7 +207,7 @@ void cGen_noSibling(TreeNode *t)
 		}
 	}
 }
-
+/* Função para realizar traversia da arvore*/
 void cGen(TreeNode *t)
 {
 	int i;
@@ -201,7 +226,7 @@ void cGen(TreeNode *t)
 	cGen(t->sibling);
 	}
 }
-
+/* Função inicial chamada na main para gerar código, abre o arquivo .txt para escrita*/
 void generateCode(TreeNode *t) {
     if (t == NULL) return;
 	codigoIntermediario = fopen("codqua.txt", "w");
