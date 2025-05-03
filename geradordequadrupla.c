@@ -11,6 +11,7 @@ FILE *codigoIntermediario;
 void cGen(TreeNode *t);
 void cGen_noSibling(TreeNode *t);
 int tempVarNum = 0;
+int tempLabelNum = 0;
 
 typedef struct parametros {
 	char *name;
@@ -21,7 +22,7 @@ parametros *parametrosLista = NULL;
 
 char* newLabel() {
 	char* name = (char*)malloc(sizeof(char) * 10);
-	sprintf(name, "L%d", tempVarNum++);
+	sprintf(name, "L%d", tempLabelNum++);
 	return name;
 }
 
@@ -37,13 +38,23 @@ void genStmt(TreeNode *tree)
 	switch(tree->kind.stmt)
 	{
 		case IfK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			cGen(tree->child[0]);
+			tree->child[1]->label = newLabel();
+			fprintf(codigoIntermediario, "(IFF,%s,%s,-)\n", tree->child[0]->temp, tree->child[1]->label);
+			cGen(tree->child[1]);
+			tree->child[2]->label = newLabel();
+			fprintf(codigoIntermediario, "(GOTO,%s,-,-)\n",tree->child[2]->label);
+			fprintf(codigoIntermediario, "(LAB,%s,-,-)\n", tree->child[1]->label);
+			cGen(tree->child[2]);
+			fprintf(codigoIntermediario, "(GOTO,%s,-,-)\n",tree->child[2]->label);
+			fprintf(codigoIntermediario, "(LAB,%s,-,-)\n", tree->child[2]->label);
 			break;
 		case WhileK:
 			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
 			break;
 		case returnK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			cGen(tree->child[0]);
+			fprintf(codigoIntermediario, "(RET,%s,-,-)\n", tree->child[0]->temp);
 			break;
 		case AtrK:
 			cGen(tree->child[0]);
@@ -104,6 +115,23 @@ void genStmt(TreeNode *tree)
 
 	}
 }
+char *genOperator(TokenType token)
+{
+	switch(token)
+	{
+		case SOM: return "ADD";
+		case SUB: return "SUB";
+		case MUL: return "MUL";
+		case DIV: return "DIV";
+		case MAI: return "GREATER";
+		case MEN: return "LESS";
+		case MIG: return "GE";
+		case MEI: return "LE";
+		case IGU: return "EQUAL";
+		case DIF: return "NOTEQUAL";
+		default: return "UNKNOWN";
+	}
+}
 
 void genExp(TreeNode *tree)
 {
@@ -111,10 +139,16 @@ void genExp(TreeNode *tree)
 	switch(tree->kind.exp)
 	{
 		case OpK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			cGen(tree->child[0]);
+			cGen(tree->child[1]);
+			tree->temp = newTemp();
+			fprintf(codigoIntermediario, "(%s,%s,%s,%s)\n", genOperator(tree->attr.op), tree->temp, tree->child[0]->temp, tree->child[1]->temp);
 			break;
 		case ConstK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+			tree->temp = (char*)malloc(sizeof(char*)*12);
+			if (tree->temp != NULL) {
+				snprintf(tree->temp, 12, "%d", tree->attr.val);
+			}
 			break;
 		case IdK:
 			tree->temp = newTemp();

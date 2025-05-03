@@ -4,14 +4,6 @@
         Parametro: u
       Type: 1
         Parametro: v
-      Type: 1
-        Parametro: x
-      Type: 1
-        Parametro: y
-      Type: 1
-        Parametro: z
-      Type: 1
-        Parametro: h
       If
         Op: IGU = ==
           Id: v
