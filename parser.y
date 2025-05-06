@@ -84,14 +84,18 @@ varDeclaracao	:	tipoEspecificador ID PEV
     			ACO NUM FCO PEV 
 			{ 
 				$$ = newExpNode(TypeK);
-                		$$->type = $1->type;
+                $$->type = $1->type;
 				TreeNode *id = newExpNode(IdK);
 				id->attr.name = copyString(savedNameVar);
 				$$->attr.name = $1->attr.name;
 				$$->child[0] = id;
-				id->nodekind = StmtK;
-				id->kind.stmt = VarK;
+				id->nodekind = ExpK;
+				id->kind.exp = VetK;
 				id->type = $1->type;
+				id->child[0] = newExpNode(ConstK);
+				id->child[0]->attr.val = atoi(tokenString);
+				id->child[0]->type = Integer;
+				id->child[0]->numline = numline;
 				id->attr.vetor = 1;
 				id->escopo = copyString(currentFunctionName);
 				st_insert(location++, id->attr.name, currentFunctionName, "var", $1->type, numline, 1);
