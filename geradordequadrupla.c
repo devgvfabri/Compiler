@@ -183,7 +183,24 @@ void genExp(TreeNode *tree)
 			break;
 		/* Gera quadruplas para vetores */
 		case VetK:
-			fprintf(codigoIntermediario, "(TESTE,-,-,-)\n");
+		{
+			char *aux = (char*)malloc(sizeof(char*)*12);
+			char *add = (char*)malloc(sizeof(char*)*12);
+			cGen(tree->child[0]);
+			if(tree->child[0]->kind.exp == ConstK){
+				aux = tree->child[0]->temp;
+				tree->child[0]->temp = newTemp();
+				fprintf(codigoIntermediario, "(ASSIGN, %s, %s, -)\n", tree->child[0]->temp, aux);
+			}
+			tree->temp = newTemp();
+			fprintf(codigoIntermediario, "(MUL, %s, %s, 4)\n", tree->temp, tree->child[0]->temp);
+			aux = newTemp();
+			fprintf(codigoIntermediario, "(LOADADDR, %s, %s, -)\n", aux, tree->attr.name);
+			add = newTemp();
+			fprintf(codigoIntermediario, "(ADD, %s, %s, %s)\n", add, aux, tree->temp);
+			tree->temp = newTemp();
+			fprintf(codigoIntermediario, "(LOAD, %s, %s, -)\n", tree->temp, add);
+		}	
 			break;
 		default:
 			break;
