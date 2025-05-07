@@ -49,19 +49,25 @@ void genStmt(TreeNode *tree)
 		/*Gera código para nó tipo If, percorre em pós ordem, primeiro ao filho mais a esquerda, volta gerando código cria um
 		label para o caminho do segundo filho e um para o terceiro filho, passa por todos os filhos em pós ordem*/
 		case IfK:
+		{
+			char *labelAux1 = (char*)malloc(sizeof(char) * 10);
+			char *labelAux2 = (char*)malloc(sizeof(char) * 10);
 			cGen(tree->child[0]);
-			tree->child[1]->label = newLabel();
-			fprintf(codigoIntermediario, "(IFF, %s, %s, -)\n", tree->child[0]->temp, tree->child[1]->label);
+			labelAux1 = newLabel();
+			fprintf(codigoIntermediario, "(IFF, %s, %s, -)\n", tree->child[0]->temp, labelAux1);
 			cGen(tree->child[1]);
-			tree->child[2]->label = newLabel();
-			fprintf(codigoIntermediario, "(GOTO, %s, -, -)\n",tree->child[2]->label);
-			fprintf(codigoIntermediario, "(LAB, %s, -, -)\n", tree->child[1]->label);
+			labelAux2= newLabel();
+			fprintf(codigoIntermediario, "(GOTO, %s, -, -)\n",labelAux2);
+			fprintf(codigoIntermediario, "(LAB, %s, -, -)\n", labelAux1);
 			cGen(tree->child[2]);
-			fprintf(codigoIntermediario, "(GOTO, %s, -, -)\n",tree->child[2]->label);
-			fprintf(codigoIntermediario, "(LAB, %s, -, -)\n", tree->child[2]->label);
+			fprintf(codigoIntermediario, "(GOTO, %s, -, -)\n",labelAux2);
+			fprintf(codigoIntermediario, "(LAB, %s, -, -)\n", labelAux2);
+		}
 			break;
 		case WhileK:
-			
+			cGen(tree->child[0]);
+			cGen(tree->child[1]);
+			fprintf(codigoIntermediario, "teste\n");
 			break;
 		/* Gera quadrupla para returns, apenas visita os filhos e imprime uma quadrupla do tipo retorno com temporario do filho*/
 		case returnK:
