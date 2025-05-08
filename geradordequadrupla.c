@@ -65,10 +65,19 @@ void genStmt(TreeNode *tree)
 		}
 			break;
 		case WhileK:
+		{
+			char *labelAux1 = (char*)malloc(sizeof(char) * 10);
+			char *labelAux2 = (char*)malloc(sizeof(char) * 10);
+			labelAux1 = newLabel();
+			fprintf(codigoIntermediario, "(LAB, %s, -, -)\n", labelAux1);
 			cGen(tree->child[0]);
+			labelAux2 = newLabel();
+			fprintf(codigoIntermediario, "(IFF, %s, %s, -)\n", tree->child[0]->temp, labelAux2);
 			cGen(tree->child[1]);
-			fprintf(codigoIntermediario, "teste\n");
+			fprintf(codigoIntermediario, "(GOTO, %s, -, - )\n", labelAux1);
+			fprintf(codigoIntermediario, "(LAB, %s, -, -)\n", labelAux2);
 			break;
+		}
 		/* Gera quadrupla para returns, apenas visita os filhos e imprime uma quadrupla do tipo retorno com temporario do filho*/
 		case returnK:
 			cGen(tree->child[0]);
@@ -249,6 +258,7 @@ void cGen(TreeNode *t)
 	cGen(t->sibling);
 	}
 }
+
 /* Função inicial chamada na main para gerar código, abre o arquivo .txt para escrita*/
 void generateCode(TreeNode *t) {
     if (t == NULL) return;
