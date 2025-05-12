@@ -2135,9 +2135,9 @@ int main()
   printf("\nParser em execução...\n");
   abrirArq();
   
-  yyparse();  // Executa o parser e gera a árvore sintática
+  yyparse(); 
   if (savedTree != NULL) {
-      printTreeArq(savedTree);  // Imprime a árvore gerada
+      printTreeArq(savedTree);  
   } else {
       printf("\nErro ao construir a árvore sintática.\n");
   }

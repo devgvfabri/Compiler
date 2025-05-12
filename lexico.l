@@ -92,5 +92,5 @@ void contLine() {
 /* Função para abrir arquivo */
 void abrirArq()
 {
-  yyin = fopen("entrada.txt", "r");
+  yyin = fopen("mmc.txt", "r");
 }

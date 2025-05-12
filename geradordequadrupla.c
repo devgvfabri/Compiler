@@ -8,6 +8,13 @@
 
 FILE *codigoIntermediario;
 
+typedef struct Quadrupla {
+    char mensagem[256];  // Armazena a mensagem de quadrupla
+    struct Quadrupla *prox;   // Ponteiro para o próxima quadrupla
+} Quadrupla;
+
+Quadrupla *listaCodInt = NULL;  // Ponteiro global para a lista de codInt
+
 /* Realiza traversia percorrendo irmãos do nó*/
 void cGen(TreeNode *t);
 
@@ -40,6 +47,33 @@ char* newTemp() {
     return name;
 }
 
+void save_List(char *msg)
+{
+	Quadrupla *newQuad = (Quadrupla*)malloc(sizeof(Quadrupla));
+	
+	snprintf(newQuad->mensagem, sizeof(newQuad->mensagem),"%s", msg);
+
+	newQuad->prox = NULL;
+	if(listaCodInt == NULL) listaCodInt = newQuad;
+	else
+	{
+		Quadrupla *aux = listaCodInt;
+		while(aux->prox != NULL)
+			aux = aux->prox;
+		aux->prox = newQuad;
+	}
+}
+
+void imprimirQuadruplas() 
+{
+    Quadrupla *atual = listaCodInt;
+    while (atual) 
+    {
+        printf("%s", atual->mensagem);
+        atual = atual->prox;
+    }
+}
+
 /* Gera código intermediário para expressões e comandos*/
 void genStmt(TreeNode *tree)
 {
@@ -52,15 +86,41 @@ void genStmt(TreeNode *tree)
 		{
 			char *labelAux1 = (char*)malloc(sizeof(char) * 10);
 			char *labelAux2 = (char*)malloc(sizeof(char) * 10);
+			char *newQuad = (char*)malloc(sizeof(char) * 256);
 			cGen(tree->child[0]);
 			labelAux1 = newLabel();
+			snprintf(newQuad, sizeof(newQuad), 
+             		"(IFF, %s, %s, -)\n", tree->child[0]->temp, labelAux1);
+             		printf("%s", newQuad);
+             		save_List(newQuad);
+
 			fprintf(codigoIntermediario, "(IFF, %s, %s, -)\n", tree->child[0]->temp, labelAux1);
 			cGen(tree->child[1]);
 			labelAux2= newLabel();
+			snprintf(newQuad, sizeof(newQuad), 
+             		"(GOTO, %s, -, -)\n",labelAux2);
+             		save_List(newQuad);
+             		
 			fprintf(codigoIntermediario, "(GOTO, %s, -, -)\n",labelAux2);
+			snprintf(newQuad, sizeof(newQuad), 
+             		"(LAB, %s, -, -)\n", labelAux1);
+             		save_List(newQuad);
+			
 			fprintf(codigoIntermediario, "(LAB, %s, -, -)\n", labelAux1);
 			cGen(tree->child[2]);
+			
 			fprintf(codigoIntermediario, "(GOTO, %s, -, -)\n",labelAux2);
+			snprintf(newQuad, sizeof(newQuad), 
+             		"(GOTO, %s, -, -)\n",labelAux2);
+             		save_List(newQuad);
+             		
+             		snprintf(newQuad, sizeof(newQuad), 
+             		"(GOTO, %s, -, -)\n",labelAux2);
+             		save_List(newQuad);
+			fprintf(codigoIntermediario, "(GOTO, %s, -, -)\n",labelAux2);
+			snprintf(newQuad, sizeof(newQuad), 
+             		"(LAB, %s, -, -)\n",labelAux2);
+             		save_List(newQuad);
 			fprintf(codigoIntermediario, "(LAB, %s, -, -)\n", labelAux2);
 		}
 			break;
@@ -265,4 +325,5 @@ void generateCode(TreeNode *t) {
 	codigoIntermediario = fopen("codqua.txt", "w");
     cGen(t);
 	fprintf(codigoIntermediario, "(HALT,-,-,-)\n");
+	imprimirQuadruplas();
 }
