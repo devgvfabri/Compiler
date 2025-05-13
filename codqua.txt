@@ -58,7 +58,6 @@
 (GOTO, L3, -, -)
 (LAB, L2, -, -)
 (GOTO, L3, -, -)
-(GOTO, L3, -, -)
 (LAB, L3, -, -)
 (LOAD, $t37, i, -)
 (LOAD, $t38, i, -)
