@@ -25,6 +25,7 @@ static TreeNode* savedTree;
 static int location = 0;
 static char *currentFunctionName = "global";
 ErroSintatico *listaErrosSintaticos = NULL;  // Ponteiro global para a lista de erros
+extern Quadrupla *listaCodInt; // Ponteiro global para a lista de codInt
 
 %}
 
@@ -500,7 +501,9 @@ int main()
   semanticCheck(savedTree);
   printSymTab();
   generateCode(savedTree);
+  imprimirQuadruplas();
   return 0;
+
 }
 
 void yyerror(char * msg)

@@ -15,6 +15,11 @@
 #define MAXCHILDREN 3
 
 
+typedef struct Quadrupla
+{
+	char mensagem[256];		// Armazena a mensagem de quadrupla
+	struct Quadrupla *prox; // Ponteiro para o próxima quadrupla
+} Quadrupla;
 
 
 typedef enum {StmtK,ExpK} NodeKind;

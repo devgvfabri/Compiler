@@ -15,5 +15,7 @@ void generateCode(TreeNode *t);
 
 void cGen_noSibling(TreeNode *t);
 
+void imprimirQuadruplas();
+
 #endif
 

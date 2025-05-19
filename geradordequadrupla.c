@@ -8,13 +8,7 @@
 
 FILE *codigoIntermediario;
 
-typedef struct Quadrupla
-{
-	char mensagem[256];		// Armazena a mensagem de quadrupla
-	struct Quadrupla *prox; // Ponteiro para o próxima quadrupla
-} Quadrupla;
-
-Quadrupla *listaCodInt = NULL; // Ponteiro global para a lista de codInt
+ Quadrupla *listaCodInt = NULL; // Ponteiro global para a lista de codInt
 
 /* Realiza traversia percorrendo irmãos do nó*/
 void cGen(TreeNode *t);
@@ -206,7 +200,8 @@ void genStmt(TreeNode *tree)
 		fprintf(codigoIntermediario, "(END, %s, -, -)\n", tree->attr.name);
 		snprintf(newQuad, sizeof(char) * 256,
 				 "(END, %s, -, -)\n", tree->attr.name);
-		save_List(newQuad);
+		tempVarNum = 0;
+				 save_List(newQuad);
 		break;
 	}
 	/*Gera quadruplas para chamadas de funções visita o filho sendo o primeiro argumento da função e os irmãos desse argumento,
@@ -424,5 +419,4 @@ void generateCode(TreeNode *t)
 	codigoIntermediario = fopen("codqua.txt", "w");
 	cGen(t);
 	fprintf(codigoIntermediario, "(HALT,-,-,-)\n");
-	imprimirQuadruplas();
 }
