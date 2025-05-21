@@ -41,10 +41,10 @@ char *newLabel()
 char *newTemp()
 {
 	char *name = (char *)malloc(sizeof(char) * 10);
-	tempVarNum++;
 	if(tempVarNum == 30) tempVarNum += 2;
-	if(tempVarNum == 64) tempVarNum = 0;
+	else if(tempVarNum == 64) tempVarNum = 0;
 	sprintf(name, "$t%d", tempVarNum);
+	tempVarNum++;
 	return name;
 }
 
