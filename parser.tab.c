@@ -2148,7 +2148,6 @@ int main()
   semanticCheck(savedTree);
   printSymTab();
   generateCode(savedTree);
-  imprimirQuadruplas();
   return 0;
 
 }
