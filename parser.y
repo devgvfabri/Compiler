@@ -501,6 +501,7 @@ int main()
   semanticCheck(savedTree);
   printSymTab();
   generateCode(savedTree);
+  generateAssembly(listaCodInt);
   return 0;
 
 }
