@@ -5,8 +5,9 @@
 #include "global.h"
 #include "geradordequadrupla.h"
 
-void generate_assembly(Quadrupla listCodInt);
+void generate_assembly(Quadrupla *listCodInt);
 
+void genAssembly(Quadrupla *listaCodInt);
 
 
 #endif

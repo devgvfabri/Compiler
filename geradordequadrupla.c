@@ -421,5 +421,10 @@ void generateCode(TreeNode *t)
 		return;
 	codigoIntermediario = fopen("codqua.txt", "w");
 	cGen(t);
-	fprintf(codigoIntermediario, "(HALT,-,-,-)\n");
+	char *newQuad = (char *)malloc(sizeof(char) * 256);
+	fprintf(codigoIntermediario, "(HALT, -, -, -)\n");
+	snprintf(newQuad, sizeof(char) * 256,
+				 "(HALT, -, -, -)\n");
+		save_List(newQuad);
 }
+

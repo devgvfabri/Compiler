@@ -44,4 +44,4 @@
 (PARAM, $t6, -, -)
 (CALL, $t7, output, 1)
 (END, main, -, -)
-(HALT,-,-,-)
+(HALT, -, -, -)

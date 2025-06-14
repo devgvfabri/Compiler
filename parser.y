@@ -7,6 +7,7 @@
 #include "symtab.h"
 #include "semantico.h"
 #include "geradordequadrupla.h"
+#include "geradorAssembly.h"
 void yyerror(char *);
 #define YYDEBUG 1    //Para exibir na tela os passos da análise sintática quando o parser é executado
 extern "C"
@@ -501,7 +502,7 @@ int main()
   semanticCheck(savedTree);
   printSymTab();
   generateCode(savedTree);
-  generateAssembly(listaCodInt);
+  generate_assembly(listaCodInt);
   return 0;
 
 }
