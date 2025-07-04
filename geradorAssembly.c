@@ -85,70 +85,78 @@ void genAssembly(Quadrupla *listaCodInt)
         printf("Generating assembly for parameter: %s\n", operand1);
         break;
     case quad_alloc:
-        printf("addi $30, $30, 1\n");
+        printf("subi $62, $62, 1\n");
         break;
     case quad_load:
-        printf("lw $29,  \n");
+        printf("lw $62, %s, offset \n", operand1);
         break;
     case quad_loadaddr:
-        printf("Generating assembly for load address: %s into %s\n", operand1, operand2);
+        printf("lw* $62, %s, offset\n", operand1);
         break;
     case quad_store:
-        printf("Generating assembly for store: %s into %s\n", operand1, operand2);
+        printf("sw $62, %s, offset \n", operand2);
         break;
     case quad_assign:
-        printf("Generating assembly for assignment: %s = %s\n", operand1, operand2);
+        printf("move %s, %s\n", operand1, operand2);
         break;
     case quad_call:
-        printf("Generating assembly for call: %s with %s\n", operand1, operand2);
+    {
+        if(strcmp(operand2, "input") == 0)
+            printf("input %s\n", operand1);
+        if(strcmp(operand2, "output") == 0)
+            printf("output %s\n", operand1);
         break;
+    }
     case quad_iff:
-        printf("Generating assembly for if: %s then %s\n", operand1, operand2);
+        printf("bne %s, $0, offset\n", operand1);
         break;
     case quad_label:
         printf("Generating assembly for label: %s\n", operand1);
         break;
     case quad_goto:
-        printf("Generating assembly for goto: %s\n", operand1);
+        printf("jump %s\n", operand1);
         break;
     case quad_return:
         printf("Generating assembly for return: %s\n", operand1);
         break;
     case quad_add:
-        printf("Generating assembly for addition: %s = %s + %s\n", operand1, operand2, operand3);
+        printf("add %s, %s, %s\n", operand1, operand2, operand3);
         break;
     case quad_sub:
-        printf("Generating assembly for subtraction: %s = %s - %s\n", operand1, operand2, operand3);
+        printf("sub %s, %s, %s\n", operand1, operand2, operand3);
         break;
     case quad_mul:
-        printf("Generating assembly for multiplication: %s = %s * %s\n", operand1, operand2, operand3);
+        printf("mul %s, %s, %s\n", operand1, operand2, operand3);
         break;
     case quad_div:
-        printf("Generating assembly for division: %s = %s / %s\n", operand1, operand2, operand3);
+        printf("div %s, %s, %s\n", operand1, operand2, operand3);
         break;
     case quad_maior:
-        printf("Generating assembly for greater than: %s = %s > %s\n", operand1, operand2, operand3);
+        printf("slt %s, %s, %s\n", operand1, operand3, operand2);
         break;
     case quad_menor:
-        printf("Generating assembly for less than: %s = %s < %s\n", operand1, operand2, operand3);
+        printf("slt %s, %s, %s\n", operand1, operand2, operand3);
         break;
     case quad_maiorigual:
-        printf("Generating assembly for greater than or equal: %s = %s >= %s\n", operand1, operand2, operand3);
+        printf("slte %s, %s, %s\n", operand1, operand3, operand2);
         break;
     case quad_menorigual:
-        printf("Generating assembly for less than or equal: %s = %s <= %s\n", operand1, operand2, operand3);
+        printf("slte %s, %s, %s\n", operand1, operand2, operand3);
         break;
     case quad_igual:
-        printf("Generating assembly for equality: %s = %s == %s\n", operand1, operand2, operand3);
+    {
+        printf("bne %s, %s, offset\n", operand2, operand3);
+        listaCodInt = listaCodInt->prox;
         break;
+    }    
     case quad_diferente:
-        printf("Generating assembly for inequality: %s = %s != %s\n", operand1, operand2, operand3);
+    {
+        printf("beq %s, %s, offset\n", operand2, operand3);
+        listaCodInt = listaCodInt->prox;
         break;
-    case quad_end:
-        printf("Generating assembly for end of code\n");
-        break;
+    }
     case quad_hlt:
-        printf("Generating assembly for halt\n");
+        printf("halt\n");
         return;
     default:
         break;
