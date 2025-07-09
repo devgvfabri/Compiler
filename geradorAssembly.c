@@ -76,13 +76,12 @@ void genAssembly(Quadrupla *listaCodInt)
     switch (converteString(operacao))
     {
     case quad_funcao:
-        printf("Generating assembly for function: %s\n", operand1);
+        printf("funcao: %s\n", operand2);
         break;
     case quad_argumento:
-        printf("addi $30, $30, 1\n");
+        printf("subi $62, $62, 1\n");
         break;
     case quad_parametro:
-        printf("Generating assembly for parameter: %s\n", operand1);
         break;
     case quad_alloc:
         printf("subi $62, $62, 1\n");
@@ -103,21 +102,34 @@ void genAssembly(Quadrupla *listaCodInt)
     {
         if(strcmp(operand2, "input") == 0)
             printf("input %s\n", operand1);
-        if(strcmp(operand2, "output") == 0)
+        else if(strcmp(operand2, "output") == 0)
             printf("output %s\n", operand1);
+        else
+        {
+            printf("subi $62, $62, 1 \n");
+            printf("sw $62, %s, offset\n",operand1);
+            printf("subi $62, $62, 1 \n");
+            printf("sw $62, %s, offset\n",operand1);
+            printf("subi $62, $62, 2 \n");
+            printf("sw $62, $31, 2 \n");
+            printf("sw $62, $30, 1 \n");
+            printf("move $62, $30 \n");
+            printf("jal %d\n", operand3);
+            printf("move $30, $62 \n");
+            printf("lw $30, $30, 0 \n");
+        }
         break;
     }
     case quad_iff:
         printf("bne %s, $0, offset\n", operand1);
         break;
     case quad_label:
-        printf("Generating assembly for label: %s\n", operand1);
         break;
     case quad_goto:
         printf("jump %s\n", operand1);
         break;
     case quad_return:
-        printf("Generating assembly for return: %s\n", operand1);
+        printf("move %s, $gp\n", operand1);
         break;
     case quad_add:
         printf("add %s, %s, %s\n", operand1, operand2, operand3);
