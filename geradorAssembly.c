@@ -106,17 +106,16 @@ void genAssembly(Quadrupla *listaCodInt)
             printf("output %s\n", operand1);
         else
         {
-            printf("subi $62, $62, 1 \n");
-            printf("sw $62, %s, offset\n",operand1);
-            printf("subi $62, $62, 1 \n");
-            printf("sw $62, %s, offset\n",operand1);
+
             printf("subi $62, $62, 2 \n");
             printf("sw $62, $31, 2 \n");
             printf("sw $62, $30, 1 \n");
             printf("move $62, $30 \n");
             printf("jal %d\n", operand3);
             printf("move $30, $62 \n");
-            printf("lw $30, $30, 0 \n");
+            printf("lw $30, $62, 0 \n");
+            printf("lw $31, $62, 1 \n");
+            printf("addi $62, $62, 2\n");
         }
         break;
     }
@@ -124,6 +123,7 @@ void genAssembly(Quadrupla *listaCodInt)
         printf("bne %s, $0, offset\n", operand1);
         break;
     case quad_label:
+        printf("label %s\n", operand1);
         break;
     case quad_goto:
         printf("jump %s\n", operand1);
