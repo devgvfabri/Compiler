@@ -8,6 +8,22 @@
 
 FILE *codigoAssembly;
 
+#define MAX_ARGS 10
+
+Quadrupla *argumentos[MAX_ARGS];
+int num_argumentos = 0;
+static int indice_parametro = 0;
+
+void empilhaArgumento(Quadrupla *arg) {
+    if (num_argumentos < MAX_ARGS) {
+        argumentos[num_argumentos++] = arg;
+    }
+}
+
+void limpaArgumentos() {
+    num_argumentos = 0;
+}
+
 typedef enum {
     quad_funcao,
     quad_argumento,
@@ -76,12 +92,26 @@ void genAssembly(Quadrupla *listaCodInt)
     switch (converteString(operacao))
     {
     case quad_funcao:
-        printf("funcao: %s\n", operand2);
+        indice_parametro = 0;
+        if(strcmp(operand2, "main") == 0)
+            printf("funcao: %s\n", operand2);
+        else
+        {
+            printf("funcao: %s\n", operand2);
+            printf("sw $62, $31, 0 \n");
+        }
         break;
     case quad_argumento:
-        printf("subi $62, $62, 1\n");
+        printf("lw %s, $fp, %d\n", argumentos[num_argumentos], 2 + num_argumentos - 1); 
+        num_argumentos--;
         break;
     case quad_parametro:
+                if (indice_parametro < 4)
+                printf("move %s, $a%d\n", operand1, indice_parametro);
+            else
+                printf("lw %s, $fp, %d\n", operand1, 2 + (indice_parametro - 4));
+            empilhaArgumento(listaCodInt);
+            indice_parametro++;
         break;
     case quad_alloc:
         printf("subi $62, $62, 1\n");
@@ -106,13 +136,11 @@ void genAssembly(Quadrupla *listaCodInt)
             printf("output %s\n", operand1);
         else
         {
-
             printf("subi $62, $62, 2 \n");
-            printf("sw $62, $31, 2 \n");
             printf("sw $62, $30, 1 \n");
-            printf("move $62, $30 \n");
-            printf("jal %d\n", operand3);
             printf("move $30, $62 \n");
+            printf("jal %d\n", operand3);
+            printf("move $62, $30 \n");
             printf("lw $30, $62, 0 \n");
             printf("lw $31, $62, 1 \n");
             printf("addi $62, $62, 2\n");
@@ -167,6 +195,13 @@ void genAssembly(Quadrupla *listaCodInt)
         listaCodInt = listaCodInt->prox;
         break;
     }
+    case quad_end:
+        if(strcmp(operand1, "main") != 0)
+        {
+            printf("lw $30, $31, 0\n");
+            printf("jr $31\n");
+        }
+        break;
     case quad_hlt:
         printf("halt\n");
         return;
