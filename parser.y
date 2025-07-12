@@ -8,6 +8,8 @@
 #include "semantico.h"
 #include "geradordequadrupla.h"
 #include "geradorAssembly.h"
+#include "geradorBinario.h"
+
 void yyerror(char *);
 #define YYDEBUG 1    //Para exibir na tela os passos da análise sintática quando o parser é executado
 extern "C"
@@ -27,7 +29,7 @@ static int location = 0;
 static char *currentFunctionName = "global";
 ErroSintatico *listaErrosSintaticos = NULL;  // Ponteiro global para a lista de erros
 extern Quadrupla *listaCodInt; // Ponteiro global para a lista de codInt
-
+extern CodAssembly *listaCodAssebly; // Ponteiro global para a lista de assembly
 %}
 
 %start programa
@@ -503,8 +505,8 @@ int main()
   printSymTab();
   generateCode(savedTree);
   generate_assembly(listaCodInt);
+  generate_Binary(listaCodAssebly);
   return 0;
-
 }
 
 void yyerror(char * msg)

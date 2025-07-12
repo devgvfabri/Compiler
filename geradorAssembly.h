@@ -9,5 +9,7 @@ void generate_assembly(Quadrupla *listCodInt);
 
 void genAssembly(Quadrupla *listaCodInt);
 
+void imprimirAssembly();
+
 
 #endif

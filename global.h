@@ -22,6 +22,12 @@ typedef struct Quadrupla
 } Quadrupla;
 
 
+typedef struct CodAssembly
+{
+	char mensagem[256];		// Armazena a mensagem de CodAssembly
+	struct CodAssembly *prox; // Ponteiro para o próxima CodAssembly
+} CodAssembly;
+
 typedef enum {StmtK,ExpK} NodeKind;
 typedef enum {IfK,WhileK,returnK, AtrK, VarK, FunK, CallK, ParamK} StmtKind;
 typedef enum {OpK,ConstK,IdK, TypeK, VetK} ExpKind;
