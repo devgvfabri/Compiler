@@ -60,6 +60,11 @@ void limpaTabelaSimbolos() {
 
 void insereSimbolo(const char *nome) {
     if (num_simbolos >= MAX_SIMBOLOS) return;
+
+    for (int i = 0; i < num_simbolos; i++) {
+        if (strcmp(tabela_simbolos[i].nome, nome) == 0) return;
+    }
+
     strcpy(tabela_simbolos[num_simbolos].nome, nome);
     tabela_simbolos[num_simbolos].offset = offset_atual--;
     num_simbolos++;
@@ -184,10 +189,10 @@ void genAssembly(Quadrupla *listaCodInt)
         snprintf(assembly, sizeof(char) * 256, "%d: subi $62, $62, 1\n", num_lines);
         save_assembly(assembly);
         num_lines++;
-        fprintf(codigoAssembly, "%d: sw $30, $a%d, %d\n", num_lines , 2 + num_argumentos - 1, buscaOffset(operand2)); 
-        snprintf(assembly, sizeof(char) * 256, "%d: sw $30, $a%d, %d\n", num_lines , 2 + num_argumentos - 1, buscaOffset(operand2));
+        fprintf(codigoAssembly, "%d: sw $30, $a%d, %d\n", num_lines , num_argumentos, buscaOffset(operand2)); 
+        snprintf(assembly, sizeof(char) * 256, "%d: sw $30, $a%d, %d\n", num_lines , num_argumentos, buscaOffset(operand2));
         save_assembly(assembly);
-        num_argumentos--;
+        num_argumentos++;
         break;
     case quad_parametro:
                 if (indice_parametro < 4)
@@ -234,8 +239,8 @@ void genAssembly(Quadrupla *listaCodInt)
         break;
     case quad_assign:
         num_lines++;
-        fprintf(codigoAssembly, "%d: move %s, %s\n", num_lines, operand1, operand2);
-        snprintf(assembly, sizeof(char) * 256, "%d: move %s, %s\n", num_lines, operand1, operand2);
+        fprintf(codigoAssembly, "%d: move %s, %s\n", num_lines, operand2, operand1);
+        snprintf(assembly, sizeof(char) * 256, "%d: move %s, %s\n", num_lines, operand2, operand1);
         save_assembly(assembly);
         break;
     case quad_call:
@@ -243,15 +248,15 @@ void genAssembly(Quadrupla *listaCodInt)
         if(strcmp(operand2, "input") == 0)
         {
             num_lines++;
-            fprintf(codigoAssembly, "%d: input %s\n", num_lines, operand1);
-            snprintf(assembly, sizeof(char) * 256, "%d: input %s\n", num_lines, operand1);
+            fprintf(codigoAssembly, "%d: input %s.\n", num_lines, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: input %s.\n", num_lines, operand1);
             save_assembly(assembly);
         }
         else if(strcmp(operand2, "output") == 0)
         {
             num_lines++;
-            fprintf(codigoAssembly, "%d: output $gp\n", num_lines);
-            snprintf(assembly, sizeof(char) * 256, "%d: output $gp\n", num_lines);
+            fprintf(codigoAssembly, "%d: output $gp.\n", num_lines);
+            snprintf(assembly, sizeof(char) * 256, "%d: output $gp.\n", num_lines);
             save_assembly(assembly);
         }
         else
@@ -273,8 +278,8 @@ void genAssembly(Quadrupla *listaCodInt)
                 snprintf(assembly, sizeof(char) * 256, "%d: jal %s\n", num_lines, operand2);
                 save_assembly(assembly);
             num_lines++;
-            fprintf(codigoAssembly, "%d: lw $62, $30, 1 \n", num_lines);
-                snprintf(assembly, sizeof(char) * 256, "%d: lw $62, $30, 1 \n", num_lines);
+            fprintf(codigoAssembly, "%d: lw $30, $30, 1 \n", num_lines);
+                snprintf(assembly, sizeof(char) * 256, "%d: lw $30, $30, 1 \n", num_lines);
                 save_assembly(assembly);
             num_lines++;
             fprintf(codigoAssembly, "%d: move $30, $62 \n", num_lines);
@@ -416,12 +421,53 @@ void genAssembly(Quadrupla *listaCodInt)
     genAssembly(listaCodInt->prox);
 }
 
+void inserir_jump_para_main_assembly() {
+    CodAssembly *atual = listaCodAssebly;
+    int linha_main = -1;
+    int linha;
+    char *main = (char *)malloc(20 * sizeof(char));
+    // Encontrar linha da main
+    while (atual != NULL) {
+            sscanf(atual->mensagem, "%d: funcao : %s", &linha, main);
+            if(strcmp(main, "main") == 0) {
+            linha_main = linha;
+            break;
+            }
+        atual = atual->prox;
+    }
+
+    if (linha_main == -1) {
+        printf("Erro: função main não encontrada!\n");
+        return;
+    }
+
+    // Atualizar numeração: +1
+    atual = listaCodAssebly;
+    while (atual != NULL) {
+        char nova[256];
+        char *codigo = strchr(atual->mensagem, ':') + 1;
+        sscanf(atual->mensagem, "%d:", &linha);
+        snprintf(nova, sizeof(nova), "%d:%s", linha + 1, codigo);
+        strcpy(atual->mensagem, nova);
+        atual = atual->prox;
+    }
+
+    // Criar novo nó jump 0
+    CodAssembly *novo = (CodAssembly *)malloc(sizeof(CodAssembly));
+    snprintf(novo->mensagem, sizeof(novo->mensagem), "1: jump %d\n", linha_main);
+    novo->prox = listaCodAssebly;
+    listaCodAssebly = novo;
+
+    num_lines++;  // importante: avança contagem total
+}
+
 void generate_assembly(Quadrupla  *listaCodInt)
 {
     printf("Generating assembly code.. \n");
     if (listaCodInt == NULL) return;
     codigoAssembly = fopen("codAssembly.txt", "w");
     genAssembly(listaCodInt);
+    inserir_jump_para_main_assembly();
     imprimirAssembly();
     return;
 }
