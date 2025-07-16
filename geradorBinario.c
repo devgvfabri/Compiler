@@ -83,8 +83,8 @@ int get_register_number(const char *reg) {
     if (prefix == 'a') {
         if (num >= 0 && num <= 7) return 55 + num;    // $a0-$a7 → 55-61
     }
-    printf("invalido");
-    return -1; // inválido
+   fprintf(codigoBinario, "invalido");
+    return -1; 
 }
 
 
@@ -122,278 +122,278 @@ void genBinary(CodAssembly *listaCodAssebly)
     switch (converteStringAssembly(operacao))
     {
         case inst_funcao:
-            printf("00000000000000000000000000000000\n");
+            fprintf(codigoBinario, "00000000000000000000000000000000\n");
             break;
         case inst_add:
         {
-            printf("000000");
+            fprintf(codigoBinario, "000000");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)) , *reg3 = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, reg3);
             char bin[7];
             int numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg3);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+            fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s00000000\n", bin);
+            fprintf(codigoBinario, "%s00000000\n", bin);
             break;
         }
         case inst_sub:
         {
-            printf("000001");
+           fprintf(codigoBinario, "000001");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)) , *reg3 = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, reg3);
             char bin[7];
             int numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg3);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s00000000\n", bin);
+           fprintf(codigoBinario, "%s00000000\n", bin);
             break;
         }
         case inst_mul:
         {
-            printf("000010");
+           fprintf(codigoBinario, "000010");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)) , *reg3 = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, reg3);
             char bin[7];
             int numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg3);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s00000000\n", bin);
+           fprintf(codigoBinario, "%s00000000\n", bin);
             break;
         }
         case inst_div:
         {
-            printf("000011");
+           fprintf(codigoBinario, "000011");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)) , *reg3 = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, reg3);
             char bin[7];
             int numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg3);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s00000000\n", bin);
+           fprintf(codigoBinario, "%s00000000\n", bin);
             break;
         }
         case inst_addi:
         {
-            printf("000100");
+           fprintf(codigoBinario, "000100");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, imedi);
             char bin[7];
             int numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             char imediate[15];
             imediato_para_bin14(atoi(imedi), imediate);
-            printf("%s\n", imediate);
+           fprintf(codigoBinario, "%s\n", imediate);
             break;
         }
         case inst_subi:
         {
-            printf("000101");
+           fprintf(codigoBinario, "000101");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, imedi);
             char bin[7];
             int numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             char imediate[15];
             imediato_para_bin14(atoi(imedi), imediate);
-            printf("%s\n", imediate);
+           fprintf(codigoBinario, "%s\n", imediate);
             break;
         }
         case inst_halt:
-            printf("00111000000000000000000000000000\n");
+           fprintf(codigoBinario, "00111000000000000000000000000000\n");
             return;
         case inst_jr:
-            printf("01000101111100000000000000000000\n");
+           fprintf(codigoBinario, "01000101111100000000000000000000\n");
             break;
         case inst_lw:
         {
-            printf("001001");
+           fprintf(codigoBinario, "001001");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, imedi);
             char bin[7];
             int numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             char imediate[15];
             imediato_para_bin14(atoi(imedi), imediate);
-            printf("%s\n", imediate);
+           fprintf(codigoBinario, "%s\n", imediate);
             break;
         }
         case inst_sw:
         {
-            printf("001010");
+           fprintf(codigoBinario, "001010");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, imedi);
             char bin[7];
             int numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             char imediate[15];
             imediato_para_bin14(atoi(imedi), imediate);
-            printf("%s\n", imediate);
+           fprintf(codigoBinario, "%s\n", imediate);
             break;
         }
         case inst_beq:
         {
-            printf("010101");
+           fprintf(codigoBinario, "010101");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, imedi);
             char bin[7];
             int numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             char imediate[15];
             imediato_para_bin14(atoi(imedi), imediate);
-            printf("%s\n", imediate);
+           fprintf(codigoBinario, "%s\n", imediate);
             break;
         }
         case inst_bne:
         {
-            printf("010101");
+           fprintf(codigoBinario, "010101");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, imedi);
             char bin[7];
             int numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             char imediate[15];
             imediato_para_bin14(atoi(imedi), imediate);
-            printf("%s\n", imediate);
+           fprintf(codigoBinario, "%s\n", imediate);
             break;
         }
         case inst_slte:
         {
-            printf("010111");
+           fprintf(codigoBinario, "010111");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)) , *reg3 = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, reg3);
             char bin[7];
             int numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg3);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s00000000\n", bin);
+           fprintf(codigoBinario, "%s00000000\n", bin);
             break;
         }
         case inst_slt:
         {
-            printf("010100");
+           fprintf(codigoBinario, "010100");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)) , *reg3 = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, reg3);
             char bin[7];
             int numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg3);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s00000000\n", bin);
+           fprintf(codigoBinario, "%s00000000\n", bin);
             break;
         }
         case inst_move:
         {
-            printf("001100");
+           fprintf(codigoBinario, "001100");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %s", &linha, operacao, reg1, reg2);
             char bin[7];
             int numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s", bin);
+           fprintf(codigoBinario, "%s", bin);
             numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
-            printf("%s", bin);
-            printf("00000000000000\n");
+           fprintf(codigoBinario, "%s", bin);
+           fprintf(codigoBinario, "00000000000000\n");
             break;
         }
         case inst_jump:
         {
-            printf("010011000000000000");
+           fprintf(codigoBinario, "010011000000000000");
             char *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %s", &linha, operacao, imedi);
             char imediate[15];
             imediato_para_bin14(atoi(imedi), imediate);
-            printf("%s\n", imediate);
+           fprintf(codigoBinario, "%s\n", imediate);
             break;
         }
         case inst_jal:
         {
-            printf("010010111111011111");
+           fprintf(codigoBinario, "010010111111011111");
             char *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %s", &linha, operacao, imedi);
             char imediate[15];
             imediato_para_bin14(atoi(imedi), imediate);
-            printf("%s\n", imediate);
+           fprintf(codigoBinario, "%s\n", imediate);
             break;
         }
         case inst_label:
-            printf("00000000000000000000000000000000\n");
+           fprintf(codigoBinario, "00000000000000000000000000000000\n");
             break;
         case inst_input:
         {
-            printf("001111111111");
+           fprintf(codigoBinario, "001111111111");
             char *reg1 = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^.].", &linha, operacao, reg1);
             char bin[7];
             int numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s", bin);
-            printf("00000000000000\n");
+           fprintf(codigoBinario, "%s", bin);
+           fprintf(codigoBinario, "00000000000000\n");
             break;
         }
         case inst_output:
         {
-            printf("010000");
+           fprintf(codigoBinario, "010000");
             char *reg1 = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^.].", &linha, operacao, reg1);
             char bin[7];
             int numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
-            printf("%s", bin);
-            printf("11111100000000000000\n");
+           fprintf(codigoBinario, "%s", bin);
+           fprintf(codigoBinario, "11111100000000000000\n");
             break;
         }
         default:
@@ -471,7 +471,7 @@ void substituir_labels_por_linhas(CodAssembly *lista) {
 
 void generate_Binary(CodAssembly  *listaCodAssebly)
 {
-    printf("Generating binary code...\n");
+   printf("Generating binary code...\n");
     if (listaCodAssebly == NULL) return;
     substituir_labels_por_linhas(listaCodAssebly);
     codigoBinario = fopen("codigoBinario.txt", "w");
