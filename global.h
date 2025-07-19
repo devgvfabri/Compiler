@@ -30,7 +30,7 @@ typedef struct CodAssembly
 
 typedef enum {StmtK,ExpK} NodeKind;
 typedef enum {IfK,WhileK,returnK, AtrK, VarK, FunK, CallK, ParamK} StmtKind;
-typedef enum {OpK,ConstK,IdK, TypeK, VetK} ExpKind;
+typedef enum {OpK,ConstK,IdK, TypeK, VetK, VetIdK} ExpKind;
 typedef enum {Void,Integer, Undefined, IntegerVetorK} ExpType;
 
 typedef int TokenType; 

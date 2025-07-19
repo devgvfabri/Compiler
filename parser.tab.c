@@ -1328,7 +1328,7 @@ yyreduce:
 				yyval->attr.name = yyvsp[-6]->attr.name;
 				yyval->child[0] = id;
 				id->nodekind = ExpK;
-				id->kind.exp = VetK;
+				id->kind.exp = VetIdK;
 				id->type = yyvsp[-6]->type;
 				id->child[0] = newExpNode(ConstK);
 				id->child[0]->attr.val = atoi(tokenString);

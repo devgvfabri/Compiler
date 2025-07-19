@@ -349,28 +349,38 @@ void genExp(TreeNode *tree)
 					 "(ASSIGN, %s, %s, -)\n", tree->child[0]->temp, aux);
 			save_List(newQuad);
 		}
-		tree->temp = newTemp();
-		fprintf(codigoIntermediario, "(MUL, %s, %s, 4)\n", tree->temp, tree->child[0]->temp);
-		snprintf(newQuad, sizeof(char) * 256,
-				 "(MUL, %s, %s, 4)\n", tree->temp, tree->child[0]->temp);
-		save_List(newQuad);
 		aux = newTemp();
-		fprintf(codigoIntermediario, "(LOADADDR, %s, %s, -)\n", aux, tree->attr.name);
+		fprintf(codigoIntermediario, "(LOADADDR, %s, %s, %s)\n", aux, tree->attr.name, tree->escopo);
 		snprintf(newQuad, sizeof(char) * 256,
-				 "(LOADADDR, %s, %s, -)\n", aux, tree->attr.name);
+				 "(LOADADDR, %s, %s, %s)\n", aux, tree->attr.name, tree->escopo);
 		save_List(newQuad);
 		add = newTemp();
-		fprintf(codigoIntermediario, "(ADD, %s, %s, %s)\n", add, aux, tree->temp);
+		fprintf(codigoIntermediario, "(SUB, %s, %s, %s)\n", add, aux, tree->child[0]->temp);
 		snprintf(newQuad, sizeof(char) * 256,
-				 "(ADD, %s, %s, %s)\n", add, aux, tree->temp);
+				 "(SUB, %s, %s, %s)\n", add, aux, tree->child[0]->temp);
 		save_List(newQuad);
 		tree->temp = newTemp();
-		fprintf(codigoIntermediario, "(LOAD, %s, %s, -)\n", tree->temp, add);
+		fprintf(codigoIntermediario, "(LOAD, %s, %s, -)\n", add, tree->temp);
 		snprintf(newQuad, sizeof(char) * 256,
-				 "(LOAD, %s, %s, -)\n", tree->temp, add);
+				 "(LOAD, %s, %s, -)\n", add, tree->temp);
 		save_List(newQuad);
+		break;
 	}
-	break;
+	case VetIdK:
+	{
+		char *aux = (char *)malloc(sizeof(char *) * 12);
+		char *add = (char *)malloc(sizeof(char *) * 12);
+		char *newQuad = (char *)malloc(sizeof(char) * 256);
+		cGen(tree->child[0]);
+		if (tree->child[0]->kind.exp == ConstK)
+		{
+			fprintf(codigoIntermediario, "(ALLOCVET, %s, %s, %s)\n", tree->attr.name, tree->escopo, tree->child[0]->temp);
+			snprintf(newQuad, sizeof(char) * 256,
+					 "(ALLOCVET, %s, %s, %s)\n", tree->attr.name, tree->escopo, tree->child[0]->temp);
+			save_List(newQuad);
+		}
+		break;
+	}
 	default:
 		break;
 	}

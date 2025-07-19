@@ -122,7 +122,7 @@ void genBinary(CodAssembly *listaCodAssebly)
     switch (converteStringAssembly(operacao))
     {
         case inst_funcao:
-            fprintf(codigoBinario, "00000000000000000000000000000000\n");
+            fprintf(codigoBinario, "00110100000000000000000000000000\n");
             break;
         case inst_add:
         {
@@ -198,10 +198,10 @@ void genBinary(CodAssembly *listaCodAssebly)
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, imedi);
             char bin[7];
-            int numreg= get_register_number(reg1);
+            int numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
            fprintf(codigoBinario, "%s", bin);
-            numreg= get_register_number(reg2);
+            numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
            fprintf(codigoBinario, "%s", bin);
             char imediate[15];
@@ -370,7 +370,7 @@ void genBinary(CodAssembly *listaCodAssebly)
             break;
         }
         case inst_label:
-           fprintf(codigoBinario, "00000000000000000000000000000000\n");
+           fprintf(codigoBinario, "00110100000000000000000000000000\n");
             break;
         case inst_input:
         {

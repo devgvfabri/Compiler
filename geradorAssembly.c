@@ -117,7 +117,8 @@ typedef enum {
     quad_igual,
     quad_diferente,
     quad_end,
-    quad_hlt
+    quad_hlt,
+    quad_allocvet
 } operacao;
 
 operacao converteString(char *stringOp)//convert str
@@ -147,6 +148,7 @@ operacao converteString(char *stringOp)//convert str
     if(strcmp(stringOp, "NOTEQUAL") == 0) return quad_diferente;
     if(strcmp(stringOp, "END") == 0) return quad_end;
     if(strcmp(stringOp, "HALT") == 0) return quad_hlt;
+    if(strcmp(stringOp, "ALLOCVET") == 0) return quad_allocvet;
 }
 
 void genAssembly(Quadrupla *listaCodInt)
@@ -195,12 +197,23 @@ void genAssembly(Quadrupla *listaCodInt)
         num_argumentos++;
         break;
     case quad_parametro:
+    {
                 if (indice_parametro < 4)
                 {
                     num_lines++;
-                    fprintf(codigoAssembly, "%d: move %s, $a%d\n", num_lines , operand1, indice_parametro);
-                    snprintf(assembly, sizeof(char) * 256, "%d: move %s, $a%d\n", num_lines , operand1, indice_parametro);
-                    save_assembly(assembly);
+                    int imediato;
+                    if(sscanf(operand1, "$t%d", &imediato) != 1){
+                        imediato = atoi(operand1);
+                        fprintf(codigoAssembly, "%d: addi $a%d, $0, %d\n", num_lines, indice_parametro, imediato );
+                        snprintf(assembly, sizeof(char) * 256, "%d: addi $a%d, $0, %d\n", num_lines, indice_parametro, imediato);
+                        save_assembly(assembly);
+                    }
+                    else
+                    {
+                        fprintf(codigoAssembly, "%d: move %s, $a%d\n", num_lines , operand1, indice_parametro);
+                        snprintf(assembly, sizeof(char) * 256, "%d: move %s, $a%d\n", num_lines , operand1, indice_parametro);
+                        save_assembly(assembly);
+                    }
                 }           
                 else
                 {
@@ -212,6 +225,7 @@ void genAssembly(Quadrupla *listaCodInt)
             empilhaArgumento(listaCodInt);
             indice_parametro++;
         break;
+    }
     case quad_alloc:
         insereSimbolo(operand1);
         num_lines++;
@@ -226,11 +240,23 @@ void genAssembly(Quadrupla *listaCodInt)
         save_assembly(assembly);
         break;
     case quad_loadaddr:
+    {
+        if(strcmp(operand3, "global") == 0)
+        {
+            num_lines++;
+            fprintf(codigoAssembly, "%d: lw $gb, %s, %d\n", num_lines, operand1, buscaOffset(operand2));
+            snprintf(assembly, sizeof(char) * 256, "%d: lw $gb, %s, %d\n", num_lines, operand1, buscaOffset(operand2));
+            save_assembly(assembly);
+        }
+        else
+        {
         num_lines++;
         fprintf(codigoAssembly, "%d: lw* $62, %s, offset\n", num_lines, operand1);
         snprintf(assembly, sizeof(char) * 256, "%d: lw* $62, %s, offset\n", num_lines, operand1);
         save_assembly(assembly);
+        }
         break;
+    }
     case quad_store:
         num_lines++;
         fprintf(codigoAssembly, "%d: sw $30, %s, %d \n", num_lines, operand2, buscaOffset(operand1));
@@ -238,11 +264,23 @@ void genAssembly(Quadrupla *listaCodInt)
         save_assembly(assembly);
         break;
     case quad_assign:
+    {
+        int imediato = 0;
         num_lines++;
-        fprintf(codigoAssembly, "%d: move %s, %s\n", num_lines, operand2, operand1);
-        snprintf(assembly, sizeof(char) * 256, "%d: move %s, %s\n", num_lines, operand2, operand1);
-        save_assembly(assembly);
+        if(sscanf(operand2, "$t%d", &imediato) != 1){
+            imediato = atoi(operand2);
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            save_assembly(assembly);
+        }
+        else
+        {
+            fprintf(codigoAssembly, "%d: move %s, %s\n", num_lines, operand2, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: move %s, %s\n", num_lines, operand2, operand1);
+            save_assembly(assembly);
+        }
         break;
+    }
     case quad_call:
     {
         if(strcmp(operand2, "input") == 0)
@@ -316,22 +354,56 @@ void genAssembly(Quadrupla *listaCodInt)
             save_assembly(assembly);
         break;
     case quad_return:
+    {
         num_lines++;
+        int imediato;
+        if(sscanf(operand1, "$t%d", &imediato) != 1){
+            imediato = atoi(operand1);
+            fprintf(codigoAssembly, "%d: addi $gp, $0, %d\n", num_lines, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi $gp, $0, %d\n", num_lines, imediato);
+            save_assembly(assembly);
+        }
+        else
+        {
         fprintf(codigoAssembly, "%d: move %s, $gp\n", num_lines, operand1);
             snprintf(assembly, sizeof(char) * 256, "%d: move %s, $gp\n", num_lines, operand1);
             save_assembly(assembly);
+        }
         break;
+    }
     case quad_add:
+    {
         num_lines++;
+        int imediato;
+        if(sscanf(operand3, "$t%d", &imediato) != 1){
+            imediato = atoi(operand3);
+            fprintf(codigoAssembly, "%d: addi %s, %s, %d\n", num_lines, operand1, operand2, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, %s, %d\n", num_lines, operand1, operand2, imediato);
+            save_assembly(assembly);
+        }
+        else
+        {
         fprintf(codigoAssembly, "%d: add %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             snprintf(assembly, sizeof(char) * 256, "%d: add %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             save_assembly(assembly);
+        }
         break;
+    }
     case quad_sub:
         num_lines++;
+        int imediato;
+        if(sscanf(operand3, "$t%d", &imediato) != 1){
+            imediato = atoi(operand3);
+            fprintf(codigoAssembly, "%d: subi %s, %s, %d\n", num_lines, operand1, operand2, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: subi %s, %s, %d\n", num_lines, operand1, operand2, imediato);
+            save_assembly(assembly);
+        }
+        else
+        {
         fprintf(codigoAssembly, "%d: sub %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             snprintf(assembly, sizeof(char) * 256, "%d: sub %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             save_assembly(assembly);
+        }
         break;
     case quad_mul:
         num_lines++;
@@ -346,32 +418,114 @@ void genAssembly(Quadrupla *listaCodInt)
             save_assembly(assembly);
         break;
     case quad_maior:
+    {
         num_lines++;
-        fprintf(codigoAssembly, "%d: slt %s, %s, %s\n", num_lines, operand1, operand3, operand2);
+        int imediato;
+        if(sscanf(operand3, "$t%d", &imediato) != 1){
+            imediato = atoi(operand3);
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            save_assembly(assembly);
+            num_lines++;
+            fprintf(codigoAssembly, "%d: slt %s, %s, %s\n", num_lines, operand1, operand1, operand2);
+            snprintf(assembly, sizeof(char) * 256, "%d: slt %s, %s, %s\n", num_lines, operand1, operand1, operand2);
+            save_assembly(assembly);
+        }
+        else
+        {
+            fprintf(codigoAssembly, "%d: slt %s, %s, %s\n", num_lines, operand1, operand3, operand2);
             snprintf(assembly, sizeof(char) * 256, "%d: slt %s, %s, %s\n", num_lines, operand1, operand3, operand2);
             save_assembly(assembly);
-        break;
+        }
+            break;
+    }
     case quad_menor:
+    {
         num_lines++;
-        fprintf(codigoAssembly, "%d: slt %s, %s, %s\n", num_lines, operand1, operand2, operand3);
+        int imediato;
+        if(sscanf(operand3, "$t%d", &imediato) != 1){
+            imediato = atoi(operand3);
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            save_assembly(assembly);
+            num_lines++;
+            fprintf(codigoAssembly, "%d: slt %s, %s, %s\n", num_lines, operand1, operand2, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: slt %s, %s, %s\n", num_lines, operand1, operand2, operand1);
+            save_assembly(assembly);
+        }
+        else
+        {
+            fprintf(codigoAssembly, "%d: slt %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             snprintf(assembly, sizeof(char) * 256, "%d: slt %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             save_assembly(assembly);
+        }
         break;
+    }
     case quad_maiorigual:
+    {
         num_lines++;
+        int imediato;
+        if(sscanf(operand3, "$t%d", &imediato) != 1){
+            imediato = atoi(operand3);
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            save_assembly(assembly);
+            num_lines++;
+            fprintf(codigoAssembly, "%d: slte %s, %s, %s\n", num_lines, operand1, operand1, operand2);
+            snprintf(assembly, sizeof(char) * 256, "%d: slte %s, %s, %s\n", num_lines, operand1, operand1, operand2);
+            save_assembly(assembly);
+        }
+        else
+        {
         fprintf(codigoAssembly, "%d: slte %s, %s, %s\n", num_lines, operand1, operand3, operand2);
             snprintf(assembly, sizeof(char) * 256, "%d: slte %s, %s, %s\n", num_lines, operand1, operand3, operand2);
             save_assembly(assembly);
         break;
+        }
+    }
     case quad_menorigual:
+    {
         num_lines++;
+        int imediato;
+        if(sscanf(operand3, "$t%d", &imediato) != 1){
+            imediato = atoi(operand3);
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            save_assembly(assembly);
+            num_lines++;
+            fprintf(codigoAssembly, "%d: slte %s, %s, %s\n", num_lines, operand1, operand2, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: slte %s, %s, %s\n", num_lines, operand1, operand2, operand1);
+            save_assembly(assembly);
+        }
+        else
+        {
         fprintf(codigoAssembly, "%d: slte %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             snprintf(assembly, sizeof(char) * 256, "%d: slte %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             save_assembly(assembly);
+        }
         break;
+    }
     case quad_igual:
     {
         num_lines++;
+        int imediato;
+        if(sscanf(operand3, "$t%d", &imediato) != 1){
+            imediato = atoi(operand3);
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            save_assembly(assembly);
+            num_lines++;
+            fprintf(codigoAssembly, "%d: bne %s, %s,", num_lines, operand2, operand1);
+            listaCodInt = listaCodInt->prox;
+            char *aux = (char *)malloc(256 * sizeof(char));
+            snprintf(aux, sizeof(char) * 256, "%d: bne %s, %s, ", num_lines,operand2, operand1);
+            sscanf(listaCodInt->mensagem, " ( %[^,], %[^,], %[^,], %[^)] )", operacao, operand1, operand2, operand3);
+            fprintf(codigoAssembly, "%s\n", operand2);
+            snprintf(assembly, sizeof(char) * 256, "%s %s\n", aux, operand2);
+                save_assembly(assembly);
+        }
+        else
+        {
         fprintf(codigoAssembly, "%d: bne %s, %s,", num_lines, operand2, operand3);
         listaCodInt = listaCodInt->prox;
         char *aux = (char *)malloc(256 * sizeof(char));
@@ -380,11 +534,30 @@ void genAssembly(Quadrupla *listaCodInt)
         fprintf(codigoAssembly, "%s\n", operand2);
         snprintf(assembly, sizeof(char) * 256, "%s %s\n", aux, operand2);
             save_assembly(assembly);
+        }
         break;
     }    
     case quad_diferente:
     {
-        num_lines++;
+
+        int imediato;
+        if(sscanf(operand3, "$t%d", &imediato) != 1){
+            imediato = atoi(operand3);
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            save_assembly(assembly);
+            num_lines++;
+            fprintf(codigoAssembly, "%d: beq %s, %s,", num_lines, operand2, operand1);
+            listaCodInt = listaCodInt->prox;
+            char *aux = (char *)malloc(256 * sizeof(char));
+            snprintf(aux, sizeof(char) * 256, "%d: beq %s, %s, ", num_lines,operand2, operand1);
+            sscanf(listaCodInt->mensagem, " ( %[^,], %[^,], %[^,], %[^)] )", operacao, operand1, operand2, operand3);
+            fprintf(codigoAssembly, "%s\n", operand2);
+            snprintf(assembly, sizeof(char) * 256, "%s %s\n", aux, operand2);
+                save_assembly(assembly);
+        }
+        else
+        {
         fprintf(codigoAssembly, "%d: beq %s, %s, ", num_lines, operand2, operand3);
         listaCodInt = listaCodInt->prox;
         char *aux = (char *)malloc(256 * sizeof(char));
@@ -393,6 +566,7 @@ void genAssembly(Quadrupla *listaCodInt)
         fprintf(codigoAssembly, "%s\n", operand2);
         snprintf(assembly, sizeof(char) * 256, "%s %s\n", aux, operand2);
             save_assembly(assembly);
+        }
 
         break;
     }
@@ -408,6 +582,12 @@ void genAssembly(Quadrupla *listaCodInt)
                 snprintf(assembly, sizeof(char) * 256, "%d: jr $31\n", num_lines);
                 save_assembly(assembly);
         }
+        break;
+    case quad_allocvet:
+        num_lines++;
+        fprintf(codigoAssembly, "%d: subi $gsp, $gsp, %d \n", num_lines, atoi(operand3));
+                snprintf(assembly, sizeof(char) * 256, "%d: subi $gsp, $gsp, %d \n", num_lines, atoi(operand3));
+                save_assembly(assembly);
         break;
     case quad_hlt:
         num_lines++;
@@ -425,14 +605,16 @@ void inserir_jump_para_main_assembly() {
     CodAssembly *atual = listaCodAssebly;
     int linha_main = -1;
     int linha;
-    char *main = (char *)malloc(20 * sizeof(char));
-    // Encontrar linha da main
+    char main[20];
+    
+    // 1. Find the line number of main function
     while (atual != NULL) {
-            sscanf(atual->mensagem, "%d: funcao : %s", &linha, main);
-            if(strcmp(main, "main") == 0) {
-            linha_main = linha;
-            break;
+        if (sscanf(atual->mensagem, "%d: funcao : %19s", &linha, main) == 2) {
+            if (strcmp(main, "main") == 0) {
+                linha_main = linha;
+                break;
             }
+        }
         atual = atual->prox;
     }
 
@@ -441,24 +623,58 @@ void inserir_jump_para_main_assembly() {
         return;
     }
 
-    // Atualizar numeração: +1
+    // 2. Find the insertion point (after global vars, before first function)
+    int insertion_line = 1;
     atual = listaCodAssebly;
+    CodAssembly *anterior = NULL;
+    
     while (atual != NULL) {
-        char nova[256];
-        char *codigo = strchr(atual->mensagem, ':') + 1;
-        sscanf(atual->mensagem, "%d:", &linha);
-        snprintf(nova, sizeof(nova), "%d:%s", linha + 1, codigo);
-        strcpy(atual->mensagem, nova);
+        // Check if this is a function declaration
+        if (sscanf(atual->mensagem, "%d: funcao : %19s", &linha, main) == 2) {
+            // Found first function - insert before this
+            break;
+        }
+        // Not a function - could be global var allocation
+        insertion_line = linha + 1; // Keep track of last line number
+        anterior = atual;
         atual = atual->prox;
     }
 
-    // Criar novo nó jump 0
-    CodAssembly *novo = (CodAssembly *)malloc(sizeof(CodAssembly));
-    snprintf(novo->mensagem, sizeof(novo->mensagem), "1: jump %d\n", linha_main);
-    novo->prox = listaCodAssebly;
-    listaCodAssebly = novo;
+    // 3. Update line numbers for all subsequent lines (+1)
+    CodAssembly *temp = atual;
+    while (temp != NULL) {
+        char *codigo = strchr(temp->mensagem, ':');
+        if (codigo != NULL) {
+            int old_linha;
+            sscanf(temp->mensagem, "%d:", &old_linha);
+            char nova[256];
+            snprintf(nova, sizeof(nova), "%d:%s", old_linha + 1, codigo + 1);
+            strcpy(temp->mensagem, nova);
+        }
+        temp = temp->prox;
+    }
 
-    num_lines++;  // importante: avança contagem total
+    // 4. Create and insert the new jump instruction
+    CodAssembly *novo = (CodAssembly *)malloc(sizeof(CodAssembly));
+    if (novo == NULL) {
+        printf("Erro ao alocar memória!\n");
+        return;
+    }
+    
+    snprintf(novo->mensagem, sizeof(novo->mensagem), "%d: jump %d\n", insertion_line, linha_main);
+    
+    // Insert the new node at the correct position
+    if (anterior == NULL) {
+        // Insert at beginning
+        novo->prox = listaCodAssebly;
+        listaCodAssebly = novo;
+    } else {
+        // Insert after global variables
+        novo->prox = anterior->prox;
+        anterior->prox = novo;
+    }
+
+    num_lines++;  // Update total line count
 }
 
 void generate_assembly(Quadrupla  *listaCodInt)

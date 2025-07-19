@@ -7,57 +7,58 @@
 7: lw $30, $t0, -1 
 8: lw $30, $t1, -2 
 9: lw $30, $t2, -2 
-10: bne $t2, 0,L0
-11: lw $30, $t4, -1 
-12: move $t4, $gp
-13: jump L1
-14: label L0
-15: lw $30, $t5, -2 
-16: move $t5, $a0
-17: lw $30, $t6, -1 
-18: lw $30, $t7, -1 
-19: lw $30, $t8, -2 
-20: div $t9, $t7, $t8
-21: lw $30, $t10, -2 
-22: mul $t11, $t9, $t10
-23: sub $t12, $t6, $t11
-24: move $t12, $a1
-25: subi $62, $62, 2 
-26: sw $62, $30, 1 
-27: move $62, $30 
-28: jal gcd
-29: lw $30, $30, 1 
-30: move $30, $62 
-31: addi $62, $62, 1
-32: move $gp, $t13
-33: move $t13, $gp
-34: jump L1
-35: label L1
-36: lw $30, $31, 0
-37: jr $31
-38: funcao : main
-39: subi $62, $62, 1
+10: addi $t3, $0, 0
+11: bne $t2, $t3,L0
+12: lw $30, $t4, -1 
+13: move $t4, $gp
+14: jump L1
+15: label L0
+16: lw $30, $t5, -2 
+17: move $t5, $a0
+18: lw $30, $t6, -1 
+19: lw $30, $t7, -1 
+20: lw $30, $t8, -2 
+21: div $t9, $t7, $t8
+22: lw $30, $t10, -2 
+23: mul $t11, $t9, $t10
+24: sub $t12, $t6, $t11
+25: move $t12, $a1
+26: subi $62, $62, 2 
+27: sw $62, $30, 1 
+28: move $62, $30 
+29: jal gcd
+30: lw $30, $30, 1 
+31: move $30, $62 
+32: addi $62, $62, 1
+33: move $gp, $t13
+34: move $t13, $gp
+35: jump L1
+36: label L1
+37: lw $30, $31, 0
+38: jr $31
+39: funcao : main
 40: subi $62, $62, 1
-41: lw $30, $t0, -1 
-42: input $t1.
-43: move $t1, $t0
-44: sw $30, $t0, -1 
-45: lw $30, $t2, -2 
-46: input $t3.
-47: move $t3, $t2
-48: sw $30, $t2, -2 
-49: lw $30, $t4, -1 
-50: move $t4, $a0
-51: lw $30, $t5, -2 
-52: move $t5, $a1
-53: subi $62, $62, 2 
-54: sw $62, $30, 1 
-55: move $62, $30 
-56: jal gcd
-57: lw $30, $30, 1 
-58: move $30, $62 
-59: addi $62, $62, 1
-60: move $gp, $t6
-61: move $t6, $a0
-62: output $gp.
-63: halt 
+41: subi $62, $62, 1
+42: lw $30, $t0, -1 
+43: input $t1.
+44: move $t1, $t0
+45: sw $30, $t0, -1 
+46: lw $30, $t2, -2 
+47: input $t3.
+48: move $t3, $t2
+49: sw $30, $t2, -2 
+50: lw $30, $t4, -1 
+51: move $t4, $a0
+52: lw $30, $t5, -2 
+53: move $t5, $a1
+54: subi $62, $62, 2 
+55: sw $62, $30, 1 
+56: move $62, $30 
+57: jal gcd
+58: lw $30, $30, 1 
+59: move $30, $62 
+60: addi $62, $62, 1
+61: move $gp, $t6
+62: move $t6, $a0
+63: output $gp.
+64: halt 

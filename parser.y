@@ -94,7 +94,7 @@ varDeclaracao	:	tipoEspecificador ID PEV
 				$$->attr.name = $1->attr.name;
 				$$->child[0] = id;
 				id->nodekind = ExpK;
-				id->kind.exp = VetK;
+				id->kind.exp = VetIdK;
 				id->type = $1->type;
 				id->child[0] = newExpNode(ConstK);
 				id->child[0]->attr.val = atoi(tokenString);
