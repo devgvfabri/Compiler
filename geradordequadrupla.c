@@ -165,10 +165,20 @@ void genStmt(TreeNode *tree)
 		snprintf(newQuad, sizeof(char) * 256,
 				 "(ASSIGN, %s, %s, -)\n", tree->child[0]->temp, tree->child[1]->temp);
 		save_List(newQuad);
+		if(tree->child[0]->kind.stmt == VetK)
+		{
+			fprintf(codigoIntermediario, "(STOREVET, %s, %s, %s)\n", tree->child[0]->attr.name, tree->child[0]->temp, tree->child[0]->enderevet);
+			snprintf(newQuad, sizeof(char) * 256,
+				 "(STOREVET, %s, %s, %s)\n", tree->child[0]->attr.name, tree->child[0]->temp, tree->child[0]->enderevet);
+			save_List(newQuad);
+		}
+		else
+		{
 		fprintf(codigoIntermediario, "(STORE, %s, %s, -)\n", tree->child[0]->attr.name, tree->child[0]->temp);
 		snprintf(newQuad, sizeof(char) * 256,
 				 "(STORE, %s, %s, -)\n", tree->child[0]->attr.name, tree->child[0]->temp);
 		save_List(newQuad);
+		}
 		break;
 	}
 	/* Gera quadrupla para leitura, apenas visita a variavel e imprime uma quadrupla do tipo leitura com o nome e escopo*/
@@ -227,11 +237,25 @@ void genStmt(TreeNode *tree)
 			arg = arg->sibling;
 		}
 
+		if((strcmp(tree->attr.name, "output") == 0) && tree->child[0]->kind.exp == VetK)
+		{	
+			fprintf(codigoIntermediario, "(MOVE, $gp, $gb, -)\n");
+			snprintf(newQuad, sizeof(char) * 256,
+				 "(MOVE, $gp, $gb, -)\n");
+			save_List(newQuad);
+			fprintf(codigoIntermediario, "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
+			snprintf(newQuad, sizeof(char) * 256,
+				 "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
+			save_List(newQuad);
+		}
+		else
+		{
 		tree->temp = newTemp();
 		fprintf(codigoIntermediario, "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
 		snprintf(newQuad, sizeof(char) * 256,
 				 "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
 		save_List(newQuad);
+		}
 		break;
 	}
 	/* Gera quadrupla para escrita, apenas visita o filho e imprime uma quadrupla do tipo escrita com o temporario do filho*/
@@ -360,10 +384,24 @@ void genExp(TreeNode *tree)
 				 "(SUB, %s, %s, %s)\n", add, aux, tree->child[0]->temp);
 		save_List(newQuad);
 		tree->temp = newTemp();
-		fprintf(codigoIntermediario, "(LOAD, %s, %s, -)\n", add, tree->temp);
-		snprintf(newQuad, sizeof(char) * 256,
-				 "(LOAD, %s, %s, -)\n", add, tree->temp);
-		save_List(newQuad);
+		if(tree->escopo != NULL)
+		{
+		if(strcmp(tree->escopo, "global") == 0)
+		{
+			fprintf(codigoIntermediario, "(LOAD, %s, %s, -)\n", add, "gb");
+			snprintf(newQuad, sizeof(char) * 256,
+				 "(LOAD, %s, %s, -)\n", add, "gb");
+			save_List(newQuad);
+		}
+		}
+		else
+		{
+			fprintf(codigoIntermediario, "(LOADVET, %s, %s, %s)\n", add, tree->temp, tree->attr.name);
+			snprintf(newQuad, sizeof(char) * 256,
+				 "(LOADVET, %s, %s, %s)\n", add, tree->temp, tree->attr.name);
+			save_List(newQuad);
+		}
+		tree->enderevet = add;
 		break;
 	}
 	case VetIdK:

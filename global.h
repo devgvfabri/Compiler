@@ -52,6 +52,7 @@ typedef struct treeNode
             } attr;
      ExpType type; 
      char *temp;
+     char *enderevet;
      char *label;
      char *escopo;
    } TreeNode;

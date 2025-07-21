@@ -45,37 +45,80 @@ void imprimirAssembly()
 int num_lines = 0;
 
 typedef struct {
-    char nome[32];
-    int offset;
+    char nome[50];      
+    int offset;         
+    char escopo[50];    
+    int tamanho;        
 } Simbolo;
 
 Simbolo tabela_simbolos[MAX_SIMBOLOS];
 int num_simbolos = 0;
-int offset_atual = -1;
+int offset_global = 511;  
+int offset_local = -1;    
 
 void limpaTabelaSimbolos() {
-    num_simbolos = 0;
-    offset_atual = -1;
+    int j = 0;
+    for (int i = 0; i < num_simbolos; i++) {
+        if (strcmp(tabela_simbolos[i].escopo, "global") == 0) {
+            if (i != j) tabela_simbolos[j] = tabela_simbolos[i];
+            j++;
+        }
+    }
+    num_simbolos = j;
+    offset_local = -1;
 }
 
-void insereSimbolo(const char *nome) {
+Simbolo *buscaSimbolo(const char *nome) {
+    for (int i = 0; i < num_simbolos; i++) {
+        if (strcmp(tabela_simbolos[i].nome, nome) == 0) {
+            return &tabela_simbolos[i];
+        }
+    }
+    return NULL;
+}
+
+int simboloEhGlobal(const char *nome) {
+    Simbolo *simb = buscaSimbolo(nome);
+    return simb && strcmp(simb->escopo, "global") == 0;
+}
+
+void insereSimbolo(const char *nome, const char *escopo, int tamanho) {
     if (num_simbolos >= MAX_SIMBOLOS) return;
 
+    // Verifica se o símbolo já existe no mesmo escopo
     for (int i = 0; i < num_simbolos; i++) {
-        if (strcmp(tabela_simbolos[i].nome, nome) == 0) return;
+        if (strcmp(tabela_simbolos[i].nome, nome) == 0 && 
+            strcmp(tabela_simbolos[i].escopo, escopo) == 0) {
+            return;  // Evita duplicatas
+        }
     }
 
+    // Insere o novo símbolo
     strcpy(tabela_simbolos[num_simbolos].nome, nome);
-    tabela_simbolos[num_simbolos].offset = offset_atual--;
+    strcpy(tabela_simbolos[num_simbolos].escopo, escopo);
+    tabela_simbolos[num_simbolos].tamanho = tamanho;  // Para vetores
+
+    // Define o offset conforme o escopo
+    if (strcmp(escopo, "global") == 0) {
+        tabela_simbolos[num_simbolos].offset = offset_global;
+        offset_global -= (tamanho > 0) ? tamanho : 1;  // Aloca espaço para vetores
+    } 
+    else {  // Escopo local (ex: "minloc")
+        tabela_simbolos[num_simbolos].offset = offset_local;
+        offset_local -= (tamanho > 0) ? tamanho : 1;
+    }
+
     num_simbolos++;
 }
 
+
 int buscaOffset(const char *nome) {
-    for (int i = 0; i < num_simbolos; i++) {
-        if (strcmp(tabela_simbolos[i].nome, nome) == 0)
-            return tabela_simbolos[i].offset;
+    Simbolo *simb = buscaSimbolo(nome);
+    if (!simb) {
+        printf("Erro: Símbolo '%s' não encontrado!\n", nome);
+        return 0;
     }
-    return 0; 
+    return simb->offset;
 }
 
 Quadrupla *argumentos[MAX_ARGS];
@@ -118,7 +161,10 @@ typedef enum {
     quad_diferente,
     quad_end,
     quad_hlt,
-    quad_allocvet
+    quad_allocvet,
+    quad_loadvet,
+    quad_storevet,
+    quad_move
 } operacao;
 
 operacao converteString(char *stringOp)//convert str
@@ -149,6 +195,9 @@ operacao converteString(char *stringOp)//convert str
     if(strcmp(stringOp, "END") == 0) return quad_end;
     if(strcmp(stringOp, "HALT") == 0) return quad_hlt;
     if(strcmp(stringOp, "ALLOCVET") == 0) return quad_allocvet;
+    if(strcmp(stringOp, "LOADVET") == 0) return quad_loadvet;
+    if(strcmp(stringOp, "STOREVET") == 0) return quad_storevet;
+    if(strcmp(stringOp, "MOVE") == 0) return quad_move;
 }
 
 void genAssembly(Quadrupla *listaCodInt)
@@ -185,16 +234,16 @@ void genAssembly(Quadrupla *listaCodInt)
         }
         break;
     case quad_argumento:
-        insereSimbolo(operand2);
+        insereSimbolo(operand2, operand3, 1);
         num_lines++;
         fprintf(codigoAssembly, "%d: subi $62, $62, 1\n", num_lines);
         snprintf(assembly, sizeof(char) * 256, "%d: subi $62, $62, 1\n", num_lines);
         save_assembly(assembly);
         num_lines++;
-        fprintf(codigoAssembly, "%d: sw $30, $a%d, %d\n", num_lines , num_argumentos, buscaOffset(operand2)); 
-        snprintf(assembly, sizeof(char) * 256, "%d: sw $30, $a%d, %d\n", num_lines , num_argumentos, buscaOffset(operand2));
+        fprintf(codigoAssembly, "%d: sw $30, $a%d, %d\n", num_lines , indice_parametro, buscaOffset(operand2)); 
+        snprintf(assembly, sizeof(char) * 256, "%d: sw $30, $a%d, %d\n", num_lines , indice_parametro, buscaOffset(operand2));
         save_assembly(assembly);
-        num_argumentos++;
+        indice_parametro++;
         break;
     case quad_parametro:
     {
@@ -227,7 +276,8 @@ void genAssembly(Quadrupla *listaCodInt)
         break;
     }
     case quad_alloc:
-        insereSimbolo(operand1);
+        indice_parametro = 0;
+        insereSimbolo(operand1, operand3, 0);
         num_lines++;
         fprintf(codigoAssembly, "%d: subi $62, $62, 1\n", num_lines);
         snprintf(assembly, sizeof(char) * 256, "%d: subi $62, $62, 1\n", num_lines);
@@ -235,33 +285,90 @@ void genAssembly(Quadrupla *listaCodInt)
         break;
     case quad_load:
         num_lines++;
-        fprintf(codigoAssembly, "%d: lw $30, %s, %d \n", num_lines , operand1, buscaOffset(operand2));
-        snprintf(assembly, sizeof(char) * 256, "%d: lw $30, %s, %d \n", num_lines , operand1, buscaOffset(operand2));
-        save_assembly(assembly);
-        break;
-    case quad_loadaddr:
-    {
-        if(strcmp(operand3, "global") == 0)
+        if(simboloEhGlobal(operand2))
         {
-            num_lines++;
-            fprintf(codigoAssembly, "%d: lw $gb, %s, %d\n", num_lines, operand1, buscaOffset(operand2));
-            snprintf(assembly, sizeof(char) * 256, "%d: lw $gb, %s, %d\n", num_lines, operand1, buscaOffset(operand2));
+            fprintf(codigoAssembly, "%d: li %s, %d \n", num_lines, operand1, buscaOffset(operand2));
+            snprintf(assembly, sizeof(char) * 256, "%d: li %s, %d \n", num_lines, operand1, buscaOffset(operand2));
+            save_assembly(assembly);
+        }
+        else if(strcmp(operand2, "gb") == 0)
+        {
+            fprintf(codigoAssembly, "%d: lw %s, $gb, 0 \n", num_lines , operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: lw %s, $gb, 0 \n", num_lines , operand1);
             save_assembly(assembly);
         }
         else
         {
-        num_lines++;
-        fprintf(codigoAssembly, "%d: lw* $62, %s, offset\n", num_lines, operand1);
-        snprintf(assembly, sizeof(char) * 256, "%d: lw* $62, %s, offset\n", num_lines, operand1);
+        fprintf(codigoAssembly, "%d: lw $30, %s, %d \n", num_lines , operand1, buscaOffset(operand2));
+        snprintf(assembly, sizeof(char) * 256, "%d: lw $30, %s, %d \n", num_lines , operand1, buscaOffset(operand2));
         save_assembly(assembly);
+        }
+        break;
+    case quad_loadaddr:
+    {
+        num_lines++;
+        if(simboloEhGlobal(operand2))
+        {
+            fprintf(codigoAssembly, "%d: li %s, %d \n", num_lines, operand1, buscaOffset(operand2));
+            snprintf(assembly, sizeof(char) * 256, "%d: li %s, %d \n", num_lines, operand1, buscaOffset(operand2));
+            save_assembly(assembly);
+        }
+        else
+        {
+        fprintf(codigoAssembly, "%d: lw $30, %s, %d \n", num_lines, operand1, buscaOffset(operand2));
+        snprintf(assembly, sizeof(char) * 256, "%d: lw $30, %s, %d \n", num_lines, operand1, buscaOffset(operand2));
+        save_assembly(assembly);
+        }
+        break;
+    }
+    case quad_loadvet:
+    {
+        num_lines++;
+        if(simboloEhGlobal(operand3))
+        {
+            fprintf(codigoAssembly, "%d: lw %s, $gb, 0 \n", num_lines , operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: lw %s, $gb, 0 \n", num_lines , operand1);
+            save_assembly(assembly);
+        }
+        else
+        {
+        fprintf(codigoAssembly, "%d: lw %s, %s, 0 \n", num_lines, operand1, operand2);
+        snprintf(assembly, sizeof(char) * 256, "%d: lw %s, %s, 0 \n", num_lines, operand1, operand2);
+        save_assembly(assembly);
+        }
+        break;
+    }
+    case quad_storevet:
+    {
+        num_lines++;
+        if(simboloEhGlobal(operand1))
+        {
+            fprintf(codigoAssembly, "%d: sw $gb, %s, 0 \n", num_lines, operand2);
+            snprintf(assembly, sizeof(char) * 256, "%d: sw $gb, %s, 0 \n", num_lines, operand2);
+            save_assembly(assembly);
+        }
+        else
+        {
+            fprintf(codigoAssembly, "%d: sw %s, %s, 0 \n", num_lines, operand3, operand2);
+            snprintf(assembly, sizeof(char) * 256, "%d: sw %s, %s, 0 \n", num_lines, operand3, operand2);
+            save_assembly(assembly);
         }
         break;
     }
     case quad_store:
         num_lines++;
-        fprintf(codigoAssembly, "%d: sw $30, %s, %d \n", num_lines, operand2, buscaOffset(operand1));
-        snprintf(assembly, sizeof(char) * 256, "%d: sw $30, %s, %d \n", num_lines, operand2, buscaOffset(operand1));
-        save_assembly(assembly);
+        if(simboloEhGlobal(operand1))
+        {
+            fprintf(codigoAssembly, "%d: sw $gb, %s, 0 \n", num_lines, operand2);
+            snprintf(assembly, sizeof(char) * 256, "%d: sw $gb, %s, 0 \n", num_lines, operand2);
+            save_assembly(assembly);
+        }
+        else
+        {
+            fprintf(codigoAssembly, "%d: sw $30, %s, %d \n", num_lines, operand2, buscaOffset(operand1));
+            snprintf(assembly, sizeof(char) * 256, "%d: sw $30, %s, %d \n", num_lines, operand2, buscaOffset(operand1));
+            save_assembly(assembly);
+        }
         break;
     case quad_assign:
     {
@@ -293,6 +400,7 @@ void genAssembly(Quadrupla *listaCodInt)
         else if(strcmp(operand2, "output") == 0)
         {
             num_lines++;
+
             fprintf(codigoAssembly, "%d: output $gp.\n", num_lines);
             snprintf(assembly, sizeof(char) * 256, "%d: output $gp.\n", num_lines);
             save_assembly(assembly);
@@ -346,6 +454,7 @@ void genAssembly(Quadrupla *listaCodInt)
         fprintf(codigoAssembly, "%d: label %s\n", num_lines, operand1);
             snprintf(assembly, sizeof(char) * 256, "%d: label %s\n", num_lines, operand1);
             save_assembly(assembly);
+                    indice_parametro = 0;
         break;
     case quad_goto:
         num_lines++;
@@ -585,10 +694,17 @@ void genAssembly(Quadrupla *listaCodInt)
         break;
     case quad_allocvet:
         num_lines++;
+        insereSimbolo(operand1, operand2, 10);
         fprintf(codigoAssembly, "%d: subi $gsp, $gsp, %d \n", num_lines, atoi(operand3));
                 snprintf(assembly, sizeof(char) * 256, "%d: subi $gsp, $gsp, %d \n", num_lines, atoi(operand3));
                 save_assembly(assembly);
         break;
+    case quad_move:
+    fprintf(codigoAssembly, "%d: move %s, %s\n", num_lines, operand2, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: move %s, %s\n", num_lines, operand2, operand1);
+            save_assembly(assembly);
+    num_lines++;
+    break;
     case quad_hlt:
         num_lines++;
         fprintf(codigoAssembly, "%d: halt \n", num_lines);
