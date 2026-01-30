@@ -1,6 +1,10 @@
-<<<<<<< HEAD
-# Compiler
-=======
+Projeto apresentado à Universidade Federal
+de São Paulo como parte dos requisitos para
+aprovação na disciplina de Laboratório de
+Sistemas Computacionais: Compiladores.
+
+
+
 # Compilador-C-minus
 Compilador C minus
 Comandos:
