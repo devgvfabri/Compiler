@@ -10,7 +10,7 @@ FILE *codigoIntermediario;
 
  Quadrupla *listaCodInt = NULL; // Ponteiro global para a lista de codInt
 
-/* Realiza traversia percorrendo irmãos do nó*/
+/* Realiza traversia percorrendo irmãos do nó atual*/
 void cGen(TreeNode *t);
 
 /* Percorre a arvore sem passar para o nós irmãos usado para chamadas de funções*/
