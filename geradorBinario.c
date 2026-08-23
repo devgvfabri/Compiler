@@ -72,6 +72,7 @@ int get_register_number(const char *reg) {
     if (strcmp(reg, "$0") == 0) return 63;
     if (strcmp(reg, "$gsp") == 0) return 52;
     if (strcmp(reg, "$gb") == 0) return 51;
+    if (strcmp(reg, "$v0") == 0) return 53;
     int num;
     char prefix;
 
@@ -403,7 +404,7 @@ void genBinary(CodAssembly *listaCodAssebly)
         {
             fprintf(codigoBinario, "001011111111");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
-            sscanf(listaCodAssebly->mensagem, "%d: %s %s, %s", &linha, operacao, reg1, imedi);
+            sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,]", &linha, operacao, reg1, imedi);
             char bin[7];
             int numreg= get_register_number(reg1);
             to_binary6(numreg, bin);

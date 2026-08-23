@@ -42,7 +42,7 @@ char *newTemp()
 {
 	char *name = (char *)malloc(sizeof(char) * 10);
 	if(tempVarNum == 30) tempVarNum += 2;
-	else if(tempVarNum == 64) tempVarNum = 0;
+	else if(tempVarNum == 50) tempVarNum = 0;
 	sprintf(name, "$t%d", tempVarNum);
 	tempVarNum++;
 	return name;
@@ -246,6 +246,13 @@ void genStmt(TreeNode *tree)
 			fprintf(codigoIntermediario, "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
 			snprintf(newQuad, sizeof(char) * 256,
 				 "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
+			save_List(newQuad);
+		}
+		else if((strcmp(tree->attr.name, "output") == 0))
+		{
+			fprintf(codigoIntermediario, "(CALL, %s, %s, %d)\n", tree->child[0]->temp, tree->attr.name, argCount);
+			snprintf(newQuad, sizeof(char) * 256,
+				 "(CALL, %s, %s, %d)\n", tree->child[0]->temp, tree->attr.name, argCount);
 			save_List(newQuad);
 		}
 		else

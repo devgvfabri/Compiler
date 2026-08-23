@@ -23,6 +23,7 @@ int numline = 1;
 static char * savedNameFun;
 static char * savedNameVar;
 static char * savedNameAtiv;
+static char *savedScopeVar;
 static int savedLineNo;
 static TreeNode* savedTree;
 static int location = 0;
@@ -84,6 +85,7 @@ varDeclaracao	:	tipoEspecificador ID PEV
 			// Declaração de variável vetor cria nó com tipo, id, escopo, e insere na tabela de símbolos, salva id em uma variavel global para gerar a arvore e a tabela
 			{
 			savedNameVar = copyString(tokenString);
+			savedScopeVar = copyString(currentFunctionName);
 			}
     			ACO NUM FCO PEV 
 			{ 
@@ -101,8 +103,8 @@ varDeclaracao	:	tipoEspecificador ID PEV
 				id->child[0]->type = Integer;
 				id->child[0]->numline = numline;
 				id->attr.vetor = 1;
-				id->escopo = copyString(currentFunctionName);
-				st_insert(location++, id->attr.name, currentFunctionName, "var", $1->type, numline, 1);
+				id->escopo = copyString(savedScopeVar);
+				st_insert(location++, id->attr.name, savedScopeVar, "var", $1->type, numline, 1);
     			}
 				| tipoEspecificador error PEV
 			{
@@ -337,6 +339,7 @@ var 		: 	ID
 				$$->child[0] = $4;
 				$$->kind.exp = VetK;
 				$$->type = Integer;
+				//$$->escopo = copyString(currentFunctionName);
 				st_insert(location++, savedNameVar, currentFunctionName, "var", NULL, numline, 0);
 			}
 		;

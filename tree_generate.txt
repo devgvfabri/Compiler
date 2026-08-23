@@ -1,39 +1,136 @@
   Type: 1
-    Fun: gcd
+    Var Vet: vet
+      Const: 10
+  Type: 1
+    Fun: minloc
       Type: 1
-        Parametro: u
+        Parametro: a
       Type: 1
-        Parametro: v
-      If
-        Op: IGU = ==
-          Id: v
-          Const: 0
-        return
-          Id: u
-        return
-          Chamada: gcd
-            Id: v
-            Op: SUB = -
-              Id: u
-              Op: MUL = *
-                Op: DIV = /
-                  Id: u
-                  Id: v
-                Id: v
+        Parametro: low
+      Type: 1
+        Parametro: high
+      Type: 1
+        Var: i
+      Type: 1
+        Var: x
+      Type: 1
+        Var: k
+      Atribuicao
+        Id: k
+        Id: low
+      Atribuicao
+        Id: x
+        Vetor: a
+          Id: low
+      Atribuicao
+        Id: i
+        Op: SOM = +
+          Id: low
+          Const: 1
+      While
+        Op: MEN = <
+          Id: i
+          Id: high
+        If
+          Op: MEN = <
+            Vetor: a
+              Id: i
+            Id: x
+          Atribuicao
+            Id: x
+            Vetor: a
+              Id: i
+          Atribuicao
+            Id: k
+            Id: i
+        Atribuicao
+          Id: i
+          Op: SOM = +
+            Id: i
+            Const: 1
+      return
+        Id: k
+  Type: 0
+    Fun: sort
+      Type: 1
+        Parametro: a
+      Type: 1
+        Parametro: low
+      Type: 1
+        Parametro: high
+      Type: 1
+        Var: i
+      Type: 1
+        Var: k
+      Atribuicao
+        Id: i
+        Id: low
+      While
+        Op: MEN = <
+          Id: i
+          Op: SUB = -
+            Id: high
+            Const: 1
+        Type: 1
+          Var: t
+        Atribuicao
+          Id: k
+          Chamada: minloc
+            Id: a
+            Id: i
+            Id: high
+        Atribuicao
+          Id: t
+          Vetor: a
+            Id: k
+        Atribuicao
+          Vetor: a
+            Id: k
+          Vetor: a
+            Id: i
+        Atribuicao
+          Vetor: a
+            Id: i
+          Id: t
+        Atribuicao
+          Id: i
+          Op: SOM = +
+            Id: i
+            Const: 1
   Type: 0
     Fun: main
       Type: 0
       Type: 1
-        Var: x
-      Type: 1
-        Var: y
+        Var: i
+      While
+        Op: MEN = <
+          Id: i
+          Const: 10
+        Atribuicao
+          Vetor: vet
+            Id: i
+          Chamada: input
+        Atribuicao
+          Id: i
+          Op: SOM = +
+            Id: i
+            Const: 1
+      Chamada: sort
+        Id: vet
+        Const: 0
+        Const: 10
       Atribuicao
-        Id: x
-        Chamada: input
-      Atribuicao
-        Id: y
-        Chamada: input
-      Chamada: output
-        Chamada: gcd
-          Id: x
-          Id: y
+        Id: i
+        Const: 0
+      While
+        Op: MEN = <
+          Id: i
+          Const: 10
+        Chamada: output
+          Vetor: vet
+            Id: i
+        Atribuicao
+          Id: i
+          Op: SOM = +
+            Id: i
+            Const: 1

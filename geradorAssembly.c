@@ -287,8 +287,8 @@ void genAssembly(Quadrupla *listaCodInt)
         num_lines++;
         if(simboloEhGlobal(operand2))
         {
-            fprintf(codigoAssembly, "%d: li %s, %d \n", num_lines, operand1, buscaOffset(operand2));
-            snprintf(assembly, sizeof(char) * 256, "%d: li %s, %d \n", num_lines, operand1, buscaOffset(operand2));
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d \n", num_lines, operand1, buscaOffset(operand2));
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d \n", num_lines, operand1, buscaOffset(operand2));
             save_assembly(assembly);
         }
         else if(strcmp(operand2, "gb") == 0)
@@ -309,8 +309,8 @@ void genAssembly(Quadrupla *listaCodInt)
         num_lines++;
         if(simboloEhGlobal(operand2))
         {
-            fprintf(codigoAssembly, "%d: li %s, %d \n", num_lines, operand1, buscaOffset(operand2));
-            snprintf(assembly, sizeof(char) * 256, "%d: li %s, %d \n", num_lines, operand1, buscaOffset(operand2));
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d \n", num_lines, operand1, buscaOffset(operand2));
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d \n", num_lines, operand1, buscaOffset(operand2));
             save_assembly(assembly);
         }
         else
@@ -326,8 +326,8 @@ void genAssembly(Quadrupla *listaCodInt)
         num_lines++;
         if(simboloEhGlobal(operand3))
         {
-            fprintf(codigoAssembly, "%d: lw %s, $gb, 0 \n", num_lines , operand1);
-            snprintf(assembly, sizeof(char) * 256, "%d: lw %s, $gb, 0 \n", num_lines , operand1);
+            fprintf(codigoAssembly, "%d: lw %s, %s, 0 \n", num_lines , operand1, operand2);
+            snprintf(assembly, sizeof(char) * 256, "%d: lw %s, %s, 0 \n", num_lines , operand1, operand2);
             save_assembly(assembly);
         }
         else
@@ -343,8 +343,8 @@ void genAssembly(Quadrupla *listaCodInt)
         num_lines++;
         if(simboloEhGlobal(operand1))
         {
-            fprintf(codigoAssembly, "%d: sw $gb, %s, 0 \n", num_lines, operand2);
-            snprintf(assembly, sizeof(char) * 256, "%d: sw $gb, %s, 0 \n", num_lines, operand2);
+            fprintf(codigoAssembly, "%d: sw %s, %s, 0 \n", num_lines, operand3, operand2);
+            snprintf(assembly, sizeof(char) * 256, "%d: sw %s, %s, 0 \n", num_lines, operand3, operand2);
             save_assembly(assembly);
         }
         else
@@ -401,14 +401,18 @@ void genAssembly(Quadrupla *listaCodInt)
         {
             num_lines++;
 
-            fprintf(codigoAssembly, "%d: output $gp.\n", num_lines);
-            snprintf(assembly, sizeof(char) * 256, "%d: output $gp.\n", num_lines);
+            fprintf(codigoAssembly, "%d: output $a0.\n", num_lines );
+            snprintf(assembly, sizeof(char) * 256, "%d: output $a0.\n", num_lines);
             save_assembly(assembly);
         }
         else
         {
             num_lines++;
-            fprintf(codigoAssembly, "%d: subi $62, $62, 2 \n", num_lines);
+            fprintf(codigoAssembly, "%d: sw $62, $62, -1 \n", num_lines);
+                snprintf(assembly, sizeof(char) * 256, "%d: subi $62, $62, 2 \n", num_lines);
+                save_assembly(assembly);
+            num_lines++;
+            fprintf(codigoAssembly, "%d: subi $62, $62, 3 \n", num_lines);
                 snprintf(assembly, sizeof(char) * 256, "%d: subi $62, $62, 2 \n", num_lines);
                 save_assembly(assembly);
             num_lines++;
@@ -424,20 +428,16 @@ void genAssembly(Quadrupla *listaCodInt)
                 snprintf(assembly, sizeof(char) * 256, "%d: jal %s\n", num_lines, operand2);
                 save_assembly(assembly);
             num_lines++;
+            fprintf(codigoAssembly, "%d: lw $30, $62, 2 \n", num_lines);
+                snprintf(assembly, sizeof(char) * 256, "%d: move $30, $62 \n", num_lines);
+                save_assembly(assembly);
+            num_lines++;
             fprintf(codigoAssembly, "%d: lw $30, $30, 1 \n", num_lines);
                 snprintf(assembly, sizeof(char) * 256, "%d: lw $30, $30, 1 \n", num_lines);
                 save_assembly(assembly);
             num_lines++;
-            fprintf(codigoAssembly, "%d: move $30, $62 \n", num_lines);
-                snprintf(assembly, sizeof(char) * 256, "%d: move $30, $62 \n", num_lines);
-                save_assembly(assembly);
-            num_lines++;
-            fprintf(codigoAssembly, "%d: addi $62, $62, 1\n", num_lines);
-                snprintf(assembly, sizeof(char) * 256, "%d: addi $62, $62, 1\n", num_lines);
-                save_assembly(assembly);
-            num_lines++;
-            fprintf(codigoAssembly, "%d: move $gp, %s\n", num_lines, operand1);
-                snprintf(assembly, sizeof(char) * 256, "%d: move $gp, %s\n", num_lines, operand1);
+            fprintf(codigoAssembly, "%d: move $v0, %s\n", num_lines, operand1);
+                snprintf(assembly, sizeof(char) * 256, "%d: move $v0, %s\n", num_lines, operand1);
                 save_assembly(assembly);
             indice_parametro = 0;
         }
@@ -468,14 +468,14 @@ void genAssembly(Quadrupla *listaCodInt)
         int imediato;
         if(sscanf(operand1, "$t%d", &imediato) != 1){
             imediato = atoi(operand1);
-            fprintf(codigoAssembly, "%d: addi $gp, $0, %d\n", num_lines, imediato);
-            snprintf(assembly, sizeof(char) * 256, "%d: addi $gp, $0, %d\n", num_lines, imediato);
+            fprintf(codigoAssembly, "%d: addi $v0, $0, %d\n", num_lines, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi $v0, $0, %d\n", num_lines, imediato);
             save_assembly(assembly);
         }
         else
         {
-        fprintf(codigoAssembly, "%d: move %s, $gp\n", num_lines, operand1);
-            snprintf(assembly, sizeof(char) * 256, "%d: move %s, $gp\n", num_lines, operand1);
+        fprintf(codigoAssembly, "%d: move %s, $v0\n", num_lines, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: move %s, $v0\n", num_lines, operand1);
             save_assembly(assembly);
         }
         break;

@@ -334,6 +334,9 @@ void printTree(TreeNode *tree)
 			case VetK:
 				fprintf(save_tree, "Vetor: %s\n", tree->attr.name);
 				break;
+			case VetIdK:
+				fprintf(save_tree, "Var Vet: %s\n", tree->attr.name);
+				break;
 			default:
 				fprintf(save_tree, "Unknown ExpNode kind\n");
 				break;

@@ -1981,6 +1981,6 @@ void contLine() {
 /* Função para abrir arquivo */
 void abrirArq()
 {
-  yyin = fopen("gcd.txt", "r");
+  yyin = fopen("code.txt", "r");
 }
 
