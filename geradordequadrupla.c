@@ -19,7 +19,9 @@ void cGen_noSibling(TreeNode *t);
 /* Contadores de registradores e labels*/
 int tempVarNum = 0;
 int tempLabelNum = 0;
-
+int varConstainsCall = 0;
+int flagCall = 0;
+char *savetemp;
 /* Estrutura para armazenar os parâmetros de uma função*/
 typedef struct parametros
 {
@@ -29,7 +31,7 @@ typedef struct parametros
 
 parametros *parametrosLista = NULL;
 
-/* Gera um novo label*/
+/* Gera  novo label*/
 char *newLabel()
 {
 	char *name = (char *)malloc(sizeof(char) * 10);
@@ -74,6 +76,16 @@ void imprimirQuadruplas()
 		printf("%s", atual->mensagem);
 		atual = atual->prox;
 	}
+}
+
+void constainsCall(TreeNode *tree)
+{
+
+	if(tree->child[0] == NULL || tree->child[1] == NULL ) return;
+
+	if(tree->child[0]->kind.stmt == CallK && (tree->child[1]->kind.stmt == CallK))
+	varConstainsCall = 1;
+	return;
 }
 
 /* Gera código intermediário para expressões e comandos*/
@@ -224,7 +236,7 @@ void genStmt(TreeNode *tree)
 		char *newQuad = (char *)malloc(sizeof(char) * 256);
 		TreeNode *arg = tree->child[0];
 		int argCount = 0;
-
+		
 		// Gera código e PARAM para cada argumento
 		while (arg != NULL)
 		{
@@ -255,6 +267,36 @@ void genStmt(TreeNode *tree)
 				 "(CALL, %s, %s, %d)\n", tree->child[0]->temp, tree->attr.name, argCount);
 			save_List(newQuad);
 		}
+		else if(varConstainsCall == 1)
+		{
+			tree->temp = newTemp();
+			fprintf(codigoIntermediario, "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
+			snprintf(newQuad, sizeof(char) * 256,
+				 "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
+			save_List(newQuad);
+			fprintf(codigoIntermediario, "(LOADCALL, %s, -, -)\n", tree->temp);
+			snprintf(newQuad, sizeof(char) * 256,
+				 "(LOADCALL, %s, -, -)\n", tree->temp);
+			save_List(newQuad);
+			flagCall = 1;
+			varConstainsCall = 0;
+			savetemp = (char *)malloc(sizeof(char) * 4);
+			strcpy(savetemp, tree->temp);
+		}
+		else if(flagCall == 1)
+		{
+			tree->temp = newTemp();
+			fprintf(codigoIntermediario, "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
+			snprintf(newQuad, sizeof(char) * 256,
+				 "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
+			save_List(newQuad);
+			fprintf(codigoIntermediario, "(LOADRET, %s, -, -)\n", savetemp);
+			snprintf(newQuad, sizeof(char) * 256,
+					 "(LOADRET, %s, -, -)\n", savetemp);
+			save_List(newQuad);
+			flagCall = 0;
+			strcpy(savetemp, "");
+		}
 		else
 		{
 		tree->temp = newTemp();
@@ -262,6 +304,7 @@ void genStmt(TreeNode *tree)
 		snprintf(newQuad, sizeof(char) * 256,
 				 "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
 		save_List(newQuad);
+
 		}
 		break;
 	}
@@ -329,6 +372,7 @@ void genExp(TreeNode *tree)
 	/* Gera nós de operadores com a operação e cada temporário do filho do nó*/
 	case OpK:
 	{
+		constainsCall(tree);
 		char *newQuad = (char *)malloc(sizeof(char) * 256);
 		cGen(tree->child[0]);
 		cGen(tree->child[1]);
@@ -336,6 +380,7 @@ void genExp(TreeNode *tree)
 		fprintf(codigoIntermediario, "(%s, %s, %s, %s)\n", genOperator(tree->attr.op), tree->temp, tree->child[0]->temp, tree->child[1]->temp);
 		snprintf(newQuad, sizeof(char) * 256,
 				 "(%s, %s, %s, %s)\n", genOperator(tree->attr.op), tree->temp, tree->child[0]->temp, tree->child[1]->temp);
+		
 		save_List(newQuad);
 		break;
 	}

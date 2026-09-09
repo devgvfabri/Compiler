@@ -2,106 +2,50 @@
     Var Vet: vet
       Const: 10
   Type: 1
-    Fun: minloc
+    Fun: invert
       Type: 1
-        Parametro: a
+        Parametro: v
       Type: 1
-        Parametro: low
+        Parametro: inicio
       Type: 1
-        Parametro: high
+        Parametro: fim
       Type: 1
-        Var: i
-      Type: 1
-        Var: x
-      Type: 1
-        Var: k
-      Atribuicao
-        Id: k
-        Id: low
-      Atribuicao
-        Id: x
-        Vetor: a
-          Id: low
-      Atribuicao
-        Id: i
-        Op: SOM = +
-          Id: low
+        Var: temp
+      If
+        Op: MIG = >=
+          Id: inicio
+          Id: fim
+        return
           Const: 1
-      While
-        Op: MEN = <
-          Id: i
-          Id: high
-        If
-          Op: MEN = <
-            Vetor: a
-              Id: i
-            Id: x
-          Atribuicao
-            Id: x
-            Vetor: a
-              Id: i
-          Atribuicao
-            Id: k
-            Id: i
         Atribuicao
-          Id: i
+          Id: temp
+          Vetor: v
+            Id: inicio
+        Atribuicao
+          Vetor: v
+            Id: inicio
+          Vetor: v
+            Id: fim
+        Atribuicao
+          Vetor: v
+            Id: fim
+          Id: temp
+        Chamada: invert
+          Id: v
           Op: SOM = +
-            Id: i
+            Id: inicio
             Const: 1
-      return
-        Id: k
-  Type: 0
-    Fun: sort
-      Type: 1
-        Parametro: a
-      Type: 1
-        Parametro: low
-      Type: 1
-        Parametro: high
-      Type: 1
-        Var: i
-      Type: 1
-        Var: k
-      Atribuicao
-        Id: i
-        Id: low
-      While
-        Op: MEN = <
-          Id: i
           Op: SUB = -
-            Id: high
-            Const: 1
-        Type: 1
-          Var: t
-        Atribuicao
-          Id: k
-          Chamada: minloc
-            Id: a
-            Id: i
-            Id: high
-        Atribuicao
-          Id: t
-          Vetor: a
-            Id: k
-        Atribuicao
-          Vetor: a
-            Id: k
-          Vetor: a
-            Id: i
-        Atribuicao
-          Vetor: a
-            Id: i
-          Id: t
-        Atribuicao
-          Id: i
-          Op: SOM = +
-            Id: i
+            Id: fim
             Const: 1
   Type: 0
     Fun: main
       Type: 0
       Type: 1
         Var: i
+      Atribuicao
+        Id: i
+        Const: 0
       While
         Op: MEN = <
           Id: i
@@ -115,10 +59,10 @@
           Op: SOM = +
             Id: i
             Const: 1
-      Chamada: sort
+      Chamada: invert
         Id: vet
         Const: 0
-        Const: 10
+        Const: 9
       Atribuicao
         Id: i
         Const: 0

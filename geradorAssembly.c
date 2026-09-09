@@ -164,7 +164,9 @@ typedef enum {
     quad_allocvet,
     quad_loadvet,
     quad_storevet,
-    quad_move
+    quad_move,
+    quad_loadcall,
+    quad_loadret
 } operacao;
 
 operacao converteString(char *stringOp)//convert str
@@ -198,6 +200,8 @@ operacao converteString(char *stringOp)//convert str
     if(strcmp(stringOp, "LOADVET") == 0) return quad_loadvet;
     if(strcmp(stringOp, "STOREVET") == 0) return quad_storevet;
     if(strcmp(stringOp, "MOVE") == 0) return quad_move;
+    if(strcmp(stringOp, "LOADCALL") == 0) return quad_loadcall;
+    if(strcmp(stringOp, "LOADRET") == 0) return quad_loadret;
 }
 
 void genAssembly(Quadrupla *listaCodInt)
@@ -304,6 +308,18 @@ void genAssembly(Quadrupla *listaCodInt)
         save_assembly(assembly);
         }
         break;
+    case quad_loadcall:
+    {
+        num_lines++;
+            fprintf(codigoAssembly, "%d: subi $62, $62, 1 \n", num_lines);
+            snprintf(assembly, sizeof(char) * 256, "%d: subi $62, $62, 1 \n", num_lines);
+            save_assembly(assembly);
+        num_lines++;
+            fprintf(codigoAssembly, "%d: sw $62, %s, 0 \n", num_lines, operand1 );
+            snprintf(assembly, sizeof(char) * 256, "%d: sw $62, %s, 0 \n", num_lines, operand1 );
+            save_assembly(assembly);
+        break;   
+    }
     case quad_loadaddr:
     {
         num_lines++;
@@ -319,6 +335,14 @@ void genAssembly(Quadrupla *listaCodInt)
         snprintf(assembly, sizeof(char) * 256, "%d: lw $30, %s, %d \n", num_lines, operand1, buscaOffset(operand2));
         save_assembly(assembly);
         }
+        break;
+    }
+    case quad_loadret:
+    {
+        num_lines++;
+        fprintf(codigoAssembly, "%d: lw $62, %s, 0 \n", num_lines, operand1 );
+        snprintf(assembly, sizeof(char) * 256, "%d: lw $62, %s, 0 \n", num_lines, operand1 );
+        save_assembly(assembly);
         break;
     }
     case quad_loadvet:
@@ -409,11 +433,11 @@ void genAssembly(Quadrupla *listaCodInt)
         {
             num_lines++;
             fprintf(codigoAssembly, "%d: sw $62, $62, -1 \n", num_lines);
-                snprintf(assembly, sizeof(char) * 256, "%d: subi $62, $62, 2 \n", num_lines);
+                snprintf(assembly, sizeof(char) * 256, "%d: sw $62, $62, -1 \n", num_lines);
                 save_assembly(assembly);
             num_lines++;
             fprintf(codigoAssembly, "%d: subi $62, $62, 3 \n", num_lines);
-                snprintf(assembly, sizeof(char) * 256, "%d: subi $62, $62, 2 \n", num_lines);
+                snprintf(assembly, sizeof(char) * 256, "%d: subi $62, $62, 3 \n", num_lines);
                 save_assembly(assembly);
             num_lines++;
             fprintf(codigoAssembly, "%d: sw $62, $30, 1 \n", num_lines);
@@ -429,7 +453,7 @@ void genAssembly(Quadrupla *listaCodInt)
                 save_assembly(assembly);
             num_lines++;
             fprintf(codigoAssembly, "%d: lw $30, $62, 2 \n", num_lines);
-                snprintf(assembly, sizeof(char) * 256, "%d: move $30, $62 \n", num_lines);
+                snprintf(assembly, sizeof(char) * 256, "%d: lw $30, $62, 2 \n", num_lines);
                 save_assembly(assembly);
             num_lines++;
             fprintf(codigoAssembly, "%d: lw $30, $30, 1 \n", num_lines);
@@ -521,11 +545,27 @@ void genAssembly(Quadrupla *listaCodInt)
             save_assembly(assembly);
         break;
     case quad_div:
+    {
         num_lines++;
-        fprintf(codigoAssembly, "%d: div %s, %s, %s\n", num_lines, operand1, operand2, operand3);
+        int imediato;
+        if(sscanf(operand3, "$t%d", &imediato) != 1){
+            imediato = atoi(operand3);
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            save_assembly(assembly);
+            num_lines++;
+            fprintf(codigoAssembly, "%d: div %s, %s, %s\n", num_lines, operand1, operand2, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: div %s, %s, %s\n", num_lines, operand1, operand2, operand1);
+            save_assembly(assembly);
+        }
+        else
+        {
+            fprintf(codigoAssembly, "%d: div %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             snprintf(assembly, sizeof(char) * 256, "%d: div %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             save_assembly(assembly);
-        break;
+        }
+    }
+    break;
     case quad_maior:
     {
         num_lines++;
