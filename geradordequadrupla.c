@@ -5,6 +5,7 @@
 #include "util.h"
 #include "parser.tab.h"
 #include "geradordequadrupla.h"
+#include "symtab.h"
 
 FILE *codigoIntermediario;
 
@@ -26,6 +27,7 @@ char *savetemp;
 typedef struct parametros
 {
 	char *name;
+	char *escopo;
 	struct parametros *prox;
 } parametros;
 
@@ -186,10 +188,21 @@ void genStmt(TreeNode *tree)
 		}
 		else
 		{
-		fprintf(codigoIntermediario, "(STORE, %s, %s, -)\n", tree->child[0]->attr.name, tree->child[0]->temp);
-		snprintf(newQuad, sizeof(char) * 256,
-				 "(STORE, %s, %s, -)\n", tree->child[0]->attr.name, tree->child[0]->temp);
-		save_List(newQuad);
+			BucketList entrada = st_lookup_entry( tree->attr.name, "global");
+			if(entrada)
+			{
+				fprintf(codigoIntermediario, "(STORE, %s, %s, global)\n", tree->child[0]->attr.name, tree->child[0]->temp);
+				snprintf(newQuad, sizeof(char) * 256,
+						"(STORE, %s, %s, global)\n", tree->child[0]->attr.name, tree->child[0]->temp);
+				save_List(newQuad);
+			}
+			else
+			{
+				fprintf(codigoIntermediario, "(STORE, %s, %s, -)\n", tree->child[0]->attr.name, tree->child[0]->temp);
+				snprintf(newQuad, sizeof(char) * 256,
+						"(STORE, %s, %s, -)\n", tree->child[0]->attr.name, tree->child[0]->temp);
+				save_List(newQuad);
+			}
 		}
 		break;
 	}
@@ -215,9 +228,9 @@ void genStmt(TreeNode *tree)
 		while (parametrosLista != NULL)
 		{
 			char *temp = newTemp();
-			fprintf(codigoIntermediario, "(LOAD, %s, %s, -)\n", temp, parametrosLista->name);
+			fprintf(codigoIntermediario, "(LOAD, %s, %s, %s)\n", temp, parametrosLista->name, parametrosLista->escopo);
 			snprintf(newQuad, sizeof(char) * 256,
-					 "(LOAD, %s, %s, -)\n", temp, parametrosLista->name);
+					 "(LOAD, %s, %s, %s)\n", temp, parametrosLista->name, parametrosLista->escopo);
 			save_List(newQuad);
 			parametrosLista = parametrosLista->prox;
 		}
@@ -318,6 +331,7 @@ void genStmt(TreeNode *tree)
 		save_List(newQuad);
 		parametros *param = (struct parametros *)malloc(sizeof(struct parametros));
 		param->name = tree->attr.name;
+		param->escopo = tree->escopo;
 		param->prox = NULL;
 		if (parametrosLista == NULL)
 			parametrosLista = param;
@@ -397,12 +411,23 @@ void genExp(TreeNode *tree)
 	/*Gera quadruplas carregando váriaveis da memória*/
 	case IdK:
 	{
+		BucketList entrada = st_lookup_entry( tree->attr.name, "global");
 		char *newQuad = (char *)malloc(sizeof(char) * 256);
 		tree->temp = newTemp();
+		if(entrada)
+		{
+			fprintf(codigoIntermediario, "(LOAD, %s, %s, global)\n", tree->temp, tree->attr.name);
+			snprintf(newQuad, sizeof(char) * 256,
+				 "(LOAD, %s, %s, global)\n", tree->temp, tree->attr.name);
+			save_List(newQuad);
+		}
+		else
+		{
 		fprintf(codigoIntermediario, "(LOAD, %s, %s, -)\n", tree->temp, tree->attr.name);
 		snprintf(newQuad, sizeof(char) * 256,
 				 "(LOAD, %s, %s, -)\n", tree->temp, tree->attr.name);
 		save_List(newQuad);
+		}
 		break;
 	}
 	/*Usado para percorrer a arvore em pós ordem*/

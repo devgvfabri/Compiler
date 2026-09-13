@@ -10,6 +10,45 @@ FILE *codigoAssembly;
 
 CodAssembly *listaCodAssebly = NULL;
 
+typedef struct {
+    char nome[50];
+    int base;
+    int tamanho;
+} Vetor;
+
+Vetor vetores[100];
+int qtdVetores = 0;
+
+typedef struct {
+    char nome[50];
+    int endereco;
+} Variavel;
+int ponteiroMemoriaGlobal = 511;
+Variavel variaveis[100];
+int qtdVariaveis = 0;
+
+int buscarBase(char *nome)
+{
+    for (int i = 0; i < qtdVetores; i++)
+    {
+        if (strcmp(vetores[i].nome, nome) == 0)
+            return vetores[i].base;
+    }
+
+    return -1;
+}
+
+int buscarEndereco(char *nome)
+{
+    for (int i = 0; i < qtdVariaveis; i++)
+    {
+        if (strcmp(variaveis[i].nome, nome) == 0)
+            return variaveis[i].endereco;
+    }
+
+    return -1;
+}
+
 void save_assembly(char *msg)
 {
 	CodAssembly *newQuad = (CodAssembly *)malloc(sizeof(CodAssembly));
@@ -280,19 +319,42 @@ void genAssembly(Quadrupla *listaCodInt)
         break;
     }
     case quad_alloc:
-        indice_parametro = 0;
-        insereSimbolo(operand1, operand3, 0);
-        num_lines++;
-        fprintf(codigoAssembly, "%d: subi $62, $62, 1\n", num_lines);
-        snprintf(assembly, sizeof(char) * 256, "%d: subi $62, $62, 1\n", num_lines);
-        save_assembly(assembly);
+    {
+        if(strcmp(operand2, "global") == 0)
+        {
+                        indice_parametro = 0;
+            insereSimbolo(operand1, operand3, 0);
+            num_lines++;
+            strcpy(variaveis[qtdVariaveis].nome, operand1);
+
+            variaveis[qtdVariaveis].endereco = ponteiroMemoriaGlobal;
+
+            ponteiroMemoriaGlobal--;
+
+            qtdVariaveis++;
+            fprintf(codigoAssembly, "%d: subi $gsp, $gsp, 1\n", num_lines);
+            snprintf(assembly, sizeof(char) * 256, "%d: subi $gsp, $gsp, 1\n", num_lines);
+            save_assembly(assembly);
+        }
+        else
+        {
+            indice_parametro = 0;
+            insereSimbolo(operand1, operand3, 0);
+            num_lines++;
+            fprintf(codigoAssembly, "%d: subi $62, $62, 1\n", num_lines);
+            snprintf(assembly, sizeof(char) * 256, "%d: subi $62, $62, 1\n", num_lines);
+            save_assembly(assembly);
+        }
+    }
         break;
     case quad_load:
+    {
         num_lines++;
-        if(simboloEhGlobal(operand2))
+        if(strcmp(operand3, "global") == 0)
         {
-            fprintf(codigoAssembly, "%d: addi %s, $0, %d \n", num_lines, operand1, buscaOffset(operand2));
-            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d \n", num_lines, operand1, buscaOffset(operand2));
+            int base = buscarEndereco(operand2);
+            fprintf(codigoAssembly, "%d: lw $0, %s, %d \n", num_lines, operand1, base);
+            snprintf(assembly, sizeof(char) * 256, "%d: lw $0, %s, %d \n", num_lines, operand1, base);
             save_assembly(assembly);
         }
         else if(strcmp(operand2, "gb") == 0)
@@ -307,6 +369,7 @@ void genAssembly(Quadrupla *listaCodInt)
         snprintf(assembly, sizeof(char) * 256, "%d: lw $30, %s, %d \n", num_lines , operand1, buscaOffset(operand2));
         save_assembly(assembly);
         }
+    }
         break;
     case quad_loadcall:
     {
@@ -325,8 +388,9 @@ void genAssembly(Quadrupla *listaCodInt)
         num_lines++;
         if(simboloEhGlobal(operand2))
         {
-            fprintf(codigoAssembly, "%d: addi %s, $0, %d \n", num_lines, operand1, buscaOffset(operand2));
-            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d \n", num_lines, operand1, buscaOffset(operand2));
+            int base = buscarBase(operand2);
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d \n", num_lines, operand1, base);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d \n", num_lines, operand1, base);
             save_assembly(assembly);
         }
         else
@@ -381,10 +445,11 @@ void genAssembly(Quadrupla *listaCodInt)
     }
     case quad_store:
         num_lines++;
-        if(simboloEhGlobal(operand1))
+        if(strcmp(operand3, "global") == 0)
         {
-            fprintf(codigoAssembly, "%d: sw $gb, %s, 0 \n", num_lines, operand2);
-            snprintf(assembly, sizeof(char) * 256, "%d: sw $gb, %s, 0 \n", num_lines, operand2);
+            int base = buscarEndereco(operand1);
+            fprintf(codigoAssembly, "%d: sw $0, %s, %d \n", num_lines, operand2, base);
+            snprintf(assembly, sizeof(char) * 256, "%d: sw $0, %s, %d \n", num_lines, operand2, base);
             save_assembly(assembly);
         }
         else
@@ -539,10 +604,26 @@ void genAssembly(Quadrupla *listaCodInt)
         }
         break;
     case quad_mul:
+    {
         num_lines++;
-        fprintf(codigoAssembly, "%d: mul %s, %s, %s\n", num_lines, operand1, operand2, operand3);
+        int imediato;
+        if(sscanf(operand3, "$t%d", &imediato) != 1){
+            imediato = atoi(operand3);
+            fprintf(codigoAssembly, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            snprintf(assembly, sizeof(char) * 256, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
+            save_assembly(assembly);
+            num_lines++;
+            fprintf(codigoAssembly, "%d: mul %s, %s, %s\n", num_lines, operand1, operand2, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: mul %s, %s, %s\n", num_lines, operand1, operand2, operand1);
+            save_assembly(assembly);
+        }
+        else
+        {
+            fprintf(codigoAssembly, "%d: mul %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             snprintf(assembly, sizeof(char) * 256, "%d: mul %s, %s, %s\n", num_lines, operand1, operand2, operand3);
             save_assembly(assembly);
+        }
+    }
         break;
     case quad_div:
     {
@@ -735,6 +816,12 @@ void genAssembly(Quadrupla *listaCodInt)
     case quad_allocvet:
         num_lines++;
         insereSimbolo(operand1, operand2, 10);
+        vetores[qtdVetores].base = ponteiroMemoriaGlobal;
+        vetores[qtdVetores].tamanho = atoi(operand3);
+        strcpy(vetores[qtdVetores].nome, operand1);
+
+        ponteiroMemoriaGlobal -= atoi(operand3);
+        qtdVetores++;
         fprintf(codigoAssembly, "%d: subi $gsp, $gsp, %d \n", num_lines, atoi(operand3));
                 snprintf(assembly, sizeof(char) * 256, "%d: subi $gsp, $gsp, %d \n", num_lines, atoi(operand3));
                 save_assembly(assembly);

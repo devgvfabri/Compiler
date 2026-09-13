@@ -2,6 +2,19 @@
     Var Vet: vet
       Const: 10
   Type: 1
+    Var Vet: array
+      Const: 10
+  Type: 1
+    Var: teste
+  Type: 1
+    Var: novo
+  Type: 1
+    Var Vet: veta
+      Const: 30
+  Type: 1
+    Var Vet: testa
+      Const: 10
+  Type: 1
     Fun: invert
       Type: 1
         Parametro: v
@@ -9,38 +22,6 @@
         Parametro: inicio
       Type: 1
         Parametro: fim
-      Type: 1
-        Var: temp
-      If
-        Op: MIG = >=
-          Id: inicio
-          Id: fim
-        return
-          Const: 1
-        Atribuicao
-          Id: temp
-          Vetor: v
-            Id: inicio
-        Atribuicao
-          Vetor: v
-            Id: inicio
-          Vetor: v
-            Id: fim
-        Atribuicao
-          Vetor: v
-            Id: fim
-          Id: temp
-        Chamada: invert
-          Id: v
-          Op: SOM = +
-            Id: inicio
-            Const: 1
-          Op: SUB = -
-            Id: fim
-            Const: 1
-  Type: 0
-    Fun: main
-      Type: 0
       Type: 1
         Var: i
       Atribuicao
@@ -53,7 +34,60 @@
         Atribuicao
           Vetor: vet
             Id: i
+          Id: teste
+        Atribuicao
+          Id: i
+          Op: SOM = +
+            Id: i
+            Const: 1
+      Atribuicao
+        Id: i
+        Op: SUB = -
+          Id: i
+          Const: 1
+      Atribuicao
+        Vetor: vet
+          Id: i
+        Id: novo
+  Type: 0
+    Fun: main
+      Type: 0
+      Type: 1
+        Var: i
+      Atribuicao
+        Id: i
+        Const: 0
+      Atribuicao
+        Id: teste
+        Const: 5
+      Atribuicao
+        Id: novo
+        Const: 7
+      While
+        Op: MEN = <
+          Id: i
+          Const: 10
+        Atribuicao
+          Vetor: vet
+            Id: i
           Chamada: input
+        Atribuicao
+          Id: i
+          Op: SOM = +
+            Id: i
+            Const: 1
+      Atribuicao
+        Id: i
+        Const: 0
+      While
+        Op: MEN = <
+          Id: i
+          Const: 10
+        Atribuicao
+          Vetor: array
+            Id: i
+          Vetor: veta
+            Id: i
         Atribuicao
           Id: i
           Op: SOM = +
@@ -71,7 +105,7 @@
           Id: i
           Const: 10
         Chamada: output
-          Vetor: vet
+          Vetor: testa
             Id: i
         Atribuicao
           Id: i
