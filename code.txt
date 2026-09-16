@@ -1,50 +1,16 @@
-/* programa para inverter um vetor com dez elementos. */
+/* Um programa para calcular o mdc
+   segundo o algoritmo de Euclides. */
 
-int vet[10];
-int array[10];
-int teste;
-int novo;
-int veta[30];
-int testa[10];
-int invert(int v[], int inicio, int fim)
-{
-    int i;
-    i = 0;
-    while(i < 10)
-    {
-        vet[i] = teste;
-        i = i + 1;
-    }
-    i = i - 1;
-    vet[i] = novo;
+int gcd(int u, int v)
+{       
+	if (v == 0) return u;
+	else return gcd(v,u-u/v*v);
+	/* u-u/v*v == u mod v */
 }
 
-void main(void)
-{
-    int i;
-    i = 0;
-    teste = 5;
-    novo = 7;
-    while(i < 10)
-    {
-        vet[i] = input();
-        i = i + 1;
-    }
-    i = 0;
-
-    while(i < 10)
-    {
-        array[i] = veta[i];
-        i = i + 1;
-    }
-
-    invert(vet, 0, 9);
-
-    i = 0;
-    while(i < 10)
-    {
-        output(testa[i]);
-        i = i + 1;
-    }
-    
+void main (void)
+{	
+	int x; int y;
+	x = input(); y = input();
+	output(gcd(x,y));
 }
