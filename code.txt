@@ -1,16 +1,20 @@
-/* Um programa para calcular o mdc
-   segundo o algoritmo de Euclides. */
+/* programa para ordena��o por sele��o de 
+   uma matriz com dez elementos. */
 
-int gcd(int u, int v)
-{       
-	if (v == 0) return u;
-	else return gcd(v,u-u/v*v);
-	/* u-u/v*v == u mod v */
-}
-
-void main (void)
-{	
-	int x; int y;
-	x = input(); y = input();
-	output(gcd(x,y));
+void main(void)
+{
+	exibelcd(14);
+	int i; int x;
+	i = 15; x = 0;
+	exibelcd(15);
+	output(i);
+	x = input();
+	if(x == i)
+	{
+		exibelcd(16);
+	}
+	else
+	{
+		exibelcd(17);
+	}
 }

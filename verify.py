@@ -1,7 +1,7 @@
 with open("programa.img", "rb") as f:
     original = f.read(512)
 
-with open("leitura.img", "rb") as f:
+with open("teste.img", "rb") as f:
     lido = f.read(512)
 
 if original == lido:

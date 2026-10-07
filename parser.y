@@ -452,7 +452,7 @@ idAtiv		: 	ID
 				$$ = newExpNode(IdK);
 				$$->attr.name = copyString(tokenString);
 				$$->numline = numline;
-				if(strcmp("output", tokenString) != 0 && strcmp("input", tokenString) && strcmp("main", tokenString) )
+				if(strcmp("output", tokenString) != 0 && strcmp("input", tokenString) && strcmp("main", tokenString) && strcmp("exibelcd", tokenString) )
 				st_insert(location++, tokenString, currentFunctionName, "funcao", NULL, numline, 0);
 			}
 		;	

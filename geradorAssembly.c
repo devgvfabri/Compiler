@@ -479,6 +479,7 @@ void genAssembly(Quadrupla *listaCodInt)
     }
     case quad_call:
     {
+        indice_parametro = 0;
         if(strcmp(operand2, "input") == 0)
         {
             num_lines++;
@@ -492,6 +493,14 @@ void genAssembly(Quadrupla *listaCodInt)
 
             fprintf(codigoAssembly, "%d: output $a0.\n", num_lines );
             snprintf(assembly, sizeof(char) * 256, "%d: output $a0.\n", num_lines);
+            save_assembly(assembly);
+        }
+        else if(strcmp(operand2, "exibelcd") == 0)
+        {
+            num_lines++;
+
+            fprintf(codigoAssembly, "%d: lcd $0, %s\n", num_lines, operand3 );
+            snprintf(assembly, sizeof(char) * 256, "%d: lcd $0, %s\n", num_lines, operand3);
             save_assembly(assembly);
         }
         else

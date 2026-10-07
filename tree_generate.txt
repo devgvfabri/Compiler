@@ -1,39 +1,26 @@
-  Type: 1
-    Fun: gcd
-      Type: 1
-        Parametro: u
-      Type: 1
-        Parametro: v
-      If
-        Op: IGU = ==
-          Id: v
-          Const: 0
-        return
-          Id: u
-        return
-          Chamada: gcd
-            Id: v
-            Op: SUB = -
-              Id: u
-              Op: MUL = *
-                Op: DIV = /
-                  Id: u
-                  Id: v
-                Id: v
   Type: 0
     Fun: main
       Type: 0
-      Type: 1
-        Var: x
-      Type: 1
-        Var: y
+      Chamada: exibelcd
+        Const: 14
+      Atribuicao
+        Id: i
+        Const: 15
+      Atribuicao
+        Id: x
+        Const: 0
+      Chamada: exibelcd
+        Const: 15
+      Chamada: output
+        Id: i
       Atribuicao
         Id: x
         Chamada: input
-      Atribuicao
-        Id: y
-        Chamada: input
-      Chamada: output
-        Chamada: gcd
+      If
+        Op: IGU = ==
           Id: x
-          Id: y
+          Id: i
+        Chamada: exibelcd
+          Const: 16
+        Chamada: exibelcd
+          Const: 17
