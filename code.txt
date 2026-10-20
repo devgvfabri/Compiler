@@ -1,20 +1,51 @@
-/* programa para ordena��o por sele��o de 
-   uma matriz com dez elementos. */
+int processos[11];
+int setorInicial[11];
+int tamanho[11];
+int setorFinal[11];
+int processoAtual;
+
+void iniciaTabela(void){
+	setorInicial[1] = 10;
+	tamanho[1] = 65;
+	setorFinal[1] = 10;
+	processoAtual = 0;
+}
+
+void salvaContexto(int p){
+	int i; int enderecoprogramabcp;
+	i = 0;
+	while(i < 64){
+		enderecoprogramabcp = p * 63;
+		enderecoprogramabcp = enderecoprogramabcp + i;
+		savereg(enderecoprogramabcp, i);
+		i++;
+	}
+}
+
+void executaProcesso(int p){
+	exibelcd(2);
+	carregaPrograma();
+	exibelcd(9);
+	salvaContexto(0);
+	carregaOffset();
+	restauraContexto();	
+	executa(p);
+	restauraContexto();	
+}
 
 void main(void)
 {
-	exibelcd(14);
-	int i; int x;
-	i = 15; x = 0;
-	exibelcd(15);
-	output(i);
-	x = input();
-	if(x == i)
-	{
-		exibelcd(16);
-	}
-	else
-	{
-		exibelcd(17);
+	int i; int p;
+	iniciaTabela();
+	exibelcd(0);
+	i = 0;
+	while(i != 5){
+		i = input();
+		if(i == 1){
+			exibelcd(1);
+			p = input();
+			executaProcesso(p);
+			exibelcd(4);
+		}
 	}
 }

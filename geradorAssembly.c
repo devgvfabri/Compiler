@@ -499,8 +499,16 @@ void genAssembly(Quadrupla *listaCodInt)
         {
             num_lines++;
 
-            fprintf(codigoAssembly, "%d: lcd $0, %s\n", num_lines, operand3 );
-            snprintf(assembly, sizeof(char) * 256, "%d: lcd $0, %s\n", num_lines, operand3);
+            fprintf(codigoAssembly, "%d: lcd $0, $a0\n", num_lines );
+            snprintf(assembly, sizeof(char) * 256, "%d: lcd $0, $a0\n", num_lines);
+            save_assembly(assembly);
+        }
+        else if(strcmp(operand2, "savereg") == 0)
+        {
+            num_lines++;
+
+            fprintf(codigoAssembly, "%d: sr $0, %s, %s\n", num_lines, operand1, operand3);
+            snprintf(assembly, sizeof(char) * 256, "%d: sr $0, %s, %s\n", num_lines, operand1, operand3);
             save_assembly(assembly);
         }
         else

@@ -1,30 +1,180 @@
-1: funcao : main
-2: addi $a0, $0, 14
-3: lcd $0, 1
-4: lw $30, $t1, 0 
-5: addi $t1, $0, 15
-6: sw $30, $t1, 0 
-7: lw $30, $t2, 0 
-8: addi $t2, $0, 0
-9: sw $30, $t2, 0 
-10: addi $a0, $0, 15
-11: lcd $0, 1
-12: lw $30, $t4, 0 
-13: move $t4, $a0
-14: output $a0.
-15: lw $30, $t5, 0 
-16: input $t6.
-17: move $t6, $t5
-18: sw $30, $t5, 0 
-19: lw $30, $t7, 0 
-20: lw $30, $t8, 0 
-21: bne $t7, $t8,L0
-22: addi $a0, $0, 16
-23: lcd $0, 1
-24: jump L1
-25: label L0
-26: addi $a0, $0, 17
-27: lcd $0, 1
-28: jump L1
-29: label L1
-30: halt 
+1: subi $gsp, $gsp, 11 
+2: subi $gsp, $gsp, 11 
+3: subi $gsp, $gsp, 11 
+4: subi $gsp, $gsp, 11 
+5: subi $gsp, $gsp, 1
+6: funcao : iniciaTabela
+7: sw $62, $31, 0 
+8: addi $t0, $0, 1
+9: addi $t1, $0, 500 
+10: sub $t2, $t1, $t0
+11: lw $t2, $t3, 0 
+12: addi $t3, $0, 10
+13: sw $t2, $t3, 0 
+14: addi $t4, $0, 1
+15: addi $t5, $0, 489 
+16: sub $t6, $t5, $t4
+17: lw $t6, $t7, 0 
+18: addi $t7, $0, 65
+19: sw $t6, $t7, 0 
+20: addi $t8, $0, 1
+21: addi $t9, $0, 478 
+22: sub $t10, $t9, $t8
+23: lw $t10, $t11, 0 
+24: addi $t11, $0, 10
+25: sw $t10, $t11, 0 
+26: lw $0, $t12, 467 
+27: addi $t12, $0, 0
+28: sw $0, $t12, 467 
+29: lw $30, $31, 0
+30: jr $31
+31: funcao : salvaContexto
+32: sw $62, $31, 0 
+33: subi $62, $62, 1
+34: sw $30, $a0, -1
+35: lw $30, $t0, -1 
+36: subi $62, $62, 1
+37: subi $62, $62, 1
+38: lw $30, $t1, -2 
+39: addi $t1, $0, 0
+40: sw $30, $t1, -2 
+41: label L0
+42: lw $30, $t2, -2 
+43: addi $t3, $0, 64
+44: slt $t3, $t2, $t3
+45: bne $t3, $0, L1
+46: lw $30, $t4, -3 
+47: lw $30, $t5, -1 
+48: addi $t6, $0, 63
+49: mul $t6, $t5, $t6
+50: move $t6, $t4
+51: sw $30, $t4, -3 
+52: lw $30, $t7, -3 
+53: lw $30, $t8, -3 
+54: lw $30, $t9, -2 
+55: add $t10, $t8, $t9
+56: move $t10, $t7
+57: sw $30, $t7, -3 
+58: lw $30, $t11, -3 
+59: move $t11, $a0
+60: lw $30, $t12, -2 
+61: move $t12, $a1
+62: sr $0, $t11, $t12
+63: jump L0
+64: label L1
+65: lw $30, $31, 0
+66: jr $31
+67: funcao : executaProcesso
+68: sw $62, $31, 0 
+69: subi $62, $62, 1
+70: sw $30, $a0, -1
+71: lw $30, $t0, -1 
+72: addi $a1, $0, 2
+73: lcd $0, $a0
+74: sw $62, $62, -1 
+75: subi $62, $62, 3 
+76: sw $62, $30, 1 
+77: move $62, $30 
+78: jal carregaPrograma
+79: lw $30, $62, 2 
+80: lw $30, $30, 1 
+81: move $v0, $t2
+82: addi $a0, $0, 9
+83: lcd $0, $a0
+84: addi $a0, $0, 0
+85: sw $62, $62, -1 
+86: subi $62, $62, 3 
+87: sw $62, $30, 1 
+88: move $62, $30 
+89: jal salvaContexto
+90: lw $30, $62, 2 
+91: lw $30, $30, 1 
+92: move $v0, $t4
+93: sw $62, $62, -1 
+94: subi $62, $62, 3 
+95: sw $62, $30, 1 
+96: move $62, $30 
+97: jal carregaOffset
+98: lw $30, $62, 2 
+99: lw $30, $30, 1 
+100: move $v0, $t5
+101: sw $62, $62, -1 
+102: subi $62, $62, 3 
+103: sw $62, $30, 1 
+104: move $62, $30 
+105: jal restauraContexto
+106: lw $30, $62, 2 
+107: lw $30, $30, 1 
+108: move $v0, $t6
+109: lw $30, $t7, -1 
+110: move $t7, $a0
+111: sw $62, $62, -1 
+112: subi $62, $62, 3 
+113: sw $62, $30, 1 
+114: move $62, $30 
+115: jal executa
+116: lw $30, $62, 2 
+117: lw $30, $30, 1 
+118: move $v0, $t8
+119: sw $62, $62, -1 
+120: subi $62, $62, 3 
+121: sw $62, $30, 1 
+122: move $62, $30 
+123: jal restauraContexto
+124: lw $30, $62, 2 
+125: lw $30, $30, 1 
+126: move $v0, $t9
+127: lw $30, $31, 0
+128: jr $31
+129: funcao : main
+130: subi $62, $62, 1
+131: subi $62, $62, 1
+132: sw $62, $62, -1 
+133: subi $62, $62, 3 
+134: sw $62, $30, 1 
+135: move $62, $30 
+136: jal iniciaTabela
+137: lw $30, $62, 2 
+138: lw $30, $30, 1 
+139: move $v0, $t0
+140: addi $a0, $0, 0
+141: lcd $0, $a0
+142: lw $30, $t2, -1 
+143: addi $t2, $0, 0
+144: sw $30, $t2, -1 
+145: label L2
+146: lw $30, $t3, -1 
+146: addi $t4, $0, 5
+147: beq $t3, $t4,L3
+148: lw $30, $t5, -1 
+149: input $t6.
+150: move $t6, $t5
+151: sw $30, $t5, -1 
+152: lw $30, $t7, -1 
+153: addi $t8, $0, 1
+154: bne $t7, $t8,L4
+155: addi $a0, $0, 1
+156: lcd $0, $a0
+157: lw $30, $t10, -2 
+158: input $t11.
+159: move $t11, $t10
+160: sw $30, $t10, -2 
+161: lw $30, $t12, -2 
+162: move $t12, $a0
+163: sw $62, $62, -1 
+164: subi $62, $62, 3 
+165: sw $62, $30, 1 
+166: move $62, $30 
+167: jal executaProcesso
+168: lw $30, $62, 2 
+169: lw $30, $30, 1 
+170: move $v0, $t13
+171: addi $a0, $0, 4
+172: lcd $0, $a0
+173: jump L5
+174: label L4
+175: jump L5
+176: label L5
+177: jump L2
+178: label L3
+179: halt 

@@ -280,6 +280,13 @@ void genStmt(TreeNode *tree)
 				 "(CALL, %s, %s, %d)\n", tree->child[0]->temp, tree->attr.name, argCount);
 			save_List(newQuad);
 		}
+		else if((strcmp(tree->attr.name, "savereg") == 0))
+		{
+			fprintf(codigoIntermediario, "(CALL, %s, %s,%s)\n", tree->child[0]->temp, tree->attr.name, tree->child[0]->sibling->temp);
+			snprintf(newQuad, sizeof(char) * 256,
+				 "(CALL, %s, %s,%s)\n", tree->child[0]->temp, tree->attr.name, tree->child[0]->sibling->temp );
+			save_List(newQuad);
+		}
 		else if(varConstainsCall == 1)
 		{
 			tree->temp = newTemp();
