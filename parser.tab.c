@@ -596,7 +596,7 @@ static const yytype_int16 yyrline[] =
      284,   292,   299,   305,   315,   323,   327,   334,   334,   347,
      353,   356,   361,   366,   371,   376,   381,   388,   394,   396,
      401,   408,   415,   418,   423,   430,   431,   432,   433,   440,
-     450,   459,   460,   463,   474
+     450,   460,   461,   464,   475
 };
 #endif
 
@@ -1888,26 +1888,27 @@ yyreduce:
 				yyval = newExpNode(IdK);
 				yyval->attr.name = copyString(tokenString);
 				yyval->numline = numline;
-				if(strcmp("output", tokenString) != 0 && strcmp("input", tokenString) && strcmp("main", tokenString) && strcmp("exibelcd", tokenString) )
+				if(strcmp("output", tokenString) != 0 && strcmp("input", tokenString) && strcmp("main", tokenString) && strcmp("exibelcd", tokenString)
+				&& strcmp("setSetorFinal", tokenString) != 0 && strcmp("setTam", tokenString) != 0 && strcmp("setSetorInicial", tokenString) != 0 && strcmp("loadreg", tokenString) != 0 && strcmp("savereg", tokenString) != 0 )
 				st_insert(location++, tokenString, currentFunctionName, "funcao", NULL, numline, 0);
 			}
-#line 1895 "parser.tab.c"
+#line 1896 "parser.tab.c"
     break;
 
   case 71: /* args: %empty  */
-#line 459 "parser.y"
+#line 460 "parser.y"
                                   { yyval = NULL; }
-#line 1901 "parser.tab.c"
+#line 1902 "parser.tab.c"
     break;
 
   case 72: /* args: argLista  */
-#line 460 "parser.y"
+#line 461 "parser.y"
                                    {yyval = yyvsp[0];}
-#line 1907 "parser.tab.c"
+#line 1908 "parser.tab.c"
     break;
 
   case 73: /* argLista: argLista VIR expressao  */
-#line 464 "parser.y"
+#line 465 "parser.y"
                         {	
 			    TreeNode * t = yyvsp[-2];
 			    if (t != NULL) {
@@ -1918,17 +1919,17 @@ yyreduce:
 				yyval = yyvsp[0];
 			    }
 			}
-#line 1922 "parser.tab.c"
+#line 1923 "parser.tab.c"
     break;
 
   case 74: /* argLista: expressao  */
-#line 474 "parser.y"
+#line 475 "parser.y"
                                     {yyval = yyvsp[0];}
-#line 1928 "parser.tab.c"
+#line 1929 "parser.tab.c"
     break;
 
 
-#line 1932 "parser.tab.c"
+#line 1933 "parser.tab.c"
 
       default: break;
     }
@@ -2121,7 +2122,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 478 "parser.y"
+#line 479 "parser.y"
 
 
 

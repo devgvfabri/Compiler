@@ -273,7 +273,7 @@ void genStmt(TreeNode *tree)
 				 "(CALL, %s, %s, %d)\n", tree->temp, tree->attr.name, argCount);
 			save_List(newQuad);
 		}
-		else if((strcmp(tree->attr.name, "output") == 0))
+		else if((strcmp(tree->attr.name, "output") == 0) || (strcmp(tree->attr.name, "setSetorInicial") == 0) || (strcmp(tree->attr.name, "setTam") == 0) || (strcmp(tree->attr.name, "setSetorFinal") == 0))
 		{
 			fprintf(codigoIntermediario, "(CALL, %s, %s, %d)\n", tree->child[0]->temp, tree->attr.name, argCount);
 			snprintf(newQuad, sizeof(char) * 256,

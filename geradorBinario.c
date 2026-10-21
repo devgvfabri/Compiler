@@ -34,6 +34,9 @@ typedef enum{
     inst_exibelcd,
     inst_storeR,
     inst_loadR,
+    inst_setsi,
+    inst_settam,
+    inst_setsf,
 } operacao;
 
 operacao converteStringAssembly(char *stringOp)
@@ -63,6 +66,9 @@ operacao converteStringAssembly(char *stringOp)
     if(strcmp(stringOp, "li") == 0) return inst_loadi;
     if(strcmp(stringOp, "sr") == 0) return inst_storeR;
     if(strcmp(stringOp, "lr") == 0) return inst_loadR;
+    if(strcmp(stringOp, "setsi") == 0) return inst_setsi;
+    if(strcmp(stringOp, "settam") == 0) return inst_settam;
+    if(strcmp(stringOp, "setsf") == 0) return inst_setsf;
 }
 
 
@@ -471,6 +477,60 @@ void genBinary(CodAssembly *listaCodAssebly)
             fprintf(codigoBinario, "%s\n", imediate);
             break;
         }
+        case inst_setsf:
+        {
+            fprintf(codigoBinario, "011011");
+            char *reg1 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char));
+            sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,]", &linha, operacao, reg1, reg2);
+            char bin[7];
+            int numreg= get_register_number(reg1);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            numreg= get_register_number(reg2);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            char imediate[15];
+            imediato_para_bin14(atoi(imedi), imediate);
+            fprintf(codigoBinario, "%s\n", imediate);
+            break;
+        }
+        break;
+        case inst_settam:
+        {
+            fprintf(codigoBinario, "011011");
+            char *reg1 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char));
+            sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,]", &linha, operacao, reg1, reg2);
+            char bin[7];
+            int numreg= get_register_number(reg1);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            numreg= get_register_number(reg2);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            char imediate[15];
+            imediato_para_bin14(atoi(imedi), imediate);
+            fprintf(codigoBinario, "%s\n", imediate);
+            break;
+        }
+        break;
+        case inst_setsi:
+        {
+            fprintf(codigoBinario, "011011");
+            char *reg1 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char));
+            sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,]", &linha, operacao, reg1, reg2);
+            char bin[7];
+            int numreg= get_register_number(reg1);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            numreg= get_register_number(reg2);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            char imediate[15];
+            imediato_para_bin14(atoi(imedi), imediate);
+            fprintf(codigoBinario, "%s\n", imediate);
+            break;
+        }
+        break;
         default:
             break;
     }

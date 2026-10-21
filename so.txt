@@ -8,6 +8,9 @@ void iniciaTabela(void){
 	setorInicial[1] = 10;
 	tamanho[1] = 65;
 	setorFinal[1] = 10;
+	setorInicial[2] = 11;
+	tamanho[2] = 64;
+	setorFinal[2] = 11;
 	processoAtual = 0;
 }
 
@@ -18,19 +21,43 @@ void salvaContexto(int p){
 		enderecoprogramabcp = p * 63;
 		enderecoprogramabcp = enderecoprogramabcp + i;
 		savereg(enderecoprogramabcp, i);
-		i++;
+		i = i + 1;
 	}
 }
 
+void restauraContexto(int p){
+	int i; int enderecoprogramabcp;
+	i = 0;
+	while(i < 64){
+		enderecoprogramabcp = p * 63;
+		enderecoprogramabcp = enderecoprogramabcp + i;
+		loadreg(enderecoprogramabcp, i);
+		i = i + 1;
+	}
+}
+
+void carregaPrograma(int p){
+	int setorAtual; int tamanhoprogramAtual; int setorFinalAtual;
+	setorAtual = setorInicial[p];
+	tamanhoprogramAtual = tamanho[p];
+	setorFinalAtual = setorFinal[p];
+	setSetorInicial(setorAtual);
+	setTam(tamanhoprogramAtual);
+	setSetorFinal(setorFinalAtual);
+	buscaPrograma();
+}
+
+
 void executaProcesso(int p){
 	exibelcd(2);
-	carregaPrograma();
+	carregaPrograma(p);
 	exibelcd(9);
 	salvaContexto(0);
+	restauraContexto(p);
 	carregaOffset();
-	restauraContexto();	
 	executa(p);
-	restauraContexto();	
+	carregaOffset();
+	restauraContexto(0);
 }
 
 void main(void)

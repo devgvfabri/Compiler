@@ -518,6 +518,27 @@ void genAssembly(Quadrupla *listaCodInt)
             snprintf(assembly, sizeof(char) * 256, "%d: lr $0, %s, %s\n", num_lines, operand1, operand3);
             save_assembly(assembly);
         }
+        else if(strcmp(operand2, "setSetorInicial") == 0)
+        {
+            num_lines++;
+            fprintf(codigoAssembly, "%d: setsi $0, %s\n", num_lines, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: setsi $0, %s\n", num_lines, operand1);
+            save_assembly(assembly);
+        }
+        else if(strcmp(operand2, "setTam") == 0)
+        {
+            num_lines++;
+            fprintf(codigoAssembly, "%d: settam $0, %s\n", num_lines, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: setsi $0, %s\n", num_lines, operand1);
+            save_assembly(assembly);
+        }
+        else if(strcmp(operand2, "setSetorFinal") == 0)
+        {
+            num_lines++;
+            fprintf(codigoAssembly, "%d: setsf $0, %s\n", num_lines, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: setsf $0, %s\n", num_lines, operand1);
+            save_assembly(assembly);
+        }
         else
         {
             num_lines++;
