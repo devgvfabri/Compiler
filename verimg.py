@@ -1,16 +1,26 @@
+
+SECTOR_SIZE = 512
+
 with open("programa.img", "rb") as arquivo:
-    setor = arquivo.read(512)
+    setor0 = arquivo.read(SECTOR_SIZE)
+    setor1 = arquivo.read(SECTOR_SIZE)
 
-print("===================================")
-print("       PRIMEIRO SETOR")
-print("===================================")
+for numero, setor in enumerate([setor0, setor1]):
+    print("===================================")
+    print(f"       SETOR {numero}")
+    print("===================================")
 
-for endereco in range(0, 512, 16):
+    if len(setor) == 0:
+        print("Setor não encontrado!")
+        continue
 
-    dados = setor[endereco:endereco + 16]
+    for endereco in range(0, len(setor), 16):
+        dados = setor[endereco:endereco + 16]
 
-    hexadecimal = " ".join(
-        f"{byte:02X}" for byte in dados
-    )
+        hexadecimal = " ".join(
+            f"{byte:02X}" for byte in dados
+        )
 
-    print(f"{endereco:04X}: {hexadecimal}")
+        print(f"{endereco:04X}: {hexadecimal}")
+
+    print()

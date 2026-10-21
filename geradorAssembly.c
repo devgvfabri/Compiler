@@ -511,6 +511,13 @@ void genAssembly(Quadrupla *listaCodInt)
             snprintf(assembly, sizeof(char) * 256, "%d: sr $0, %s, %s\n", num_lines, operand1, operand3);
             save_assembly(assembly);
         }
+        else if(strcmp(operand2, "loadreg") == 0)
+        {
+            num_lines++;
+            fprintf(codigoAssembly, "%d: lr $0, %s, %s\n", num_lines, operand1, operand3);
+            snprintf(assembly, sizeof(char) * 256, "%d: lr $0, %s, %s\n", num_lines, operand1, operand3);
+            save_assembly(assembly);
+        }
         else
         {
             num_lines++;

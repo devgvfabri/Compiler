@@ -33,6 +33,7 @@ typedef enum{
     inst_loadi,
     inst_exibelcd,
     inst_storeR,
+    inst_loadR,
 } operacao;
 
 operacao converteStringAssembly(char *stringOp)
@@ -61,6 +62,7 @@ operacao converteStringAssembly(char *stringOp)
     if(strcmp(stringOp, "funcao") == 0) return inst_funcao;
     if(strcmp(stringOp, "li") == 0) return inst_loadi;
     if(strcmp(stringOp, "sr") == 0) return inst_storeR;
+    if(strcmp(stringOp, "lr") == 0) return inst_loadR;
 }
 
 
@@ -396,8 +398,24 @@ void genBinary(CodAssembly *listaCodAssebly)
             imediato_para_bin14(0, imediate);
             fprintf(codigoBinario, "%s\n", imediate);
         }
-            break;
-
+        break;
+        case inst_loadR:
+        {
+            fprintf(codigoBinario, "011000");
+            char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
+            sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, imedi);
+            char bin[7];
+            int numreg= get_register_number(reg2);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            numreg= get_register_number(reg1);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            numreg= get_register_number(imedi);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s00000000\n", bin);
+        }
+        break;
         case inst_input:
         {
            fprintf(codigoBinario, "001111111111");

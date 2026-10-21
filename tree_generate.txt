@@ -28,6 +28,18 @@
           Const: 1
         Const: 10
       Atribuicao
+        Vetor: setorInicial
+          Const: 2
+        Const: 11
+      Atribuicao
+        Vetor: tamanho
+          Const: 2
+        Const: 64
+      Atribuicao
+        Vetor: setorFinal
+          Const: 2
+        Const: 11
+      Atribuicao
         Id: processoAtual
         Const: 0
   Type: 0
@@ -58,6 +70,73 @@
         Chamada: savereg
           Id: enderecoprogramabcp
           Id: i
+        Atribuicao
+          Id: i
+          Op: SOM = +
+            Id: i
+            Const: 1
+  Type: 0
+    Fun: restauraContexto
+      Type: 1
+        Parametro: p
+      Type: 1
+        Var: i
+      Type: 1
+        Var: enderecoprogramabcp
+      Atribuicao
+        Id: i
+        Const: 0
+      While
+        Op: MEN = <
+          Id: i
+          Const: 64
+        Atribuicao
+          Id: enderecoprogramabcp
+          Op: MUL = *
+            Id: p
+            Const: 63
+        Atribuicao
+          Id: enderecoprogramabcp
+          Op: SOM = +
+            Id: enderecoprogramabcp
+            Id: i
+        Chamada: loadreg
+          Id: enderecoprogramabcp
+          Id: i
+        Atribuicao
+          Id: i
+          Op: SOM = +
+            Id: i
+            Const: 1
+  Type: 0
+    Fun: carregaPrograma
+      Type: 1
+        Parametro: p
+      Type: 1
+        Var: setorAtual
+      Type: 1
+        Var: tamanhoprogramAtual
+      Type: 1
+        Var: setorFinalAtual
+      Atribuicao
+        Id: setorAtual
+        Vetor: setorInicial
+          Id: p
+      Atribuicao
+        Id: tamanhoprogramAtual
+        Vetor: tamanho
+          Id: p
+      Atribuicao
+        Id: setorFinalAtual
+        Vetor: setorFinal
+          Id: p
+      Chamada: setSetorInicial
+        Id: setorAtual
+      Chamada: setTam
+        Id: tamanhoprogramAtual
+      Chamada: setSetorFinal
+        Id: setorFinalAtual
+      Chamada: buscaPrograma
   Type: 0
     Fun: executaProcesso
       Type: 1
@@ -65,15 +144,19 @@
       Chamada: exibelcd
         Const: 2
       Chamada: carregaPrograma
+        Id: p
       Chamada: exibelcd
         Const: 9
       Chamada: salvaContexto
         Const: 0
-      Chamada: carregaOffset
       Chamada: restauraContexto
+        Id: p
+      Chamada: carregaOffset
       Chamada: executa
         Id: p
+      Chamada: carregaOffset
       Chamada: restauraContexto
+        Const: 0
   Type: 0
     Fun: main
       Type: 0
