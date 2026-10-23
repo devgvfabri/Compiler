@@ -152,9 +152,9 @@
       Chamada: restauraContexto
         Id: p
       Chamada: carregaOffset
+        Id: p
       Chamada: executa
         Id: p
-      Chamada: carregaOffset
       Chamada: restauraContexto
         Const: 0
   Type: 0

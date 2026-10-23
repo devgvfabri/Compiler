@@ -104,7 +104,8 @@ void checkNode(TreeNode *t)
       if (t->child[0] != NULL)
       {
         if (t->child[0]->attr.name != NULL && strcmp(t->child[0]->attr.name, "output") != 0 && strcmp(t->child[0]->attr.name, "input") != 0 && strcmp(t->child[0]->attr.name, "exibelcd") != 0  && strcmp(t->child[0]->attr.name, "savereg") != 0 && strcmp(t->child[0]->attr.name, "loadreg") != 0
-      && strcmp(t->child[0]->attr.name, "setSetorInicial") != 0 && strcmp(t->child[0]->attr.name, "setTam") != 0 && strcmp(t->child[0]->attr.name, "setSetorFinal") != 0)
+      && strcmp(t->child[0]->attr.name, "setSetorInicial") != 0 && strcmp(t->child[0]->attr.name, "setTam") != 0 && strcmp(t->child[0]->attr.name, "setSetorFinal") != 0 && strcmp(t->child[0]->attr.name, "buscaPrograma") != 0 && strcmp(t->child[0]->attr.name, "executa") != 0
+      && strcmp(t->child[0]->attr.name, "carregaOffset") != 0)
         {
           t->child[0]->type = st_lookup_type(t->child[0]->attr.name, "global");
         }
@@ -118,7 +119,8 @@ void checkNode(TreeNode *t)
       if (t->child[1] != NULL)
       {
         if (t->child[1]->attr.name != NULL && strcmp(t->child[1]->attr.name, "output") != 0 && strcmp(t->child[1]->attr.name, "input") != 0 && strcmp(t->child[1]->attr.name, "exibelcd") != 0 && strcmp(t->child[1]->attr.name, "savereg") != 0 && strcmp(t->child[1]->attr.name, "loadreg") != 0 
-       && strcmp(t->child[1]->attr.name, "setSetorInicial") != 0 && strcmp(t->child[1]->attr.name, "setTam") != 0 && strcmp(t->child[1]->attr.name, "setSetorFinal") != 0)
+       && strcmp(t->child[1]->attr.name, "setSetorInicial") != 0 && strcmp(t->child[1]->attr.name, "setTam") != 0 && strcmp(t->child[1]->attr.name, "setSetorFinal") != 0 && strcmp(t->child[1]->attr.name, "buscaPrograma") != 0 && strcmp(t->child[1]->attr.name, "executa") != 0
+       && strcmp(t->child[1]->attr.name, "carregaOffset") != 0)
         {
           t->child[1]->type = st_lookup_type(t->child[1]->attr.name, "global");
         }
@@ -211,7 +213,8 @@ void checkNode(TreeNode *t)
         {
           // Verifica se o nome da função não é "input" ou "output"
           if (t->child[1]->attr.name != NULL && strcmp(t->child[1]->attr.name, "output") != 0 && strcmp(t->child[1]->attr.name, "input") != 0 && strcmp(t->child[1]->attr.name, "exibelcd") != 0 && strcmp(t->child[1]->attr.name, "savereg") != 0 && strcmp(t->child[1]->attr.name, "loadreg") != 0
-             && strcmp(t->child[1]->attr.name, "setSetorInicial") != 0 && strcmp(t->child[1]->attr.name, "setTam") != 0 && strcmp(t->child[1]->attr.name, "setSetorFinal") != 0)
+             && strcmp(t->child[1]->attr.name, "setSetorInicial") != 0 && strcmp(t->child[1]->attr.name, "setTam") != 0 && strcmp(t->child[1]->attr.name, "setSetorFinal") != 0 && strcmp(t->child[1]->attr.name, "buscaPrograma") != 0 && strcmp(t->child[1]->attr.name, "carregaOffset") != 0
+             && strcmp(t->child[1]->attr.name, "executa") != 0)
           {
             // Obtém o tipo da função na tabela de símbolos
             t->child[1]->type = st_lookup_type(t->child[1]->attr.name, "global");
@@ -231,7 +234,8 @@ void checkNode(TreeNode *t)
     case CallK:
       /*Insere recursões na tabela de símbolos*/
       if (strcmp(t->attr.name, "output") != 0 || strcmp(t->attr.name, "input") != 0 || strcmp(t->attr.name, "exibelcd") != 0 || strcmp(t->attr.name, "savereg") != 0 || strcmp(t->attr.name, "loadreg") != 0
-    || strcmp(t->attr.name, "setSetorInicial") != 0 || strcmp(t->attr.name, "setTam") != 0 || strcmp(t->attr.name, "setSetorFinal") != 0 )
+    || strcmp(t->attr.name, "setSetorInicial") != 0 || strcmp(t->attr.name, "setTam") != 0 || strcmp(t->attr.name, "setSetorFinal") != 0 || strcmp(t->attr.name, "buscaPrograma") != 0 || strcmp(t->attr.name, "carregaOffset") != 0
+    || strcmp(t->attr.name, "executa") != 0 )
       {
         st_insert(0, t->attr.name, "global", "funcao", t->type, t->numline, 0);
       }

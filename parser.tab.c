@@ -596,7 +596,7 @@ static const yytype_int16 yyrline[] =
      284,   292,   299,   305,   315,   323,   327,   334,   334,   347,
      353,   356,   361,   366,   371,   376,   381,   388,   394,   396,
      401,   408,   415,   418,   423,   430,   431,   432,   433,   440,
-     450,   460,   461,   464,   475
+     450,   461,   462,   465,   476
 };
 #endif
 
@@ -1889,26 +1889,27 @@ yyreduce:
 				yyval->attr.name = copyString(tokenString);
 				yyval->numline = numline;
 				if(strcmp("output", tokenString) != 0 && strcmp("input", tokenString) && strcmp("main", tokenString) && strcmp("exibelcd", tokenString)
-				&& strcmp("setSetorFinal", tokenString) != 0 && strcmp("setTam", tokenString) != 0 && strcmp("setSetorInicial", tokenString) != 0 && strcmp("loadreg", tokenString) != 0 && strcmp("savereg", tokenString) != 0 )
+				&& strcmp("setSetorFinal", tokenString) != 0 && strcmp("setTam", tokenString) != 0 && strcmp("setSetorInicial", tokenString) != 0 && strcmp("loadreg", tokenString) != 0 && strcmp("savereg", tokenString) != 0
+				&& strcmp("buscaPrograma", tokenString) != 0 && strcmp("carregaOffset", tokenString) != 0 && strcmp("executa", tokenString) != 0 )
 				st_insert(location++, tokenString, currentFunctionName, "funcao", NULL, numline, 0);
 			}
-#line 1896 "parser.tab.c"
+#line 1897 "parser.tab.c"
     break;
 
   case 71: /* args: %empty  */
-#line 460 "parser.y"
+#line 461 "parser.y"
                                   { yyval = NULL; }
-#line 1902 "parser.tab.c"
+#line 1903 "parser.tab.c"
     break;
 
   case 72: /* args: argLista  */
-#line 461 "parser.y"
+#line 462 "parser.y"
                                    {yyval = yyvsp[0];}
-#line 1908 "parser.tab.c"
+#line 1909 "parser.tab.c"
     break;
 
   case 73: /* argLista: argLista VIR expressao  */
-#line 465 "parser.y"
+#line 466 "parser.y"
                         {	
 			    TreeNode * t = yyvsp[-2];
 			    if (t != NULL) {
@@ -1919,17 +1920,17 @@ yyreduce:
 				yyval = yyvsp[0];
 			    }
 			}
-#line 1923 "parser.tab.c"
+#line 1924 "parser.tab.c"
     break;
 
   case 74: /* argLista: expressao  */
-#line 475 "parser.y"
+#line 476 "parser.y"
                                     {yyval = yyvsp[0];}
-#line 1929 "parser.tab.c"
+#line 1930 "parser.tab.c"
     break;
 
 
-#line 1933 "parser.tab.c"
+#line 1934 "parser.tab.c"
 
       default: break;
     }
@@ -2122,7 +2123,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 479 "parser.y"
+#line 480 "parser.y"
 
 
 

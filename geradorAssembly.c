@@ -539,6 +539,27 @@ void genAssembly(Quadrupla *listaCodInt)
             snprintf(assembly, sizeof(char) * 256, "%d: setsf $0, %s\n", num_lines, operand1);
             save_assembly(assembly);
         }
+        else if(strcmp(operand2, "buscaPrograma") == 0)
+        {
+            num_lines++;
+            fprintf(codigoAssembly, "%d: loadp $0, %s\n", num_lines, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: loadp $0, %s\n", num_lines, operand1);
+            save_assembly(assembly);
+        }
+        else if(strcmp(operand2, "carregaOffset") == 0)
+        {
+            num_lines++;
+            fprintf(codigoAssembly, "%d: setOff $0, %s\n", num_lines, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: setOff $0, %s\n", num_lines, operand1);
+            save_assembly(assembly);
+        }
+        else if(strcmp(operand2, "executa") == 0)
+        {
+            num_lines++;
+            fprintf(codigoAssembly, "%d: exec $0, %s\n", num_lines, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: exec $0, %s\n", num_lines, operand1);
+            save_assembly(assembly);
+        }
         else
         {
             num_lines++;
