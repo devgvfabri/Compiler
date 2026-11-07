@@ -1,0 +1,78 @@
+int processos[11];
+int setorInicial[11];
+int tamanho[11];
+int setorFinal[11];
+int processoAtual;
+
+void iniciaTabela(void){
+	setorInicial[1] = 10;
+	tamanho[1] = 65;
+	setorFinal[1] = 10;
+	setorInicial[2] = 11;
+	tamanho[2] = 64;
+	setorFinal[2] = 11;
+	processoAtual = 0;
+}
+
+void salvaContexto(int p){
+	int i; int enderecoprogramabcp;
+	i = 0;
+	while(i < 64){
+		enderecoprogramabcp = p * 63;
+		enderecoprogramabcp = enderecoprogramabcp + i;
+		savereg(enderecoprogramabcp, i);
+		i = i + 1;
+	}
+}
+
+void restauraContexto(int p){
+	int i; int enderecoprogramabcp;
+	i = 0;
+	while(i < 64){
+		enderecoprogramabcp = p * 63;
+		enderecoprogramabcp = enderecoprogramabcp + i;
+		loadreg(enderecoprogramabcp, i);
+		i = i + 1;
+	}
+}
+
+void carregaPrograma(int p){
+	int setorAtual; int tamanhoprogramAtual; int setorFinalAtual;
+	setorAtual = setorInicial[p];
+	tamanhoprogramAtual = tamanho[p];
+	setorFinalAtual = setorFinal[p];
+	setSetorInicial(setorAtual);
+	setTam(tamanhoprogramAtual);
+	setSetorFinal(setorFinalAtual);
+	buscaPrograma();
+}
+
+
+void executaProcesso(int p){
+	exibelcd(2);
+	carregaPrograma(p);
+	exibelcd(9);
+	salvaContexto(0);
+	restauraContexto(p);
+	/*carregaOffset(p);*/
+	executa(p);
+	cleanMem();
+	restauraContexto(0);
+}
+
+void main(void)
+{
+	int i; int p;
+	iniciaTabela();
+	exibelcd(0);
+	i = 0;
+	while(i != 5){
+		i = input();
+		if(i == 1){
+			exibelcd(1);
+			p = input();
+			executaProcesso(p);
+			exibelcd(4);
+		}
+	}
+}

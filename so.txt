@@ -3,6 +3,7 @@ int setorInicial[11];
 int tamanho[11];
 int setorFinal[11];
 int processoAtual;
+int filaRR[11];
 
 void iniciaTabela(void){
 	setorInicial[1] = 10;
@@ -54,18 +55,20 @@ void executaProcesso(int p){
 	exibelcd(9);
 	salvaContexto(0);
 	restauraContexto(p);
-	carregaOffset();
+	/*carregaOffset(p);*/
 	executa(p);
-	carregaOffset();
+	cleanMem();
 	restauraContexto(0);
 }
 
 void main(void)
 {
-	int i; int p;
+	int i; int p; int n; int j;
 	iniciaTabela();
 	exibelcd(0);
 	i = 0;
+	n = 0;
+	j = 0;
 	while(i != 5){
 		i = input();
 		if(i == 1){
@@ -73,6 +76,29 @@ void main(void)
 			p = input();
 			executaProcesso(p);
 			exibelcd(4);
+		}
+		else if(i == 2){
+			exibelcd(5);
+			n = input();
+			while(j < n){
+				filaRR[j] = input();
+				j = j + 1;
+			}
+			exibelcd(6);
+			executaProcessos(n);
+			exibelcd(10);
+			j = 0;
+		}
+		else if(i == 3){
+			exibelcd(11);
+			p = input();
+			renomearProcesso(p);
+		}
+		else if(i == 4){
+			exibelcd(12);
+			p = input();
+			exibelcd(13);
+			deletaProcesso(p);
 		}
 	}
 }

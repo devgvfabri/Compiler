@@ -40,6 +40,7 @@ typedef enum{
     inst_loadp,
     inst_setOff,
     inst_exec,
+    inst_clean,
 } operacao;
 
 operacao converteStringAssembly(char *stringOp)
@@ -75,6 +76,7 @@ operacao converteStringAssembly(char *stringOp)
     if(strcmp(stringOp, "loadp") == 0) return inst_loadp;
     if(strcmp(stringOp, "setOff") == 0) return inst_setOff;
     if(strcmp(stringOp, "exec") == 0) return inst_exec;
+    if(strcmp(stringOp, "clean") == 0) return inst_clean;
 }
 
 
@@ -249,7 +251,7 @@ void genBinary(CodAssembly *listaCodAssebly)
             break;
         }
         case inst_halt:
-           fprintf(codigoBinario, "00111000000000000000000000000000\n");
+           fprintf(codigoBinario, "00111011100000000000000000000000\n");
             return;
         case inst_jr:
            fprintf(codigoBinario, "01000101111100000000000000000000\n");
@@ -290,7 +292,7 @@ void genBinary(CodAssembly *listaCodAssebly)
         }
         case inst_beq:
         {
-           fprintf(codigoBinario, "010101");
+           fprintf(codigoBinario, "010110");
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, imedi);
             char bin[7];
@@ -561,7 +563,12 @@ void genBinary(CodAssembly *listaCodAssebly)
         break;
         case inst_exec:
         {
-            fprintf(codigoBinario, "10000100000000000000000000000000\n");
+            fprintf(codigoBinario, "10000111111101110000000000000000\n");
+        }
+        break;
+        case inst_clean:
+        {
+            fprintf(codigoBinario, "10001000000000000000000000000000\n");
         }
         break;
         default:

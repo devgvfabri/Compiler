@@ -1890,7 +1890,7 @@ yyreduce:
 				yyval->numline = numline;
 				if(strcmp("output", tokenString) != 0 && strcmp("input", tokenString) && strcmp("main", tokenString) && strcmp("exibelcd", tokenString)
 				&& strcmp("setSetorFinal", tokenString) != 0 && strcmp("setTam", tokenString) != 0 && strcmp("setSetorInicial", tokenString) != 0 && strcmp("loadreg", tokenString) != 0 && strcmp("savereg", tokenString) != 0
-				&& strcmp("buscaPrograma", tokenString) != 0 && strcmp("carregaOffset", tokenString) != 0 && strcmp("executa", tokenString) != 0 )
+				&& strcmp("buscaPrograma", tokenString) != 0 && strcmp("carregaOffset", tokenString) != 0 && strcmp("executa", tokenString) != 0 && strcmp("cleanMem", tokenString) != 0 )
 				st_insert(location++, tokenString, currentFunctionName, "funcao", NULL, numline, 0);
 			}
 #line 1897 "parser.tab.c"

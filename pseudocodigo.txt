@@ -1,0 +1,26 @@
+void executaComPreempcao(int n){
+    int i; int numHalts; int pAtual; int haltsAtual;
+    i = 0; numHalts = 0;
+    while(numHalts < n){
+        pAtual = filaRR[i];
+        if(pAtual != 0){
+            carregaPrograma(pAtual);
+            salvaContexto(0);
+            restauraContexto(pAtual);
+            setQuantum(20);
+            /*carregaOffset(pAtual);*/
+            executaProcess(pAtual);
+            cleanMem();
+            restauraContexto(0);
+
+            numHalts = verificaHalt();
+            if(haltsAtual < numHalts){
+                filaRR[i] = 0;
+            }
+        }
+        i = i + 1;
+        if(i == 10){
+            i = 0;
+        }
+    }
+}

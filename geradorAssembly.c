@@ -529,7 +529,7 @@ void genAssembly(Quadrupla *listaCodInt)
         {
             num_lines++;
             fprintf(codigoAssembly, "%d: settam $0, %s\n", num_lines, operand1);
-            snprintf(assembly, sizeof(char) * 256, "%d: setsi $0, %s\n", num_lines, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: settam $0, %s\n", num_lines, operand1);
             save_assembly(assembly);
         }
         else if(strcmp(operand2, "setSetorFinal") == 0)
@@ -556,8 +556,19 @@ void genAssembly(Quadrupla *listaCodInt)
         else if(strcmp(operand2, "executa") == 0)
         {
             num_lines++;
+            fprintf(codigoAssembly, "%d: setOff $0, %s\n", num_lines, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: setOff $0, %s\n", num_lines, operand1);
+            save_assembly(assembly);
+            num_lines++;
             fprintf(codigoAssembly, "%d: exec $0, %s\n", num_lines, operand1);
             snprintf(assembly, sizeof(char) * 256, "%d: exec $0, %s\n", num_lines, operand1);
+            save_assembly(assembly);
+        }
+        else if(strcmp(operand2, "cleanMem") == 0)
+        {
+            num_lines++;
+            fprintf(codigoAssembly, "%d: clean $0, %s\n", num_lines, operand1);
+            snprintf(assembly, sizeof(char) * 256, "%d: clean $0, %s\n", num_lines, operand1);
             save_assembly(assembly);
         }
         else
