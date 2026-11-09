@@ -76,6 +76,7 @@ void executaProcesso(int p){
 	exibelcd(2);
 	carregaPrograma(p);
 	exibelcd(9);
+	setPid(p);
 	salvaContexto(0);
 	/*carregaOffset(p);*/
 	executa(p);

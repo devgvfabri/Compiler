@@ -210,6 +210,8 @@
         Id: p
       Chamada: exibelcd
         Const: 9
+      Chamada: setPid
+        Id: p
       Chamada: salvaContexto
         Const: 0
       Chamada: executa
