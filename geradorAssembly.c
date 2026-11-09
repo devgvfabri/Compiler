@@ -556,7 +556,81 @@ void genAssembly(Quadrupla *listaCodInt)
         else if(strcmp(operand2, "executa") == 0)
         {
             num_lines++;
-            
+
+                fprintf(codigoAssembly,
+                        "%d: addi $0, %s, %d\n",
+                        num_lines, "$t0", 0);
+
+                snprintf(assembly, sizeof(char) * 256,
+                        "%d: addi $0, %s, %d\n",
+                        num_lines, "$t0", 0);
+
+                save_assembly(assembly);
+
+                fprintf(codigoAssembly,
+                        "%d: addi $0, %s, %d\n",
+                        num_lines, "$t1", 0);
+
+                snprintf(assembly, sizeof(char) * 256,
+                        "%d: addi $0, %s, %d\n",
+                        num_lines, "$t1", 0);
+
+                save_assembly(assembly);
+            for(int i = 2; i < 64; i++)
+            {
+                if(i != 6)
+                {
+                num_lines++;
+
+                fprintf(codigoAssembly,
+                        "%d: addi $t0, %s, %d\n",
+                        num_lines, "$t0", 1);
+
+                snprintf(assembly, sizeof(char) * 256,
+                        "%d: addi $t0, %s, %d\n",
+                        num_lines, "$t0", 1);
+
+                save_assembly(assembly);
+
+                num_lines++;
+
+                fprintf(codigoAssembly,
+                        "%d: mul $t1, %s, %d\n",
+                        num_lines, "$t6", 64);
+
+                snprintf(assembly, sizeof(char) * 256,
+                        "%d: mul $t1, %s, %d\n",
+                        num_lines, "$t6", 64);
+
+                save_assembly(assembly);
+
+                num_lines++;
+
+                fprintf(codigoAssembly,
+                        "%d: add $t1, $t1, $t0\n",
+                        num_lines);
+
+                snprintf(assembly, sizeof(char) * 256,
+                        "%d: add $t1, $t1, $t0\n",
+                        num_lines);
+
+                save_assembly(assembly);
+
+
+                num_lines++;
+
+                fprintf(codigoAssembly,
+                        "%d: lr $0, $t0, $t1\n",
+                        num_lines);
+
+                snprintf(assembly, sizeof(char) * 256,
+                        "%d: lr $0, $t0, $t1\n",
+                        num_lines);
+
+                save_assembly(assembly);
+                }
+        }
+
             num_lines++;
             fprintf(codigoAssembly, "%d: setOff $0, %s\n", num_lines, operand1);
             snprintf(assembly, sizeof(char) * 256, "%d: setOff $0, %s\n", num_lines, operand1);
