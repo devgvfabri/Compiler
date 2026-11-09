@@ -639,9 +639,8 @@ void genAssembly(Quadrupla *listaCodInt)
                 save_assembly(assembly);
 
                 }
-
-        }
-
+            }
+            
             num_lines++;
             fprintf(codigoAssembly, "%d: setOff $0, %s\n", num_lines, "$t50");
             snprintf(assembly, sizeof(char) * 256, "%d: setOff $0, %s\n", num_lines, "$t50");
@@ -650,6 +649,54 @@ void genAssembly(Quadrupla *listaCodInt)
             fprintf(codigoAssembly, "%d: exec $0, %s\n", num_lines, "$t50");
             snprintf(assembly, sizeof(char) * 256, "%d: exec $0, %s\n", num_lines, "$t50");
             save_assembly(assembly);
+
+            num_lines++;
+
+                fprintf(codigoAssembly,
+                        "%d: addi %s, $0, %d\n",
+                        num_lines, "$t47", 0);
+
+                snprintf(assembly, sizeof(char) * 256,
+                        "%d: addi %s, $0, %d\n",
+                        num_lines, "$t47", 0);
+
+                save_assembly(assembly);
+
+
+
+            for(int i = 0; i < 64; i++)
+            {
+                if(i != 50 && i != 47 && i != 48 && i != 49)
+                {
+
+                num_lines++;
+
+                fprintf(codigoAssembly,
+                        "%d: sr $0, $t47, $t47\n",
+                        num_lines);
+
+                snprintf(assembly, sizeof(char) * 256,
+                        "%d: sr $0, $t47, $t47\n",
+                        num_lines);
+
+                save_assembly(assembly);
+                
+                num_lines++;
+
+                fprintf(codigoAssembly,
+                        "%d: addi $t47, %s, %d\n",
+                        num_lines, "$t47", 1);
+
+                snprintf(assembly, sizeof(char) * 256,
+                        "%d: addi $t47, %s, %d\n",
+                        num_lines, "$t47", 1);
+
+                save_assembly(assembly);
+
+                }
+            }
+
+
         }
         else if(strcmp(operand2, "cleanMem") == 0)
         {
@@ -935,6 +982,7 @@ void genAssembly(Quadrupla *listaCodInt)
     {
 
         int imediato;
+        num_lines++;
         if(sscanf(operand3, "$t%d", &imediato) != 1){
             imediato = atoi(operand3);
             fprintf(codigoAssembly, "%d: addi %s, $0, %d\n", num_lines, operand1, imediato);
