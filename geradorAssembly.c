@@ -556,6 +556,8 @@ void genAssembly(Quadrupla *listaCodInt)
         else if(strcmp(operand2, "executa") == 0)
         {
             num_lines++;
+            
+            num_lines++;
             fprintf(codigoAssembly, "%d: setOff $0, %s\n", num_lines, operand1);
             snprintf(assembly, sizeof(char) * 256, "%d: setOff $0, %s\n", num_lines, operand1);
             save_assembly(assembly);

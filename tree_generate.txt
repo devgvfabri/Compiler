@@ -1,136 +1,250 @@
   Type: 1
-    Var Vet: vet
-      Const: 10
+    Var Vet: processos
+      Const: 11
   Type: 1
-    Fun: minloc
-      Type: 1
-        Parametro: a
-      Type: 1
-        Parametro: low
-      Type: 1
-        Parametro: high
-      Type: 1
-        Var: i
-      Type: 1
-        Var: x
-      Type: 1
-        Var: k
-      Atribuicao
-        Id: k
-        Id: low
-      Atribuicao
-        Id: x
-        Vetor: a
-          Id: low
-      Atribuicao
-        Id: i
-        Op: SOM = +
-          Id: low
-          Const: 1
-      While
-        Op: MEN = <
-          Id: i
-          Id: high
-        If
-          Op: MEN = <
-            Vetor: a
-              Id: i
-            Id: x
-          Atribuicao
-            Id: x
-            Vetor: a
-              Id: i
-          Atribuicao
-            Id: k
-            Id: i
-        Atribuicao
-          Id: i
-          Op: SOM = +
-            Id: i
-            Const: 1
-      return
-        Id: k
+    Var Vet: setorInicial
+      Const: 11
+  Type: 1
+    Var Vet: tamanho
+      Const: 11
+  Type: 1
+    Var Vet: setorFinal
+      Const: 11
+  Type: 1
+    Var: processoAtual
   Type: 0
-    Fun: sort
+    Fun: iniciaTabela
+      Type: 0
+      Atribuicao
+        Vetor: setorInicial
+          Const: 1
+        Const: 10
+      Atribuicao
+        Vetor: tamanho
+          Const: 1
+        Const: 65
+      Atribuicao
+        Vetor: setorFinal
+          Const: 1
+        Const: 10
+      Atribuicao
+        Vetor: setorInicial
+          Const: 2
+        Const: 11
+      Atribuicao
+        Vetor: tamanho
+          Const: 2
+        Const: 72
+      Atribuicao
+        Vetor: setorFinal
+          Const: 2
+        Const: 11
+      Atribuicao
+        Vetor: setorInicial
+          Const: 3
+        Const: 12
+      Atribuicao
+        Vetor: tamanho
+          Const: 3
+        Const: 70
+      Atribuicao
+        Vetor: setorFinal
+          Const: 3
+        Const: 12
+      Atribuicao
+        Vetor: setorInicial
+          Const: 4
+        Const: 13
+      Atribuicao
+        Vetor: tamanho
+          Const: 4
+        Const: 83
+      Atribuicao
+        Vetor: setorFinal
+          Const: 4
+        Const: 13
+      Atribuicao
+        Vetor: setorInicial
+          Const: 5
+        Const: 14
+      Atribuicao
+        Vetor: tamanho
+          Const: 5
+        Const: 95
+      Atribuicao
+        Vetor: setorFinal
+          Const: 5
+        Const: 14
+      Atribuicao
+        Vetor: setorInicial
+          Const: 6
+        Const: 15
+      Atribuicao
+        Vetor: tamanho
+          Const: 6
+        Const: 65
+      Atribuicao
+        Vetor: setorFinal
+          Const: 6
+        Const: 15
+      Atribuicao
+        Vetor: setorInicial
+          Const: 7
+        Const: 16
+      Atribuicao
+        Vetor: tamanho
+          Const: 7
+        Const: 124
+      Atribuicao
+        Vetor: setorFinal
+          Const: 7
+        Const: 16
+      Atribuicao
+        Vetor: setorInicial
+          Const: 8
+        Const: 17
+      Atribuicao
+        Vetor: tamanho
+          Const: 8
+        Const: 104
+      Atribuicao
+        Vetor: setorFinal
+          Const: 8
+        Const: 17
+      Atribuicao
+        Vetor: setorInicial
+          Const: 9
+        Const: 18
+      Atribuicao
+        Vetor: tamanho
+          Const: 9
+        Const: 146
+      Atribuicao
+        Vetor: setorFinal
+          Const: 9
+        Const: 19
+      Atribuicao
+        Vetor: setorInicial
+          Const: 10
+        Const: 20
+      Atribuicao
+        Vetor: tamanho
+          Const: 10
+        Const: 200
+      Atribuicao
+        Vetor: setorFinal
+          Const: 10
+        Const: 21
+      Atribuicao
+        Id: processoAtual
+        Const: 0
+  Type: 0
+    Fun: salvaContexto
       Type: 1
-        Parametro: a
-      Type: 1
-        Parametro: low
-      Type: 1
-        Parametro: high
+        Parametro: p
       Type: 1
         Var: i
       Type: 1
-        Var: k
+        Var: enderecoprogramabcp
       Atribuicao
         Id: i
-        Id: low
+        Const: 0
       While
         Op: MEN = <
           Id: i
-          Op: SUB = -
-            Id: high
-            Const: 1
-        Type: 1
-          Var: t
+          Const: 64
         Atribuicao
-          Id: k
-          Chamada: minloc
-            Id: a
+          Id: enderecoprogramabcp
+          Op: MUL = *
+            Id: p
+            Const: 64
+        Atribuicao
+          Id: enderecoprogramabcp
+          Op: SOM = +
+            Id: enderecoprogramabcp
             Id: i
-            Id: high
-        Atribuicao
-          Id: t
-          Vetor: a
-            Id: k
-        Atribuicao
-          Vetor: a
-            Id: k
-          Vetor: a
-            Id: i
-        Atribuicao
-          Vetor: a
-            Id: i
-          Id: t
+        Chamada: savereg
+          Id: enderecoprogramabcp
+          Id: i
         Atribuicao
           Id: i
           Op: SOM = +
             Id: i
             Const: 1
+  Type: 0
+    Fun: carregaPrograma
+      Type: 1
+        Parametro: p
+      Type: 1
+        Var: setorAtual
+      Type: 1
+        Var: tamanhoprogramAtual
+      Type: 1
+        Var: setorFinalAtual
+      Atribuicao
+        Id: setorAtual
+        Vetor: setorInicial
+          Id: p
+      Atribuicao
+        Id: tamanhoprogramAtual
+        Vetor: tamanho
+          Id: p
+      Atribuicao
+        Id: setorFinalAtual
+        Vetor: setorFinal
+          Id: p
+      Chamada: setSetorInicial
+        Id: setorAtual
+      Chamada: setTam
+        Id: tamanhoprogramAtual
+      Chamada: setSetorFinal
+        Id: setorFinalAtual
+      Chamada: buscaPrograma
+  Type: 0
+    Fun: executaProcesso
+      Type: 1
+        Parametro: p
+      Chamada: exibelcd
+        Const: 2
+      Chamada: carregaPrograma
+        Id: p
+      Chamada: exibelcd
+        Const: 9
+      Chamada: salvaContexto
+        Const: 0
+      Chamada: executa
+        Id: p
+      Chamada: cleanMem
   Type: 0
     Fun: main
       Type: 0
       Type: 1
         Var: i
-      While
-        Op: MEN = <
-          Id: i
-          Const: 10
-        Atribuicao
-          Vetor: vet
-            Id: i
-          Chamada: input
-        Atribuicao
-          Id: i
-          Op: SOM = +
-            Id: i
-            Const: 1
-      Chamada: sort
-        Id: vet
+      Type: 1
+        Var: p
+      Chamada: iniciaTabela
+      Chamada: exibelcd
         Const: 0
-        Const: 10
       Atribuicao
         Id: i
         Const: 0
       While
-        Op: MEN = <
+        Op: DIF = !=
           Id: i
-          Const: 10
-        Chamada: output
-          Vetor: vet
-            Id: i
+          Const: 5
         Atribuicao
           Id: i
-          Op: SOM = +
+          Chamada: input
+        If
+          Op: IGU = ==
             Id: i
             Const: 1
+          Chamada: exibelcd
+            Const: 1
+          Atribuicao
+            Id: p
+            Chamada: input
+          Chamada: executaProcesso
+            Id: p
+          Chamada: exibelcd
+            Const: 4
