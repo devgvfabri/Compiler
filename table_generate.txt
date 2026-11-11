@@ -1,21 +1,22 @@
 Location   Variable Name Escopo Tipo ID Tipo Dado Line Numbers
 --------   ------------- ------ ------- --------- ------------
-51        salvaContexto  global  funcao    0            51   80 
+51        salvaContexto  global  funcao    0            51   81 
 3         setorFinal     global  var       1             4   11   15   19   23   27   31   35   39   43   47   67 
-86        main           global  funcao    0            86 
+87        main           global  funcao    0            87 
 39        enderecoprogramabcp salvaContexto  var       1            52   55   56   57 
 53        setorAtual     carregaPrograma  var       1            64   65   68 
-36        iniciaTabela   global  funcao    0             7   89 
+36        iniciaTabela   global  funcao    0             7   90 
 1         setorInicial   global  var       1             2    9   13   17   21   25   29   33   37   41   45   65 
 55        setorFinalAtual carregaPrograma  var       1            64   67   70 
-76        i              main    var       1            88   91   92   93   94 
+77        i              main    var       1            89   92   93   94   95 
+70        i              executaProcesso  var       1            76 
 38        i              salvaContexto  var       1            52   53   54   56   57   58 
-77        p              main    var       1            88   96   97 
-75        executaProcesso global  funcao    0            75   97 
-69        p              executaProcesso  param     1            75   77   79   82 
+78        p              main    var       1            89   97   98 
+76        executaProcesso global  funcao    0            75   98 
+69        p              executaProcesso  param     1            75   78   80   83 
 52        p              carregaPrograma  param     1            63   65   66   67 
 37        p              salvaContexto  param     1            51   55 
-68        carregaPrograma global  funcao    0            63   77 
+68        carregaPrograma global  funcao    0            63   78 
 0         processos      global  var       1             1 
 4         processoAtual  global  var       1             5   48 
 54        tamanhoprogramAtual carregaPrograma  var       1            64   66   69 
