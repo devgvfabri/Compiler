@@ -23,7 +23,7 @@ void iniciaTabela(void){
 	setorFinal[4] = 13;
 	/*media*/
 	setorInicial[5] = 14;
-	tamanho[5] = 95;
+	tamanho[5] = 90;
 	setorFinal[5] = 14;
 	/*potencia*/
 	setorInicial[6] = 15;
@@ -43,7 +43,7 @@ void iniciaTabela(void){
 	setorFinal[9] = 19;
 	/*sort*/
 	setorInicial[10] = 20;
-	tamanho[10] = 200;
+	tamanho[10] = 203;
 	setorFinal[10] = 21;
 	processoAtual = 0;
 }
@@ -87,9 +87,9 @@ void main(void)
 {
 	int i; int p;
 	iniciaTabela();
-	exibelcd(0);
 	i = 0;
-	while(i != 5){
+	while(i != 32){
+		exibelcd(0);
 		i = input();
 		if(i == 1){
 			exibelcd(1);

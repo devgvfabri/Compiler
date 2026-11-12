@@ -70,7 +70,7 @@
       Atribuicao
         Vetor: tamanho
           Const: 5
-        Const: 95
+        Const: 90
       Atribuicao
         Vetor: setorFinal
           Const: 5
@@ -130,7 +130,7 @@
       Atribuicao
         Vetor: tamanho
           Const: 10
-        Const: 200
+        Const: 203
       Atribuicao
         Vetor: setorFinal
           Const: 10
@@ -225,15 +225,15 @@
       Type: 1
         Var: p
       Chamada: iniciaTabela
-      Chamada: exibelcd
-        Const: 0
       Atribuicao
         Id: i
         Const: 0
       While
         Op: DIF = !=
           Id: i
-          Const: 5
+          Const: 32
+        Chamada: exibelcd
+          Const: 0
         Atribuicao
           Id: i
           Chamada: input

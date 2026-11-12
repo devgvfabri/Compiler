@@ -33,7 +33,7 @@ programas = {
         "arquivo": "media.txt",
         "inicio": 14,
         "fim": 14,
-        "tamanho": 95
+        "tamanho": 90
     },
     "potencia": {
         "arquivo": "potencia.txt",
@@ -63,7 +63,7 @@ programas = {
         "arquivo": "sort.txt",
         "inicio": 20,
         "fim": 21,
-        "tamanho": 200
+        "tamanho": 203
     }
 }
 

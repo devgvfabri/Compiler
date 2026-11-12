@@ -5,12 +5,46 @@ int setorFinal[11];
 int processoAtual;
 
 void iniciaTabela(void){
+	/*gcdbinario*/
 	setorInicial[1] = 10;
 	tamanho[1] = 65;
 	setorFinal[1] = 10;
+	/*fatorial*/
 	setorInicial[2] = 11;
-	tamanho[2] = 64;
+	tamanho[2] = 72;
 	setorFinal[2] = 11;
+	/*fibonacci*/
+	setorInicial[3] = 12;
+	tamanho[3] = 70;
+	setorFinal[3] = 12;
+	/*mmc*/
+	setorInicial[4] = 13;
+	tamanho[4] = 83;
+	setorFinal[4] = 13;
+	/*media*/
+	setorInicial[5] = 14;
+	tamanho[5] = 90;
+	setorFinal[5] = 14;
+	/*potencia*/
+	setorInicial[6] = 15;
+	tamanho[6] = 65;
+	setorFinal[6] = 15;
+	/*inverter*/
+	setorInicial[7] = 16;
+	tamanho[7] = 124;
+	setorFinal[7] = 16;
+	/*maxvetor*/
+	setorInicial[8] = 17;
+	tamanho[8] = 104;
+	setorFinal[8] = 17;
+	/*buscabinbinario*/
+	setorInicial[9] = 18;
+	tamanho[9] = 146;
+	setorFinal[9] = 19;
+	/*sort*/
+	setorInicial[10] = 20;
+	tamanho[10] = 203;
+	setorFinal[10] = 21;
 	processoAtual = 0;
 }
 
@@ -18,23 +52,13 @@ void salvaContexto(int p){
 	int i; int enderecoprogramabcp;
 	i = 0;
 	while(i < 64){
-		enderecoprogramabcp = p * 63;
+		enderecoprogramabcp = p * 64;
 		enderecoprogramabcp = enderecoprogramabcp + i;
 		savereg(enderecoprogramabcp, i);
 		i = i + 1;
 	}
 }
 
-void restauraContexto(int p){
-	int i; int enderecoprogramabcp;
-	i = 0;
-	while(i < 64){
-		enderecoprogramabcp = p * 63;
-		enderecoprogramabcp = enderecoprogramabcp + i;
-		loadreg(enderecoprogramabcp, i);
-		i = i + 1;
-	}
-}
 
 void carregaPrograma(int p){
 	int setorAtual; int tamanhoprogramAtual; int setorFinalAtual;
@@ -52,12 +76,11 @@ void executaProcesso(int p){
 	exibelcd(2);
 	carregaPrograma(p);
 	exibelcd(9);
+	setPid(p);
 	salvaContexto(0);
-	restauraContexto(p);
 	/*carregaOffset(p);*/
 	executa(p);
 	cleanMem();
-	restauraContexto(0);
 }
 
 void main(void)

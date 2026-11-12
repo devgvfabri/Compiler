@@ -8,7 +8,7 @@ Location   Variable Name Escopo Tipo ID Tipo Dado Line Numbers
 36        iniciaTabela   global  funcao    0             7   89 
 1         setorInicial   global  var       1             2    9   13   17   21   25   29   33   37   41   45   65 
 55        setorFinalAtual carregaPrograma  var       1            64   67   70 
-76        i              main    var       1            88   91   92   93   94 
+76        i              main    var       1            88   90   91   93   94 
 38        i              salvaContexto  var       1            52   53   54   56   57   58 
 77        p              main    var       1            88   96   97 
 75        executaProcesso global  funcao    0            75   97 
