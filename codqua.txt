@@ -265,6 +265,7 @@
 (FUN, void, executaProcesso, -)
 (ARG, int, p, executaProcesso)
 (LOAD, $t0, p, executaProcesso)
+(ALLOC, i, executaProcesso, -)
 (PARAM, 2, -, -)
 (CALL, $t1, exibelcd, 1)
 (LOAD, $t2, p, -)

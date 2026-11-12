@@ -499,8 +499,8 @@ void genAssembly(Quadrupla *listaCodInt)
         {
             num_lines++;
 
-            fprintf(codigoAssembly, "%d: lcd $0, $a0\n", num_lines );
-            snprintf(assembly, sizeof(char) * 256, "%d: lcd $0, $a0\n", num_lines);
+            fprintf(codigoAssembly, "%d: lcd $0, $a%d\n", num_lines, indice_parametro );
+            snprintf(assembly, sizeof(char) * 256, "%d: lcd $0, $a%d\n", num_lines, indice_parametro);
             save_assembly(assembly);
         }
         else if(strcmp(operand2, "savereg") == 0)
@@ -672,11 +672,11 @@ void genAssembly(Quadrupla *listaCodInt)
                 num_lines++;
 
                 fprintf(codigoAssembly,
-                        "%d: sr $0, $t47, $t47\n",
+                        "%d: lr $0, $t47, $t47\n",
                         num_lines);
 
                 snprintf(assembly, sizeof(char) * 256,
-                        "%d: sr $0, $t47, $t47\n",
+                        "%d: lr $0, $t47, $t47\n",
                         num_lines);
 
                 save_assembly(assembly);

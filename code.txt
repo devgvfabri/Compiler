@@ -73,6 +73,7 @@ void carregaPrograma(int p){
 
 
 void executaProcesso(int p){
+	int i;
 	exibelcd(2);
 	carregaPrograma(p);
 	exibelcd(9);

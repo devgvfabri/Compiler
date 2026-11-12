@@ -204,6 +204,8 @@
     Fun: executaProcesso
       Type: 1
         Parametro: p
+      Type: 1
+        Var: i
       Chamada: exibelcd
         Const: 2
       Chamada: carregaPrograma
