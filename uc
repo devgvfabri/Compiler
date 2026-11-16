@@ -90,7 +90,7 @@ void executaComPreempcao(int n){
             j = 0;
 			while(j < 64){
 				savereg(j, j);
-				i = i + 1;
+				j = j + 1;
 			}
             setPid(pAtual);
             executaProcess(pAtual);
