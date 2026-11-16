@@ -46,7 +46,7 @@ char *newTemp()
 {
 	char *name = (char *)malloc(sizeof(char) * 10);
 	if(tempVarNum == 28) tempVarNum += 4;
-	else if(tempVarNum == 47) tempVarNum = 0;
+	else if(tempVarNum == 46) tempVarNum = 0;
 	sprintf(name, "$t%d", tempVarNum);
 	tempVarNum++;
 	return name;

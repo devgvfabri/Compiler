@@ -1,102 +1,54 @@
-int processos[11];
-int setorInicial[11];
-int tamanho[11];
-int setorFinal[11];
-int processoAtual;
+/* programa para busca em um vetor */
 
-void iniciaTabela(void){
-	/*gcdbinario*/
-	setorInicial[1] = 10;
-	tamanho[1] = 65;
-	setorFinal[1] = 10;
-	/*fatorial*/
-	setorInicial[2] = 11;
-	tamanho[2] = 72;
-	setorFinal[2] = 11;
-	/*fibonacci*/
-	setorInicial[3] = 12;
-	tamanho[3] = 70;
-	setorFinal[3] = 12;
-	/*mmc*/
-	setorInicial[4] = 13;
-	tamanho[4] = 83;
-	setorFinal[4] = 13;
-	/*media*/
-	setorInicial[5] = 14;
-	tamanho[5] = 90;
-	setorFinal[5] = 14;
-	/*potencia*/
-	setorInicial[6] = 15;
-	tamanho[6] = 65;
-	setorFinal[6] = 15;
-	/*inverter*/
-	setorInicial[7] = 16;
-	tamanho[7] = 124;
-	setorFinal[7] = 16;
-	/*maxvetor*/
-	setorInicial[8] = 17;
-	tamanho[8] = 104;
-	setorFinal[8] = 17;
-	/*buscabinbinario*/
-	setorInicial[9] = 18;
-	tamanho[9] = 146;
-	setorFinal[9] = 19;
-	/*sort*/
-	setorInicial[10] = 20;
-	tamanho[10] = 203;
-	setorFinal[10] = 21;
-	processoAtual = 0;
-}
+int vet[10];
 
-void salvaContexto(int p){
-	int i; int enderecoprogramabcp;
-	i = 0;
-	while(i < 64){
-		enderecoprogramabcp = p * 64;
-		enderecoprogramabcp = enderecoprogramabcp + i;
-		savereg(enderecoprogramabcp, i);
-		i = i + 1;
-	}
-}
+int busca(int v[], int inicio, int fim, int x)
+{
+    int meio;
 
+    if(inicio > fim)
+    {
+        return 11;
+    }
+    else
+    {
+        meio = (inicio + fim) / 2;
 
-void carregaPrograma(int p){
-	int setorAtual; int tamanhoprogramAtual; int setorFinalAtual;
-	setorAtual = setorInicial[p];
-	tamanhoprogramAtual = tamanho[p];
-	setorFinalAtual = setorFinal[p];
-	setSetorInicial(setorAtual);
-	setTam(tamanhoprogramAtual);
-	setSetorFinal(setorFinalAtual);
-	buscaPrograma();
-}
-
-
-void executaProcesso(int p){
-	int i;
-	exibelcd(2);
-	carregaPrograma(p);
-	exibelcd(9);
-	setPid(p);
-	salvaContexto(0);
-	/*carregaOffset(p);*/
-	executa(p);
-	cleanMem();
+        if(v[meio] == x)
+        {
+            return meio;
+        }
+        else
+        {
+            if(x < v[meio])
+            {
+                return busca(v, inicio, meio - 1, x);
+            }
+            else
+            {
+                return busca(v, meio + 1, fim, x);
+            }
+        }
+    }
 }
 
 void main(void)
 {
-	int i; int p;
-	iniciaTabela();
-	i = 0;
-	while(i != 32){
-		exibelcd(0);
-		i = input();
-		if(i == 1){
-			exibelcd(1);
-			p = input();
-			executaProcesso(p);
-			exibelcd(4);
-		}
-	}
+    int i;
+    int x;
+    int pos;
+
+    i = 0;
+
+    while(i < 10)
+    {
+        vet[i] = input();
+        i = i + 1;
+    }
+
+    x = input();
+
+    pos = busca(vet, 0, 9, x);
+
+    output(pos);
 }

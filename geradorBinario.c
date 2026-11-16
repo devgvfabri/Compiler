@@ -41,6 +41,10 @@ typedef enum{
     inst_setOff,
     inst_exec,
     inst_clean,
+    inst_execs,
+    inst_setQuantum,
+    inst_verificaHalt,
+    inst_contHalts,
 } operacao;
 
 operacao converteStringAssembly(char *stringOp)
@@ -77,6 +81,10 @@ operacao converteStringAssembly(char *stringOp)
     if(strcmp(stringOp, "setOff") == 0) return inst_setOff;
     if(strcmp(stringOp, "exec") == 0) return inst_exec;
     if(strcmp(stringOp, "clean") == 0) return inst_clean;
+    if(strcmp(stringOp, "execs") == 0) return inst_execs;
+    if(strcmp(stringOp, "setQuantum") == 0) return inst_setQuantum;
+    if(strcmp(stringOp, "contHalts") == 0) return inst_contHalts;
+    if(strcmp(stringOp, "verificaHalt") == 0) return inst_verificaHalt;
 }
 
 
@@ -251,7 +259,7 @@ void genBinary(CodAssembly *listaCodAssebly)
             break;
         }
         case inst_halt:
-           fprintf(codigoBinario, "00111011100000000000000000000000\n");
+           fprintf(codigoBinario, "00111001110000000000000000000000\n");
             return;
         case inst_jr:
            fprintf(codigoBinario, "01000101111100000000000000000000\n");
@@ -568,7 +576,39 @@ void genBinary(CodAssembly *listaCodAssebly)
         break;
         case inst_clean:
         {
-            fprintf(codigoBinario, "10001000000000000000000000000000\n");
+            fprintf(codigoBinario, "10000100000000000000000000000000\n");
+        }
+        break;
+        case inst_execs:
+        {
+            fprintf(codigoBinario, "10001011111110111001110000000000\n"); // 28 salva pc SO 46 tem o pc do programa
+        }
+        break;
+        case inst_setQuantum: // inicia contagem do quantum
+        {
+            fprintf(codigoBinario, "10001100000000000000000000000000\n");
+        }
+        break;
+        case inst_verificaHalt:
+        {
+            fprintf(codigoBinario, "100110");
+            char *reg1 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char));
+            sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,]", &linha, operacao, reg1, reg2);
+            char bin[7];
+            int numreg= get_register_number(reg1);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            numreg= get_register_number(reg2);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            char imediate[15];
+            imediato_para_bin14(atoi(imedi), imediate);
+            fprintf(codigoBinario, "%s\n", imediate);
+        }
+        break;
+        case inst_contHalts: // inicia contagem de halts
+        {
+            fprintf(codigoBinario, "10010100000000000000000000000000\n");
         }
         break;
         default:
