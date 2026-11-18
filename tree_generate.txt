@@ -11,6 +11,9 @@
     Var Vet: setorFinal
       Const: 11
   Type: 1
+    Var Vet: filaRR
+      Const: 11
+  Type: 1
     Var: processoAtual
   Type: 0
     Fun: iniciaTabela
@@ -173,8 +176,6 @@
         Parametro: p
       Type: 1
         Var: i
-      Type: 1
-        Var: enderecoprogramabcp
       Atribuicao
         Id: i
         Const: 0
@@ -202,20 +203,129 @@
         Id: p
       Chamada: cleanMem
   Type: 0
+    Fun: executaComPreempcao
+      Type: 1
+        Parametro: n
+      Type: 1
+        Var: i
+      Type: 1
+        Var: numHalts
+      Type: 1
+        Var: pAtual
+      Type: 1
+        Var: haltsAtual
+      Type: 1
+        Var: j
+      Atribuicao
+        Id: i
+        Const: 0
+      Atribuicao
+        Id: numHalts
+        Const: 0
+      Atribuicao
+        Id: haltsAtual
+        Const: 0
+      Chamada: contHalts
+      While
+        Op: MEN = <
+          Id: numHalts
+          Id: n
+        Atribuicao
+          Id: pAtual
+          Vetor: filaRR
+            Id: i
+        If
+          Op: DIF = !=
+            Id: pAtual
+            Const: 0
+          Chamada: carregaPrograma
+            Id: pAtual
+          Atribuicao
+            Id: j
+            Const: 0
+          While
+            Op: MEN = <
+              Id: j
+              Const: 64
+            Chamada: savereg
+              Id: j
+              Id: j
+            Atribuicao
+              Id: j
+              Op: SOM = +
+                Id: j
+                Const: 1
+          Chamada: setPid
+            Id: pAtual
+          Chamada: executaProcess
+            Id: pAtual
+          Chamada: cleanMem
+          Atribuicao
+            Id: numHalts
+            Chamada: verificaHalt
+          If
+            Op: MEN = <
+              Id: haltsAtual
+              Id: numHalts
+            Atribuicao
+              Vetor: filaRR
+                Id: i
+              Const: 0
+            Atribuicao
+              Id: haltsAtual
+              Op: SOM = +
+                Id: haltsAtual
+                Const: 1
+        Atribuicao
+          Id: i
+          Op: SOM = +
+            Id: i
+            Const: 1
+        If
+          Op: IGU = ==
+            Id: i
+            Id: n
+          Atribuicao
+            Id: i
+            Const: 0
+      Chamada: contHalts
+  Type: 0
+    Fun: renomearProcesso
+      Type: 1
+        Parametro: p
+      Type: 1
+        Var: i
+  Type: 0
+    Fun: deletaProcesso
+      Type: 1
+        Parametro: p
+      Type: 1
+        Var: i
+  Type: 0
     Fun: main
       Type: 0
       Type: 1
         Var: i
       Type: 1
         Var: p
+      Type: 1
+        Var: n
+      Type: 1
+        Var: j
       Chamada: iniciaTabela
       Atribuicao
         Id: i
         Const: 0
+      Atribuicao
+        Id: n
+        Const: 0
+      Atribuicao
+        Id: j
+        Const: 0
       While
         Op: DIF = !=
           Id: i
-          Const: 5
+          Const: 32
         Chamada: exibelcd
           Const: 0
         Atribuicao
@@ -234,3 +344,59 @@
             Id: p
           Chamada: exibelcd
             Const: 4
+          Chamada: input
+          If
+            Op: IGU = ==
+              Id: i
+              Const: 2
+            Chamada: exibelcd
+              Const: 5
+            Atribuicao
+              Id: n
+              Chamada: input
+            While
+              Op: MEN = <
+                Id: j
+                Id: n
+              Atribuicao
+                Vetor: filaRR
+                  Id: j
+                Chamada: input
+              Atribuicao
+                Id: j
+                Op: SOM = +
+                  Id: j
+                  Const: 1
+            Chamada: exibelcd
+              Const: 6
+            Chamada: executaComPreempcao
+              Id: n
+            Chamada: exibelcd
+              Const: 10
+            Atribuicao
+              Id: j
+              Const: 0
+            If
+              Op: IGU = ==
+                Id: i
+                Const: 3
+              Chamada: exibelcd
+                Const: 11
+              Atribuicao
+                Id: p
+                Chamada: input
+              Chamada: renomearProcesso
+                Id: p
+              If
+                Op: IGU = ==
+                  Id: i
+                  Const: 4
+                Chamada: exibelcd
+                  Const: 12
+                Atribuicao
+                  Id: p
+                  Chamada: input
+                Chamada: exibelcd
+                  Const: 13
+                Chamada: deletaProcesso
+                  Id: p
