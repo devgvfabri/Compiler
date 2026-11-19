@@ -610,9 +610,9 @@ void genAssembly(Quadrupla *listaCodInt)
                         num_lines, "$t50", 64);
 
                 save_assembly(assembly);
-            for(int i = 0; i < 64; i++)
+            for(int i = 0; i < 61; i++)
             {
-                if(i != 50 && i != 47 && i != 48 && i != 49)
+                if(i != 47 )
                 {
 
                 num_lines++;
@@ -653,6 +653,20 @@ void genAssembly(Quadrupla *listaCodInt)
                 save_assembly(assembly);
 
                 }
+                else
+                {
+                    num_lines++;
+
+                    fprintf(codigoAssembly,
+                            "%d: addi $t47, %s, %d\n",
+                            num_lines, "$t47", 4);
+
+                    snprintf(assembly, sizeof(char) * 256,
+                            "%d: addi $t47, %s, %d\n",
+                            num_lines, "$t47", 4);
+
+                    save_assembly(assembly);
+                }
             }
             
             num_lines++;
@@ -678,9 +692,9 @@ void genAssembly(Quadrupla *listaCodInt)
 
 
 
-            for(int i = 0; i < 64; i++)
+            for(int i = 0; i < 61; i++)
             {
-                if(i != 50 && i != 47 && i != 48 && i != 49)
+                if(i != 47 )
                 {
 
                 num_lines++;
@@ -707,6 +721,20 @@ void genAssembly(Quadrupla *listaCodInt)
 
                 save_assembly(assembly);
 
+                }
+                else
+                {
+                    num_lines++;
+
+                    fprintf(codigoAssembly,
+                            "%d: addi $t47, %s, %d\n",
+                            num_lines, "$t47", 4);
+
+                    snprintf(assembly, sizeof(char) * 256,
+                            "%d: addi $t47, %s, %d\n",
+                            num_lines, "$t47", 4);
+
+                    save_assembly(assembly);
                 }
             }
 
@@ -748,9 +776,9 @@ void genAssembly(Quadrupla *listaCodInt)
                         num_lines, "$t50", 64);
 
                 save_assembly(assembly);
-            for(int i = 0; i < 64; i++)
+            for(int i = 0; i < 61; i++)
             {
-                if(i != 50 && i != 47 && i != 48 && i != 49)
+                if(i != 47 )
                 {
 
                 num_lines++;
@@ -790,6 +818,20 @@ void genAssembly(Quadrupla *listaCodInt)
 
                 save_assembly(assembly);
 
+                }
+                else
+                {
+                    num_lines++;
+
+                    fprintf(codigoAssembly,
+                            "%d: addi $t47, %s, %d\n",
+                            num_lines, "$t47", 4);
+
+                    snprintf(assembly, sizeof(char) * 256,
+                            "%d: addi $t47, %s, %d\n",
+                            num_lines, "$t47", 4);
+
+                    save_assembly(assembly);
                 }
             }
             num_lines++;
@@ -841,9 +883,9 @@ void genAssembly(Quadrupla *listaCodInt)
                         num_lines, "$t50", 64);
 
                 save_assembly(assembly);
-            for(int i = 0; i < 64; i++)
+            for(int i = 0; i < 61; i++)
             {
-                if(i != 50 && i != 47 && i != 48 && i != 49)
+                if(i != 47 )
                 {
 
                 num_lines++;
@@ -884,6 +926,20 @@ void genAssembly(Quadrupla *listaCodInt)
                 save_assembly(assembly);
 
                 }
+                else
+                {
+                    num_lines++;
+
+                    fprintf(codigoAssembly,
+                            "%d: addi $t47, %s, %d\n",
+                            num_lines, "$t47", 4);
+
+                    snprintf(assembly, sizeof(char) * 256,
+                            "%d: addi $t47, %s, %d\n",
+                            num_lines, "$t47", 4);
+
+                    save_assembly(assembly);
+                }
             }
 
 
@@ -903,9 +959,9 @@ void genAssembly(Quadrupla *listaCodInt)
 
 
 
-            for(int i = 0; i < 64; i++)
+            for(int i = 0; i < 61; i++)
             {
-                if(i != 50 && i != 47 && i != 48 && i != 49)
+                if(i != 47 )
                 {
 
                 num_lines++;
@@ -932,6 +988,20 @@ void genAssembly(Quadrupla *listaCodInt)
 
                 save_assembly(assembly);
 
+                }
+                else
+                {
+                    num_lines++;
+
+                    fprintf(codigoAssembly,
+                            "%d: addi $t47, %s, %d\n",
+                            num_lines, "$t47", 4);
+
+                    snprintf(assembly, sizeof(char) * 256,
+                            "%d: addi $t47, %s, %d\n",
+                            num_lines, "$t47", 4);
+
+                    save_assembly(assembly);
                 }
             }
 
