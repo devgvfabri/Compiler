@@ -16,6 +16,161 @@
   Type: 1
     Var: processoAtual
   Type: 0
+    Fun: iniciaTabela
+      Type: 0
+      Atribuicao
+        Vetor: setorInicial
+          Const: 1
+        Const: 11
+      Atribuicao
+        Vetor: tamanho
+          Const: 1
+        Const: 65
+      Atribuicao
+        Vetor: setorFinal
+          Const: 1
+        Const: 11
+      Atribuicao
+        Vetor: setorInicial
+          Const: 2
+        Const: 12
+      Atribuicao
+        Vetor: tamanho
+          Const: 2
+        Const: 72
+      Atribuicao
+        Vetor: setorFinal
+          Const: 2
+        Const: 12
+      Atribuicao
+        Vetor: setorInicial
+          Const: 3
+        Const: 13
+      Atribuicao
+        Vetor: tamanho
+          Const: 3
+        Const: 70
+      Atribuicao
+        Vetor: setorFinal
+          Const: 3
+        Const: 13
+      Atribuicao
+        Vetor: setorInicial
+          Const: 4
+        Const: 14
+      Atribuicao
+        Vetor: tamanho
+          Const: 4
+        Const: 83
+      Atribuicao
+        Vetor: setorFinal
+          Const: 4
+        Const: 14
+      Atribuicao
+        Vetor: setorInicial
+          Const: 5
+        Const: 15
+      Atribuicao
+        Vetor: tamanho
+          Const: 5
+        Const: 90
+      Atribuicao
+        Vetor: setorFinal
+          Const: 5
+        Const: 15
+      Atribuicao
+        Vetor: setorInicial
+          Const: 6
+        Const: 16
+      Atribuicao
+        Vetor: tamanho
+          Const: 6
+        Const: 65
+      Atribuicao
+        Vetor: setorFinal
+          Const: 6
+        Const: 16
+      Atribuicao
+        Vetor: setorInicial
+          Const: 7
+        Const: 17
+      Atribuicao
+        Vetor: tamanho
+          Const: 7
+        Const: 124
+      Atribuicao
+        Vetor: setorFinal
+          Const: 7
+        Const: 17
+      Atribuicao
+        Vetor: setorInicial
+          Const: 8
+        Const: 18
+      Atribuicao
+        Vetor: tamanho
+          Const: 8
+        Const: 104
+      Atribuicao
+        Vetor: setorFinal
+          Const: 8
+        Const: 18
+      Atribuicao
+        Vetor: setorInicial
+          Const: 9
+        Const: 19
+      Atribuicao
+        Vetor: tamanho
+          Const: 9
+        Const: 146
+      Atribuicao
+        Vetor: setorFinal
+          Const: 9
+        Const: 20
+      Atribuicao
+        Vetor: setorInicial
+          Const: 10
+        Const: 21
+      Atribuicao
+        Vetor: tamanho
+          Const: 10
+        Const: 203
+      Atribuicao
+        Vetor: setorFinal
+          Const: 10
+        Const: 22
+      Atribuicao
+        Id: processoAtual
+        Const: 0
+  Type: 0
+    Fun: carregaPrograma
+      Type: 1
+        Parametro: p
+      Type: 1
+        Var: setorAtual
+      Type: 1
+        Var: tamanhoprogramAtual
+      Type: 1
+        Var: setorFinalAtual
+      Atribuicao
+        Id: setorAtual
+        Vetor: setorInicial
+          Id: p
+      Atribuicao
+        Id: tamanhoprogramAtual
+        Vetor: tamanho
+          Id: p
+      Atribuicao
+        Id: setorFinalAtual
+        Vetor: setorFinal
+          Id: p
+      Chamada: setSetorInicial
+        Id: setorAtual
+      Chamada: setTam
+        Id: tamanhoprogramAtual
+      Chamada: setSetorFinal
+        Id: setorFinalAtual
+      Chamada: buscaPrograma
+  Type: 0
     Fun: executaProcesso
       Type: 1
         Parametro: p
@@ -26,7 +181,8 @@
         Const: 0
       Chamada: exibelcd
         Const: 2
-      Chamada: input
+      Chamada: carregaPrograma
+        Id: p
       Chamada: exibelcd
         Const: 9
       Chamada: input
@@ -36,11 +192,16 @@
         Op: MEN = <
           Id: i
           Const: 64
+        Chamada: savereg
+          Id: i
+          Id: i
         Atribuicao
           Id: i
           Op: SOM = +
             Id: i
             Const: 1
+      Chamada: executa
+        Id: p
       Chamada: cleanMem
   Type: 0
     Fun: executaComPreempcao
@@ -65,8 +226,6 @@
       Atribuicao
         Id: haltsAtual
         Const: 0
-<<<<<<< HEAD
-=======
       Chamada: contHalts
       While
         Op: MEN = <
@@ -99,6 +258,9 @@
                 Const: 1
           Chamada: setPid
             Id: pAtual
+          Chamada: exibelcd
+            Const: 8
+          Chamada: input
           Chamada: executaProcess
             Id: pAtual
           Chamada: cleanMem
@@ -131,7 +293,6 @@
             Id: i
             Const: 0
       Chamada: contHalts
->>>>>>> 128fd2b778be197941b5fd6fd5ff1394de3a06e1
   Type: 0
     Fun: renomearProcesso
       Type: 1
@@ -155,10 +316,7 @@
         Var: n
       Type: 1
         Var: j
-<<<<<<< HEAD
-=======
       Chamada: iniciaTabela
->>>>>>> 128fd2b778be197941b5fd6fd5ff1394de3a06e1
       Atribuicao
         Id: i
         Const: 0
@@ -190,7 +348,6 @@
             Id: p
           Chamada: exibelcd
             Const: 4
-          Chamada: input
           If
             Op: IGU = ==
               Id: i
@@ -200,11 +357,8 @@
             Atribuicao
               Id: n
               Chamada: input
-<<<<<<< HEAD
             Chamada: exibelcd
               Const: 7
-=======
->>>>>>> 128fd2b778be197941b5fd6fd5ff1394de3a06e1
             While
               Op: MEN = <
                 Id: j
@@ -218,24 +372,15 @@
                 Op: SOM = +
                   Id: j
                   Const: 1
-<<<<<<< HEAD
             Chamada: setNprocess
               Id: n
             Chamada: exibelcd
               Const: 6
-            Chamada: input
-=======
-            Chamada: exibelcd
-              Const: 6
->>>>>>> 128fd2b778be197941b5fd6fd5ff1394de3a06e1
             Chamada: executaComPreempcao
               Id: n
             Chamada: exibelcd
               Const: 10
-<<<<<<< HEAD
             Chamada: input
-=======
->>>>>>> 128fd2b778be197941b5fd6fd5ff1394de3a06e1
             Atribuicao
               Id: j
               Const: 0
