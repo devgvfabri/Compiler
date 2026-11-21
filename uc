@@ -7,45 +7,45 @@ int processoAtual;
 
 void iniciaTabela(void){
 	/*gcdbinario*/
-	setorInicial[1] = 10;
+	setorInicial[1] = 11;
 	tamanho[1] = 65;
-	setorFinal[1] = 10;
+	setorFinal[1] = 11;
 	/*fatorial*/
-	setorInicial[2] = 11;
+	setorInicial[2] = 12;
 	tamanho[2] = 72;
-	setorFinal[2] = 11;
+	setorFinal[2] = 12;
 	/*fibonacci*/
-	setorInicial[3] = 12;
+	setorInicial[3] = 13;
 	tamanho[3] = 70;
-	setorFinal[3] = 12;
+	setorFinal[3] = 13;
 	/*mmc*/
-	setorInicial[4] = 13;
+	setorInicial[4] = 14;
 	tamanho[4] = 83;
-	setorFinal[4] = 13;
+	setorFinal[4] = 14;
 	/*media*/
-	setorInicial[5] = 14;
+	setorInicial[5] = 15;
 	tamanho[5] = 90;
-	setorFinal[5] = 14;
+	setorFinal[5] = 15;
 	/*potencia*/
-	setorInicial[6] = 15;
+	setorInicial[6] = 16;
 	tamanho[6] = 65;
-	setorFinal[6] = 15;
+	setorFinal[6] = 16;
 	/*inverter*/
-	setorInicial[7] = 16;
+	setorInicial[7] = 17;
 	tamanho[7] = 124;
-	setorFinal[7] = 16;
+	setorFinal[7] = 17;
 	/*maxvetor*/
-	setorInicial[8] = 17;
+	setorInicial[8] = 18;
 	tamanho[8] = 104;
-	setorFinal[8] = 17;
+	setorFinal[8] = 18;
 	/*buscabinbinario*/
-	setorInicial[9] = 18;
+	setorInicial[9] = 19;
 	tamanho[9] = 146;
-	setorFinal[9] = 19;
+	setorFinal[9] = 20;
 	/*sort*/
-	setorInicial[10] = 20;
+	setorInicial[10] = 21;
 	tamanho[10] = 203;
-	setorFinal[10] = 21;
+	setorFinal[10] = 22;
 	processoAtual = 0;
 }
 
@@ -68,6 +68,7 @@ void executaProcesso(int p){
 	exibelcd(2);
 	carregaPrograma(p);
 	exibelcd(9);
+	input();
 	setPid(p);
 	while(i < 64){
 		savereg(i, i);
@@ -93,6 +94,8 @@ void executaComPreempcao(int n){
 				j = j + 1;
 			}
             setPid(pAtual);
+			exibelcd(8);
+			input();
             executaProcess(pAtual);
             cleanMem();
 			
@@ -101,17 +104,11 @@ void executaComPreempcao(int n){
                 filaRR[i] = 0;
                 haltsAtual = haltsAtual + 1;
             }
-            else{
-            }
-        }
-        else{
         }
 
         i = i + 1;
         if (i == n) {
             i = 0;
-        }
-        else {
         }
     }
 	contHalts();
@@ -142,13 +139,16 @@ void main(void)
 		else if(i == 2){
 			exibelcd(5);
 			n = input();
+			exibelcd(7);
 			while(j < n){
 				filaRR[j] = input();
 				j = j + 1;
 			}
+			setNprocess(n);
 			exibelcd(6);
 			executaComPreempcao(n);
 			exibelcd(10);
+			input();
 			j = 0;
 		}
 		else if(i == 3){
