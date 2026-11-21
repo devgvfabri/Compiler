@@ -578,7 +578,7 @@ void genBinary(CodAssembly *listaCodAssebly)
         break;
         case inst_clean:
         {
-            fprintf(codigoBinario, "10000100000000000000000000000000\n");
+            fprintf(codigoBinario, "10011100000000000000000000000000\n");
         }
         break;
         case inst_execs:

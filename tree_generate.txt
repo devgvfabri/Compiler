@@ -65,6 +65,73 @@
       Atribuicao
         Id: haltsAtual
         Const: 0
+<<<<<<< HEAD
+=======
+      Chamada: contHalts
+      While
+        Op: MEN = <
+          Id: numHalts
+          Id: n
+        Atribuicao
+          Id: pAtual
+          Vetor: filaRR
+            Id: i
+        If
+          Op: DIF = !=
+            Id: pAtual
+            Const: 0
+          Chamada: carregaPrograma
+            Id: pAtual
+          Atribuicao
+            Id: j
+            Const: 0
+          While
+            Op: MEN = <
+              Id: j
+              Const: 64
+            Chamada: savereg
+              Id: j
+              Id: j
+            Atribuicao
+              Id: j
+              Op: SOM = +
+                Id: j
+                Const: 1
+          Chamada: setPid
+            Id: pAtual
+          Chamada: executaProcess
+            Id: pAtual
+          Chamada: cleanMem
+          Atribuicao
+            Id: numHalts
+            Chamada: verificaHalt
+          If
+            Op: MEN = <
+              Id: haltsAtual
+              Id: numHalts
+            Atribuicao
+              Vetor: filaRR
+                Id: i
+              Const: 0
+            Atribuicao
+              Id: haltsAtual
+              Op: SOM = +
+                Id: haltsAtual
+                Const: 1
+        Atribuicao
+          Id: i
+          Op: SOM = +
+            Id: i
+            Const: 1
+        If
+          Op: IGU = ==
+            Id: i
+            Id: n
+          Atribuicao
+            Id: i
+            Const: 0
+      Chamada: contHalts
+>>>>>>> 128fd2b778be197941b5fd6fd5ff1394de3a06e1
   Type: 0
     Fun: renomearProcesso
       Type: 1
@@ -88,6 +155,10 @@
         Var: n
       Type: 1
         Var: j
+<<<<<<< HEAD
+=======
+      Chamada: iniciaTabela
+>>>>>>> 128fd2b778be197941b5fd6fd5ff1394de3a06e1
       Atribuicao
         Id: i
         Const: 0
@@ -129,8 +200,11 @@
             Atribuicao
               Id: n
               Chamada: input
+<<<<<<< HEAD
             Chamada: exibelcd
               Const: 7
+=======
+>>>>>>> 128fd2b778be197941b5fd6fd5ff1394de3a06e1
             While
               Op: MEN = <
                 Id: j
@@ -144,16 +218,24 @@
                 Op: SOM = +
                   Id: j
                   Const: 1
+<<<<<<< HEAD
             Chamada: setNprocess
               Id: n
             Chamada: exibelcd
               Const: 6
             Chamada: input
+=======
+            Chamada: exibelcd
+              Const: 6
+>>>>>>> 128fd2b778be197941b5fd6fd5ff1394de3a06e1
             Chamada: executaComPreempcao
               Id: n
             Chamada: exibelcd
               Const: 10
+<<<<<<< HEAD
             Chamada: input
+=======
+>>>>>>> 128fd2b778be197941b5fd6fd5ff1394de3a06e1
             Atribuicao
               Id: j
               Const: 0

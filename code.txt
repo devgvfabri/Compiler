@@ -104,17 +104,11 @@ void executaComPreempcao(int n){
                 filaRR[i] = 0;
                 haltsAtual = haltsAtual + 1;
             }
-            else{
-            }
-        }
-        else{
         }
 
         i = i + 1;
         if (i == n) {
             i = 0;
-        }
-        else {
         }
     }
 	contHalts();
