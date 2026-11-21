@@ -503,6 +503,14 @@ void genAssembly(Quadrupla *listaCodInt)
             snprintf(assembly, sizeof(char) * 256, "%d: lcd $0, $a%d\n", num_lines, indice_parametro);
             save_assembly(assembly);
         }
+        else if(strcmp(operand2, "setNprocess") == 0)
+        {
+            num_lines++;
+
+            fprintf(codigoAssembly, "%d: setNpro $0, $a%d\n", num_lines, indice_parametro );
+            snprintf(assembly, sizeof(char) * 256, "%d: setNpro $0, $a%d\n", num_lines, indice_parametro);
+            save_assembly(assembly);
+        }
         else if(strcmp(operand2, "savereg") == 0)
         {
             num_lines++;

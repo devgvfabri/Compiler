@@ -5,64 +5,70 @@ INSTRUCTIONS_PER_SECTOR = SECTOR_SIZE // INSTRUCTION_SIZE
 
 # Tabela de programas
 programas = {
+    "so": {
+        "arquivo": "so.txt",
+        "inicio": 0,
+        "fim": 10,
+        "tamanho": 1370
+    },
     "gcdbinario": {
         "arquivo": "gcdbinario.txt",
-        "inicio": 10,
-        "fim": 10,
+        "inicio": 11,
+        "fim": 11,
         "tamanho": 65
     },
     "fatorial": {
         "arquivo": "fatorial.txt",
-        "inicio": 11,
-        "fim": 11,
+        "inicio": 12,
+        "fim": 12,
         "tamanho": 72
     },
     "fibonacci": {
         "arquivo": "fibonacci.txt",
-        "inicio": 12,
-        "fim": 12,
+        "inicio": 13,
+        "fim": 13,
         "tamanho": 70
     },
     "mmc": {
         "arquivo": "mmc.txt",
-        "inicio": 13,
-        "fim": 13,
+        "inicio": 14,
+        "fim": 14,
         "tamanho": 83
     },
     "media": {
         "arquivo": "media.txt",
-        "inicio": 14,
-        "fim": 14,
+        "inicio": 15,
+        "fim": 15,
         "tamanho": 90
     },
     "potencia": {
         "arquivo": "potencia.txt",
-        "inicio": 15,
-        "fim": 15,
+        "inicio": 16,
+        "fim": 16,
         "tamanho": 65
     },
     "inverter": {
         "arquivo": "inverter.txt",
-        "inicio": 16,
-        "fim": 16,
+        "inicio": 17,
+        "fim": 17,
         "tamanho": 124
     },
     "maxvetor": {
         "arquivo": "maxvetor.txt",
-        "inicio": 17,
-        "fim": 17,
+        "inicio": 18,
+        "fim": 18,
         "tamanho": 104
     },
     "buscabinbinario": {
         "arquivo": "buscabinbinario.txt",
-        "inicio": 18,
-        "fim": 19,
+        "inicio": 19,
+        "fim": 20,
         "tamanho": 146
     },
     "sort": {
         "arquivo": "sort.txt",
-        "inicio": 20,
-        "fim": 21,
+        "inicio": 21,
+        "fim": 22,
         "tamanho": 203
     }
 }

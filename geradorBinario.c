@@ -45,6 +45,7 @@ typedef enum{
     inst_setQuantum,
     inst_verificaHalt,
     inst_contHalts,
+    inst_setNpro,
 } operacao;
 
 operacao converteStringAssembly(char *stringOp)
@@ -85,6 +86,7 @@ operacao converteStringAssembly(char *stringOp)
     if(strcmp(stringOp, "setQuantum") == 0) return inst_setQuantum;
     if(strcmp(stringOp, "contHalts") == 0) return inst_contHalts;
     if(strcmp(stringOp, "verificaHalt") == 0) return inst_verificaHalt;
+    if(strcmp(stringOp, "setNpro") == 0) return inst_setNpro;
 }
 
 
@@ -609,6 +611,23 @@ void genBinary(CodAssembly *listaCodAssebly)
         case inst_contHalts: // inicia contagem de halts
         {
             fprintf(codigoBinario, "10010100000000000000000000000000\n");
+        }
+        break;
+        case inst_setNpro:
+        {
+            fprintf(codigoBinario, "101000");
+            char *reg1 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char));
+            sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,]", &linha, operacao, reg1, reg2);
+            char bin[7];
+            int numreg= get_register_number(reg1);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            numreg= get_register_number(reg2);
+            to_binary6(numreg, bin);
+            fprintf(codigoBinario, "%s", bin);
+            char imediate[15];
+            imediato_para_bin14(atoi(imedi), imediate);
+            fprintf(codigoBinario, "%s\n", imediate);
         }
         break;
         default:
