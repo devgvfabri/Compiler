@@ -117,6 +117,9 @@ int get_register_number(const char *reg) {
     if (prefix == 'a') {
         if (num >= 0 && num <= 7) return 55 + num;    // $a0-$a7 → 55-61
     }
+    if (prefix == 'r') {
+        return  num;    // 0-63
+    }
    fprintf(codigoBinario, "invalido");
     return -1; 
 }
@@ -412,14 +415,14 @@ void genBinary(CodAssembly *listaCodAssebly)
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, imedi);
             char bin[7];
-            int numreg= get_register_number(reg2);
+            int numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
             fprintf(codigoBinario, "%s", bin);
-            numreg= get_register_number(imedi);
+            numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
             fprintf(codigoBinario, "%s", bin);
             char imediate[15];
-            imediato_para_bin14(0, imediate);
+            imediato_para_bin14(atoi(imedi), imediate);
             fprintf(codigoBinario, "%s\n", imediate);
         }
         break;
@@ -429,15 +432,15 @@ void genBinary(CodAssembly *listaCodAssebly)
             char *reg1 = (char *)malloc(20 * sizeof(char)), *reg2 = (char *)malloc(20 * sizeof(char)), *imedi = (char *)malloc(20 * sizeof(char));
             sscanf(listaCodAssebly->mensagem, "%d: %s %[^,], %[^,], %[^,]", &linha, operacao, reg1, reg2, imedi);
             char bin[7];
-            int numreg= get_register_number(reg2);
+            int numreg= get_register_number(reg1);
             to_binary6(numreg, bin);
             fprintf(codigoBinario, "%s", bin);
-            numreg= get_register_number(reg1);
+            numreg= get_register_number(reg2);
             to_binary6(numreg, bin);
             fprintf(codigoBinario, "%s", bin);
-            numreg= get_register_number(imedi);
-            to_binary6(numreg, bin);
-            fprintf(codigoBinario, "%s00000000\n", bin);
+            char imediate[15];
+            imediato_para_bin14(atoi(imedi), imediate);
+            fprintf(codigoBinario, "%s\n", imediate);
         }
         break;
         case inst_input:
