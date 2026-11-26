@@ -586,97 +586,59 @@ void genAssembly(Quadrupla *listaCodInt)
         {
             num_lines++;
 
-                fprintf(codigoAssembly,
+            fprintf(codigoAssembly,
                         "%d: addi %s, $0, %d\n",
                         num_lines, "$t47", 0);
 
-                snprintf(assembly, sizeof(char) * 256,
+            snprintf(assembly, sizeof(char) * 256,
                         "%d: addi %s, $0, %d\n",
                         num_lines, "$t47", 0);
 
-                save_assembly(assembly);
+            save_assembly(assembly);
+
+            for(int i = 0; i < 64; i++){
                 num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t48", 0);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t48", 0);
-
-                save_assembly(assembly);
-
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: mul $t48, %s, %d\n",
-                        num_lines, "$t50", 64);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: mul $t48, %s, %d\n",
-                        num_lines, "$t50", 64);
-
-                save_assembly(assembly);
-            for(int i = 0; i < 61; i++)
-            {
-                if(i != 47 )
-                {
-
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: add $t49, $t48, $t47\n",
-                        num_lines);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: add $t49, $t48, $t47\n",
-                        num_lines);
-
-                save_assembly(assembly);
-
-
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: lr $0, $t49, $t47\n",
-                        num_lines);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: lr $0, $t49, $t47\n",
-                        num_lines);
-
-                save_assembly(assembly);
-                
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: addi $t47, %s, %d\n",
-                        num_lines, "$t47", 1);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: addi $t47, %s, %d\n",
-                        num_lines, "$t47", 1);
-
-                save_assembly(assembly);
-
-                }
-                else
-                {
-                    num_lines++;
 
                     fprintf(codigoAssembly,
-                            "%d: addi $t47, %s, %d\n",
-                            num_lines, "$t47", 4);
+                                "%d: sr %s, $%d, %d\n",
+                                num_lines, "$0", i, i);
 
                     snprintf(assembly, sizeof(char) * 256,
-                            "%d: addi $t47, %s, %d\n",
-                            num_lines, "$t47", 4);
+                                "%d: sr %s, $%d, %d\n",
+                                num_lines, "$0", i, i);
+
+                    save_assembly(assembly);
+            }
+
+            num_lines++;
+
+            fprintf(codigoAssembly,
+                        "%d: mul %s, $50, %d\n",
+                        num_lines, "$t49", 64);
+
+            snprintf(assembly, sizeof(char) * 256,
+                        "%d: mul %s, $50, %d\n",
+                        num_lines, "$t49", 64);
+
+            save_assembly(assembly);
+
+            for(int i = 0; i < 64; i++){
+                if(i != 49){
+                num_lines++;
+
+                    fprintf(codigoAssembly,
+                                "%d: lr %s, $%d, %d\n",
+                                num_lines, "$49", i, i);
+
+                    snprintf(assembly, sizeof(char) * 256,
+                                "%d: lr %s, $%d, %d\n",
+                                num_lines, "$49", i, i);
 
                     save_assembly(assembly);
                 }
             }
-            
+
+                
             num_lines++;
             fprintf(codigoAssembly, "%d: setOff $0, %s\n", num_lines, "$t50");
             snprintf(assembly, sizeof(char) * 256, "%d: setOff $0, %s\n", num_lines, "$t50");
@@ -686,162 +648,82 @@ void genAssembly(Quadrupla *listaCodInt)
             snprintf(assembly, sizeof(char) * 256, "%d: exec $0, %s\n", num_lines, "$t50");
             save_assembly(assembly);
 
-            num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t47", 0);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t47", 0);
-
-                save_assembly(assembly);
-
-
-
-            for(int i = 0; i < 61; i++)
-            {
-                if(i != 47 )
-                {
-
+            for(int i = 0; i < 64; i++){
+                if(i != 49){
                 num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: lr $0, $t47, $t47\n",
-                        num_lines);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: lr $0, $t47, $t47\n",
-                        num_lines);
-
-                save_assembly(assembly);
-                
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: addi $t47, %s, %d\n",
-                        num_lines, "$t47", 1);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: addi $t47, %s, %d\n",
-                        num_lines, "$t47", 1);
-
-                save_assembly(assembly);
-
-                }
-                else
-                {
-                    num_lines++;
 
                     fprintf(codigoAssembly,
-                            "%d: addi $t47, %s, %d\n",
-                            num_lines, "$t47", 4);
+                                "%d: lr %s, $%d, %d\n",
+                                num_lines, "$0", i, i);
 
                     snprintf(assembly, sizeof(char) * 256,
-                            "%d: addi $t47, %s, %d\n",
-                            num_lines, "$t47", 4);
+                                "%d: lr %s, $%d, %d\n",
+                                num_lines, "$0", i, i);
 
                     save_assembly(assembly);
                 }
             }
 
+            
 
         }
         else if(strcmp(operand2, "executaProcess") == 0)
         {
             num_lines++;
 
-                fprintf(codigoAssembly,
+            fprintf(codigoAssembly,
                         "%d: addi %s, $0, %d\n",
                         num_lines, "$t47", 0);
 
-                snprintf(assembly, sizeof(char) * 256,
+            snprintf(assembly, sizeof(char) * 256,
                         "%d: addi %s, $0, %d\n",
                         num_lines, "$t47", 0);
 
-                save_assembly(assembly);
+            save_assembly(assembly);
+
+            for(int i = 0; i < 64; i++){
                 num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t48", 0);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t48", 0);
-
-                save_assembly(assembly);
-
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: mul $t48, %s, %d\n",
-                        num_lines, "$t50", 64);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: mul $t48, %s, %d\n",
-                        num_lines, "$t50", 64);
-
-                save_assembly(assembly);
-            for(int i = 0; i < 61; i++)
-            {
-                if(i != 47 )
-                {
-
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: add $t49, $t48, $t47\n",
-                        num_lines);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: add $t49, $t48, $t47\n",
-                        num_lines);
-
-                save_assembly(assembly);
-
-
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: lr $0, $t49, $t47\n",
-                        num_lines);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: lr $0, $t49, $t47\n",
-                        num_lines);
-
-                save_assembly(assembly);
-                
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: addi $t47, %s, %d\n",
-                        num_lines, "$t47", 1);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: addi $t47, %s, %d\n",
-                        num_lines, "$t47", 1);
-
-                save_assembly(assembly);
-
-                }
-                else
-                {
-                    num_lines++;
 
                     fprintf(codigoAssembly,
-                            "%d: addi $t47, %s, %d\n",
-                            num_lines, "$t47", 4);
+                                "%d: sr %s, $%d, %d\n",
+                                num_lines, "$0", i, i);
 
                     snprintf(assembly, sizeof(char) * 256,
-                            "%d: addi $t47, %s, %d\n",
-                            num_lines, "$t47", 4);
+                                "%d: sr %s, $%d, %d\n",
+                                num_lines, "$0", i, i);
+
+                    save_assembly(assembly);
+            }
+
+            num_lines++;
+
+            fprintf(codigoAssembly,
+                        "%d: mul %s, $50, %d\n",
+                        num_lines, "$t49", 64);
+
+            snprintf(assembly, sizeof(char) * 256,
+                        "%d: mul %s, $50, %d\n",
+                        num_lines, "$t49", 64);
+
+            save_assembly(assembly);
+
+            for(int i = 0; i < 64; i++){
+                if(i != 49){
+                num_lines++;
+
+                    fprintf(codigoAssembly,
+                                "%d: lr %s, $%d, %d\n",
+                                num_lines, "$49", i, i);
+
+                    snprintf(assembly, sizeof(char) * 256,
+                                "%d: lr %s, $%d, %d\n",
+                                num_lines, "$49", i, i);
 
                     save_assembly(assembly);
                 }
             }
+
+            
             num_lines++;
             fprintf(codigoAssembly, "%d: setQuantum $0\n", num_lines);
             snprintf(assembly, sizeof(char) * 256, "%d: setQuantum $0\n", num_lines);
@@ -859,160 +741,45 @@ void genAssembly(Quadrupla *listaCodInt)
 
             num_lines++;
 
-                fprintf(codigoAssembly,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t47", 0);
+            fprintf(codigoAssembly,
+                        "%d: mul %s, $50, %d\n",
+                        num_lines, "$t49", 64);
 
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t47", 0);
+            snprintf(assembly, sizeof(char) * 256,
+                        "%d: mul %s, $50, %d\n",
+                        num_lines, "$t49", 64);
 
-                save_assembly(assembly);
+            save_assembly(assembly);
+
+            for(int i = 0; i < 64; i++){
                 num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t48", 0);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t48", 0);
-
-                save_assembly(assembly);
-
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: mul $t48, %s, %d\n",
-                        num_lines, "$t50", 64);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: mul $t48, %s, %d\n",
-                        num_lines, "$t50", 64);
-
-                save_assembly(assembly);
-            for(int i = 0; i < 61; i++)
-            {
-                if(i != 47 )
-                {
-
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: add $t49, $t48, $t47\n",
-                        num_lines);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: add $t49, $t48, $t47\n",
-                        num_lines);
-
-                save_assembly(assembly);
-
-
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: sr $0, $t49, $t47\n",
-                        num_lines);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: sr $0, $t49, $t47\n",
-                        num_lines);
-
-                save_assembly(assembly);
-                
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: addi $t47, %s, %d\n",
-                        num_lines, "$t47", 1);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: addi $t47, %s, %d\n",
-                        num_lines, "$t47", 1);
-
-                save_assembly(assembly);
-
-                }
-                else
-                {
-                    num_lines++;
 
                     fprintf(codigoAssembly,
-                            "%d: addi $t47, %s, %d\n",
-                            num_lines, "$t47", 4);
+                                "%d: sr %s, $%d, %d\n",
+                                num_lines, "$0", i, i);
 
                     snprintf(assembly, sizeof(char) * 256,
-                            "%d: addi $t47, %s, %d\n",
-                            num_lines, "$t47", 4);
+                                "%d: sr %s, $%d, %d\n",
+                                num_lines, "$0", i, i);
+
+                    save_assembly(assembly);
+            }
+
+            for(int i = 0; i < 64; i++){
+                if(i != 49){
+                num_lines++;
+
+                    fprintf(codigoAssembly,
+                                "%d: lr %s, $%d, %d\n",
+                                num_lines, "$0", i, i);
+
+                    snprintf(assembly, sizeof(char) * 256,
+                                "%d: lr %s, $%d, %d\n",
+                                num_lines, "$0", i, i);
 
                     save_assembly(assembly);
                 }
             }
-
-
-            // restaura SO:
-
-            num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t47", 0);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: addi %s, $0, %d\n",
-                        num_lines, "$t47", 0);
-
-                save_assembly(assembly);
-
-
-
-            for(int i = 0; i < 61; i++)
-            {
-                if(i != 47 )
-                {
-
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: lr $0, $t47, $t47\n",
-                        num_lines);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: lr $0, $t47, $t47\n",
-                        num_lines);
-
-                save_assembly(assembly);
-                
-                num_lines++;
-
-                fprintf(codigoAssembly,
-                        "%d: addi $t47, %s, %d\n",
-                        num_lines, "$t47", 1);
-
-                snprintf(assembly, sizeof(char) * 256,
-                        "%d: addi $t47, %s, %d\n",
-                        num_lines, "$t47", 1);
-
-                save_assembly(assembly);
-
-                }
-                else
-                {
-                    num_lines++;
-
-                    fprintf(codigoAssembly,
-                            "%d: addi $t47, %s, %d\n",
-                            num_lines, "$t47", 4);
-
-                    snprintf(assembly, sizeof(char) * 256,
-                            "%d: addi $t47, %s, %d\n",
-                            num_lines, "$t47", 4);
-
-                    save_assembly(assembly);
-                }
-            }
-
 
         }
         else if(strcmp(operand2, "cleanMem") == 0)
